@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SymQ | المرجع الشامل للاختصارات</title>
+    
+    <!-- Fonts: Cairo (Professional Arabic) + Inter (English Numbers) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-content">
+            <div class="logo">
+                <div class="logo-box">Q</div>
+                <div class="logo-text">
+                    <h1>SymQ</h1>
+                    <span class="badge-beta">PRO</span>
+                </div>
+            </div>
+            
+            <div class="search-container">
+                <i class="ph ph-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="ابحث عن اختصار، اسم، أو برنامج (مثال: نسخ، Excel)...">
+                <div class="shortcut-hint">/</div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper container">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>الأقسام</h3>
+            </div>
+            <ul id="categoryList" class="category-nav">
+                <!-- Injected via JS -->
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content-area">
+            
+            <!-- Mobile Category Filter (Visible only on mobile) -->
+            <div class="mobile-filters">
+                <select id="mobileCategorySelect">
+                    <!-- Injected via JS -->
+                </select>
+            </div>
+
+            <!-- Stats & Header -->
+            <header class="section-header">
+                <div class="header-text">
+                    <h2 id="currentCategoryTitle">كل الاختصارات</h2>
+                    <p id="currentCategoryDesc">تصفح المكتبة الكاملة للاختصارات الإنتاجية.</p>
+                </div>
+                <div class="header-stats">
+                    <span id="itemCount">0</span> اختصار
+                </div>
+            </header>
+
+            <!-- Grid -->
+            <div id="shortcutsGrid" class="grid-layout">
+                <!-- Cards Injected via JS -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state hidden">
+                <div class="empty-icon"><i class="ph ph-smiley-sad"></i></div>
+                <h3>لا توجد نتائج</h3>
+                <p>جرب البحث بكلمات مختلفة أو تغيير القسم.</p>
+                <button onclick="app.resetSearch()" class="btn-reset">عرض الكل</button>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="ph ph-check-circle-fill"></i>
+        <span>تم نسخ الاختصار بنجاح</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
