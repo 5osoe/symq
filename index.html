@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SymQ | فهرس الرموز والاختصارات الشامل</title>
+    <meta name="description" content="مرجع شامل لرموز لوحة المفاتيح، التشكيل العربي، واختصارات ويندوز.">
+
+    <!-- Fonts: Cairo (Modern Arabic/Latin) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons: Phosphor Icons (Lightweight, Professional) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Fixed Navbar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <!-- Logo -->
+            <a href="#" class="logo">
+                <div class="logo-icon">Q</div>
+                <div class="logo-text">SymQ</div>
+            </a>
+
+            <!-- Desktop Search (Centered) -->
+            <div class="search-bar-desktop">
+                <i class="ph ph-magnifying-glass"></i>
+                <input type="text" id="globalSearch" placeholder="بحث سريع (مثال: فتحة، Alt+0169، Win+D)...">
+                <div class="kbd-hint">/</div>
+            </div>
+
+            <!-- Nav Actions -->
+            <div class="nav-actions">
+                <a href="#categories" class="nav-link">التصنيفات</a>
+                <a href="#" class="btn-primary" onclick="copyUrl()">نسخ الرابط</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container hero-content">
+            <h1>كل الرموز والاختصارات <br><span class="text-gradient">في مكان واحد</span></h1>
+            <p class="hero-subtitle">المرجع الأول للمحترفين: التشكيل العربي، علامات الترقيم، الرموز الرياضية، واختصارات النظام.</p>
+            
+            <!-- Mobile Search Fallback -->
+            <div class="search-mobile-wrapper">
+                <input type="text" id="mobileSearch" placeholder="ابحث عن أي رمز...">
+                <i class="ph ph-magnifying-glass"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <main class="container main-layout">
+        
+        <!-- Sidebar Categories -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>التصنيفات</h3>
+                <span class="badge-total" id="totalCount">0</span>
+            </div>
+            <ul id="categoriesList" class="categories-nav">
+                <!-- Injected via JS -->
+            </ul>
+        </aside>
+
+        <!-- Content Grid -->
+        <section class="content-area">
+            <div class="section-header">
+                <div class="header-info">
+                    <h2 id="activeCategoryTitle">جميع الرموز</h2>
+                    <p id="activeCategoryDesc" class="category-desc">تصفح كافة الرموز والاختصارات المتاحة.</p>
+                </div>
+                <div class="view-controls">
+                    <span id="resultCount">0 عنصر</span>
+                </div>
+            </div>
+
+            <div id="symbolsGrid" class="grid-container">
+                <!-- Cards Injected via JS -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state hidden">
+                <div class="empty-icon">
+                    <i class="ph ph-magnifying-glass"></i>
+                </div>
+                <h3>لم يتم العثور على نتائج</h3>
+                <p>جرب البحث بكلمات مختلفة أو تحقق من التصنيف المختار.</p>
+                <button class="btn-outline" onclick="resetFilters()">عرض الكل</button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 SymQ. Designed for Professionals.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div class="toast-icon"><i class="ph ph-check"></i></div>
+        <div class="toast-content">
+            <span class="toast-title">تم النسخ!</span>
+            <span class="toast-msg">تم نسخ الرمز للحافظة.</span>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
