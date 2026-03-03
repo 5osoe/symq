@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     
     // --- Configuration ---
-    const DEBOUNCE_DELAY = 250; // Faster response
+    const DEBOUNCE_DELAY = 250; 
     
     // Group Definitions
     const GROUPS = {
@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- Data Aggregation ---
-    // Safe spread in case files are missing
     const ALL_DATA = [
         ...(typeof DATA_DIACRITICS !== 'undefined' ? DATA_DIACRITICS : []),
         ...(typeof DATA_PUNCTUATION !== 'undefined' ? DATA_PUNCTUATION : []),
@@ -40,13 +39,15 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebar: document.getElementById('sidebar'),
         backdrop: document.getElementById('backdrop'),
         searchInput: document.getElementById('searchInput'),
-        searchContainer: document.querySelector('.search-bar-container'),
+        searchContainer: document.getElementById('searchContainer'),
         title: document.getElementById('activeCategoryTitle'),
         count: document.getElementById('itemCount'),
         empty: document.getElementById('emptyState'),
         mobileBtn: document.getElementById('mobileFilterBtn'),
+        mobileSearchToggle: document.getElementById('mobileSearchToggle'),
         closeBtn: document.getElementById('closeSidebar'),
         resetBtn: document.getElementById('resetSearch'),
+        backToTop: document.getElementById('backToTop'),
         contentHeader: document.querySelector('.content-header')
     };
 
@@ -56,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     subFilterSelect.className = 'sub-filter hidden';
     ui.contentHeader.appendChild(subFilterSelect);
 
-    // --- Phase 3: Add Clear Button ---
+    // Clear Button
     let clearBtn = document.createElement('span');
     clearBtn.innerHTML = '&times;';
     clearBtn.className = 'search-clear hidden';
@@ -65,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Core Logic ---
 
-    // Debounce Function
     function debounce(func, wait) {
         let timeout;
         return function executedFunction(...args) {
@@ -82,13 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const query = state.search.toLowerCase().trim();
         
         return ALL_DATA.filter(item => {
-            // Category Filter
             if (state.category !== 'الكل' && item.category !== state.category) return false;
-            
-            // Subcategory Filter
             if (state.subCategory !== 'الكل' && item.subCategory !== state.subCategory) return false;
-
-            // Search Filter
             if (!query) return true;
             
             const text = [
@@ -135,7 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 let count = catName === 'الكل' ? ALL_DATA.length : ALL_DATA.filter(d => d.category === catName).length;
                 
-                // Simplified clean item
                 li.innerHTML = `<span>${catName}</span> <span>${count}</span>`;
                 li.onclick = () => setCategory(catName);
                 ul.appendChild(li);
@@ -148,14 +142,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderGrid() {
         const data = getFilteredData();
         
-        // Update UI Info
         ui.title.textContent = state.search ? 'نتائج البحث' : state.category;
         ui.count.textContent = `${data.length} عنصر`;
 
-        // Empty State & Grid Clear
         ui.grid.innerHTML = '';
         
-        // Manage Clear Button Visibility
         if (state.search.length > 0) {
             clearBtn.classList.remove('hidden');
         } else {
@@ -177,7 +168,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isShortcut = item.type === 'shortcut';
                 const mainDisplay = isShortcut ? item.shortcut : item.symbol;
                 
-                // --- Phase 2: Keyboard Logic (Preserved & Styled) ---
                 let keyboardHTML = '';
                 if (!isShortcut && item.keyboardMethod) {
                     const k = item.keyboardMethod;
@@ -187,7 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     if (hasLayout || hasCombo || hasAlt) {
                         keyboardHTML += `<div class="symbol-keyboard">`;
-                        // Removed header "طريقة الكتابة" to reduce noise, kept layout simple
                         if (hasLayout) {
                             keyboardHTML += `
                             <div class="kbd-row">
@@ -212,7 +201,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         keyboardHTML += `</div>`;
                     }
                 }
-                // -----------------------------
                 
                 card.innerHTML = `
                     <div class="${isShortcut ? 'text-shortcut' : 'card-symbol'}">${mainDisplay}</div>
@@ -226,9 +214,27 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="card-cat">${item.category}</div>
                         ${item.subCategory ? `<div class="tag-sub">${item.subCategory}</div>` : ''}
                     </div>
+
+                    <div class="card-actions">
+                        <button class="card-action-btn copy-btn">نسخ</button>
+                        <button class="card-action-btn download-btn">تحميل</button>
+                    </div>
                 `;
                 
-                card.onclick = () => handleCopy(mainDisplay, card);
+                // Add event listeners for buttons
+                const copyBtn = card.querySelector('.copy-btn');
+                const downloadBtn = card.querySelector('.download-btn');
+                
+                copyBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    handleCopy(mainDisplay, copyBtn);
+                };
+                
+                downloadBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    handleDownload(card, item.englishName || 'symq-card');
+                };
+
                 fragment.appendChild(card);
             });
 
@@ -261,14 +267,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function setCategory(name) {
         state.category = name;
         state.subCategory = 'الكل';
-        // Clear search when switching categories? Usually better UX to keep it or clear it.
-        // Let's clear it to show the category fully.
+        
         clearSearch(false); 
         
         renderSubFilters();
         renderSidebar();
         renderGrid();
         closeSidebar();
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
     }
 
     function clearSearch(shouldRender = true) {
@@ -277,19 +287,44 @@ document.addEventListener('DOMContentLoaded', () => {
         if(shouldRender) renderGrid();
     }
 
-    function handleCopy(text, card) {
+    function handleCopy(text, btnElement) {
         navigator.clipboard.writeText(text).then(() => {
-            // Refined feedback: subtle border change
-            card.style.borderColor = '#22c55e'; // Green
-            card.style.background = '#f0fdf4';
+            const originalText = btnElement.textContent;
+            btnElement.textContent = "تم النسخ";
+            btnElement.classList.add('success');
+            
             setTimeout(() => {
-                card.style.borderColor = '';
-                card.style.background = '';
-            }, 400);
+                btnElement.textContent = originalText;
+                btnElement.classList.remove('success');
+            }, 1500);
         });
     }
 
-    // --- Sidebar Handling ---
+    function handleDownload(cardElement, fileName) {
+        cardElement.classList.add('capturing');
+        
+        if (typeof html2canvas === 'undefined') {
+            alert('خطأ: مكتبة التحميل لم يتم تحميلها بشكل صحيح.');
+            cardElement.classList.remove('capturing');
+            return;
+        }
+
+        html2canvas(cardElement, {
+            backgroundColor: "#ffffff",
+            scale: 2 // High resolution
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `${fileName.replace(/\s+/g, '-').toLowerCase()}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+            cardElement.classList.remove('capturing');
+        }).catch(err => {
+            console.error(err);
+            cardElement.classList.remove('capturing');
+        });
+    }
+
+    // --- Sidebar Handling (Mobile Scroll Lock) ---
     function openSidebar() {
         ui.sidebar.classList.add('open');
         ui.backdrop.classList.add('open');
@@ -304,12 +339,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Listeners ---
 
+    // Mobile Search Toggle
+    ui.mobileSearchToggle.addEventListener('click', () => {
+        ui.searchContainer.classList.toggle('active');
+        if (ui.searchContainer.classList.contains('active')) {
+            setTimeout(() => ui.searchInput.focus(), 100);
+        }
+    });
+
+    // Back to Top Logic (Optimized with Passive Listener)
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            ui.backToTop.classList.add('visible');
+        } else {
+            ui.backToTop.classList.remove('visible');
+        }
+    }, { passive: true });
+
+    ui.backToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Input Events
     ui.searchInput.addEventListener('input', debounce((e) => {
         state.search = e.target.value;
         renderGrid();
     }, DEBOUNCE_DELAY));
 
-    // Clear Button Action
     clearBtn.addEventListener('click', () => {
         clearSearch();
         ui.searchInput.focus();
@@ -323,6 +379,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Escape') {
             closeSidebar();
             ui.searchInput.blur();
+            if (window.innerWidth <= 900) {
+                ui.searchContainer.classList.remove('active');
+            }
         }
     });
 
@@ -339,6 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
     subFilterSelect.addEventListener('change', (e) => {
         state.subCategory = e.target.value;
         renderGrid();
+        window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
     // --- Init ---

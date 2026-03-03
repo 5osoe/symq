@@ -8,7 +8,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     
     <!-- Styles -->
     <link rel="stylesheet" href="style.css">
@@ -25,14 +25,22 @@
                 <span class="logo-text">SymQ</span>
             </div>
             
-            <div class="search-bar-container">
+            <!-- Search Container -->
+            <div class="search-bar-container" id="searchContainer">
                 <input type="text" id="searchInput" placeholder="بحث (مثال: نسخ، F5)..." autocomplete="off">
                 <div class="search-icon">/</div>
+                <!-- Clear button injected via JS -->
             </div>
 
-            <button id="mobileFilterBtn" class="filter-btn-mobile">
-                التصنيفات
-            </button>
+            <!-- Mobile Controls -->
+            <div class="mobile-controls">
+                <button id="mobileSearchToggle" class="icon-btn-mobile" aria-label="بحث">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </button>
+                <button id="mobileFilterBtn" class="filter-btn-mobile">
+                    التصنيفات
+                </button>
+            </div>
         </div>
     </header>
 
@@ -71,6 +79,12 @@
         </main>
 
     </div>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" aria-label="العودة للأعلى">↑</button>
+
+    <!-- External Libs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <!-- Data Files -->
     <script src="symbols-diacritics.js"></script>
