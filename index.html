@@ -3,104 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="SymQ - Professional Keyboard Shortcuts & Symbols Reference Index.">
-    <meta name="theme-color" content="#ffffff">
-    <title>SymQ | Reference Index</title>
-
-    <!-- Fonts: Cairo (UI) + Roboto Mono (Technical) -->
+    <title>SymQ | الرموز والاختصارات</title>
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     
-    <!-- CSS -->
+    <!-- Styles -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- Backdrop for Mobile Sidebar -->
+    <div id="backdrop" class="backdrop"></div>
+
     <!-- Header -->
     <header class="app-header">
-        <div class="container header-layout">
+        <div class="header-container">
             <div class="brand">
                 <span class="logo-text">SymQ</span>
-                <span class="version-tag">v3.0</span>
             </div>
             
-            <div class="search-wrapper">
-                <input type="text" id="searchInput" placeholder="Search / بحث..." autocomplete="off">
-                <kbd class="shortcut-hint">/</kbd>
+            <div class="search-bar-container">
+                <input type="text" id="searchInput" placeholder="بحث (مثال: نسخ، F5)..." autocomplete="off">
+                <div class="search-icon">/</div>
             </div>
 
-            <button id="mobileMenuBtn" class="icon-btn" aria-label="Menu">
-                <span class="menu-bar"></span>
-                <span class="menu-bar"></span>
+            <button id="mobileFilterBtn" class="filter-btn-mobile">
+                التصنيفات
             </button>
         </div>
     </header>
 
     <!-- Main Layout -->
-    <div class="container main-layout">
+    <div class="layout-container">
         
-        <!-- Sidebar -->
+        <!-- Sidebar / Bottom Sheet -->
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header-mobile">
-                <h3>Sections</h3>
-                <button id="closeSidebarBtn" class="close-btn">&times;</button>
+            <div class="sidebar-header">
+                <h3>تصفح الأقسام</h3>
+                <button id="closeSidebar" class="close-btn">&times;</button>
             </div>
-
-            <nav class="nav-section">
-                <h4 class="nav-label">Symbols</h4>
-                <ul id="navSymbols" class="nav-list">
-                    <!-- Injected via JS -->
-                </ul>
-            </nav>
-
-            <nav class="nav-section">
-                <h4 class="nav-label">Shortcuts</h4>
-                <ul id="navShortcuts" class="nav-list">
-                    <!-- Injected via JS -->
-                </ul>
-            </nav>
+            <div id="sidebarContent" class="sidebar-content">
+                <!-- Injected via JS -->
+            </div>
         </aside>
 
         <!-- Content -->
-        <main class="content">
-            <div class="content-head">
-                <h1 id="categoryTitle">Overview</h1>
-                <span id="itemCount" class="meta-text">0 items</span>
+        <main class="content-area">
+            <div class="content-header">
+                <div class="title-group">
+                    <h1 id="activeCategoryTitle">الكل</h1>
+                    <span id="itemCount" class="count-badge">0 عنصر</span>
+                </div>
+                <!-- Sub Filter Dropdown Injected via JS -->
             </div>
 
-            <!-- Content Grid Container -->
-            <div id="contentContainer">
-                <!-- Most Used Section (Dynamic) -->
-                <div id="sectionPopular" class="section-block hidden">
-                    <h3 class="section-title">Most Used</h3>
-                    <div id="gridPopular" class="grid"></div>
-                </div>
-
-                <!-- Main Grid -->
-                <div id="sectionMain" class="section-block">
-                    <h3 id="mainGridTitle" class="section-title hidden">All Items</h3>
-                    <div id="gridMain" class="grid"></div>
-                </div>
+            <div id="symbolsGrid" class="grid">
+                <!-- Cards Injected via JS -->
             </div>
-
-            <!-- Empty State -->
+            
             <div id="emptyState" class="empty-state hidden">
-                <p>No results found.</p>
-                <button id="resetSearchBtn" class="btn-text">Clear Search</button>
+                <p>لا توجد نتائج مطابقة.</p>
+                <button id="resetSearch" class="btn-text">عرض الكل</button>
             </div>
-
-            <!-- Footer -->
-            <footer class="app-footer">
-                <p>&copy; 2024 SymQ Index. <span class="divider">/</span> Designed for efficiency.</p>
-            </footer>
         </main>
 
     </div>
 
-    <!-- Scripts -->
-    <script src="data-symbols.js"></script>
-    <script src="data-shortcuts.js"></script>
+    <!-- Data Files -->
+    <script src="symbols-diacritics.js"></script>
+    <script src="symbols-punctuation.js"></script>
+    <script src="symbols-math.js"></script>
+    <script src="symbols-supersub.js"></script>
+    <script src="symbols-currency.js"></script>
+    
+    <script src="shortcuts-windows.js"></script>
+    <script src="shortcuts-editing.js"></script>
+    <script src="shortcuts-word.js"></script>
+    <script src="shortcuts-excel.js"></script>
+    <script src="shortcuts-powerpoint.js"></script>
+    <script src="shortcuts-browser.js"></script>
+    <script src="shortcuts-explorer.js"></script>
+    
+    <!-- Logic -->
     <script src="app.js"></script>
 
 </body>

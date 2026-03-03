@@ -1,0 +1,100 @@
+
+const DATA_WORD = [
+    // --- Formatting (تنسيق النصوص) ---
+    { id: "wd01", type: "shortcut", shortcut: "Ctrl + B", arabicName: "خط عريض", englishName: "Bold", program: "Word", category: "Word", subCategory: "تنسيق", description: "جعل النص المحدد عريضاً.", keywords: ["bold", "thick"] },
+    { id: "wd02", type: "shortcut", shortcut: "Ctrl + I", arabicName: "خط مائل", englishName: "Italic", program: "Word", category: "Word", subCategory: "تنسيق", description: "إمالة النص المحدد.", keywords: ["italic", "slanted"] },
+    { id: "wd03", type: "shortcut", shortcut: "Ctrl + U", arabicName: "تسطير", englishName: "Underline", program: "Word", category: "Word", subCategory: "تنسيق", description: "وضع خط تحت النص.", keywords: ["line", "under"] },
+    { id: "wd04", type: "shortcut", shortcut: "Ctrl + Shift + W", arabicName: "تسطير الكلمات", englishName: "Underline Words", program: "Word", category: "Word", subCategory: "تنسيق", description: "تسطير الكلمات فقط دون المسافات.", keywords: ["line", "words"] },
+    { id: "wd05", type: "shortcut", shortcut: "Ctrl + Shift + D", arabicName: "تسطير مزدوج", englishName: "Double Underline", program: "Word", category: "Word", subCategory: "تنسيق", description: "وضع خطين تحت النص.", keywords: ["double", "line"] },
+    { id: "wd06", type: "shortcut", shortcut: "Ctrl + ]", arabicName: "تكبير الخط +1", englishName: "Grow Font +1", program: "Word", category: "Word", subCategory: "تنسيق", description: "زيادة حجم الخط بمقدار نقطة واحدة.", keywords: ["size", "grow"] },
+    { id: "wd07", type: "shortcut", shortcut: "Ctrl + [", arabicName: "تصغير الخط -1", englishName: "Shrink Font -1", program: "Word", category: "Word", subCategory: "تنسيق", description: "إنقاص حجم الخط بمقدار نقطة واحدة.", keywords: ["size", "shrink"] },
+    { id: "wd08", type: "shortcut", shortcut: "Ctrl + Shift + >", arabicName: "تكبير الخط", englishName: "Grow Font", program: "Word", category: "Word", subCategory: "تنسيق", description: "زيادة حجم الخط إلى الحجم القياسي التالي.", keywords: ["size", "big"] },
+    { id: "wd09", type: "shortcut", shortcut: "Ctrl + Shift + <", arabicName: "تصغير الخط", englishName: "Shrink Font", program: "Word", category: "Word", subCategory: "تنسيق", description: "إنقاص حجم الخط إلى الحجم القياسي السابق.", keywords: ["size", "small"] },
+    { id: "wd10", type: "shortcut", shortcut: "Ctrl + =", arabicName: "منخفض", englishName: "Subscript", program: "Word", category: "Word", subCategory: "تنسيق", description: "جعل النص منخفضاً (مثل H₂O).", keywords: ["sub", "math"] },
+    { id: "wd11", type: "shortcut", shortcut: "Ctrl + Shift + +", arabicName: "مرتفع", englishName: "Superscript", program: "Word", category: "Word", subCategory: "تنسيق", description: "جعل النص مرتفعاً (مثل X²).", keywords: ["super", "power"] },
+    { id: "wd12", type: "shortcut", shortcut: "Shift + F3", arabicName: "حالة الأحرف", englishName: "Change Case", program: "Word", category: "Word", subCategory: "تنسيق", description: "التبديل بين أحرف كبيرة وصغيرة (Capital/Small).", keywords: ["caps", "toggle"] },
+    { id: "wd13", type: "shortcut", shortcut: "Ctrl + Shift + A", arabicName: "كل الأحرف كبيرة", englishName: "All Caps", program: "Word", category: "Word", subCategory: "تنسيق", description: "تحويل النص الإنجليزي لأحرف كبيرة.", keywords: ["caps", "upper"] },
+    { id: "wd14", type: "shortcut", shortcut: "Ctrl + Shift + K", arabicName: "أحرف كبيرة صغيرة", englishName: "Small Caps", program: "Word", category: "Word", subCategory: "تنسيق", description: "تحويل النص لأحرف كبيرة بحجم صغير.", keywords: ["style", "font"] },
+    { id: "wd15", type: "shortcut", shortcut: "Ctrl + Space", arabicName: "مسح التنسيق", englishName: "Clear Formatting", program: "Word", category: "Word", subCategory: "تنسيق", description: "إزالة التنسيق والعودة للنمط الافتراضي.", keywords: ["reset", "normal"] },
+
+    // --- Paragraph (فقرة) ---
+    { id: "wd16", type: "shortcut", shortcut: "Ctrl + E", arabicName: "توسيط", englishName: "Center", program: "Word", category: "Word", subCategory: "فقرة", description: "توسيط النص في منتصف الصفحة.", keywords: ["align", "middle"] },
+    { id: "wd17", type: "shortcut", shortcut: "Ctrl + L", arabicName: "محاذاة لليسار", englishName: "Align Left", program: "Word", category: "Word", subCategory: "فقرة", description: "محاذاة الفقرة لليسار.", keywords: ["align", "left"] },
+    { id: "wd18", type: "shortcut", shortcut: "Ctrl + R", arabicName: "محاذاة لليمين", englishName: "Align Right", program: "Word", category: "Word", subCategory: "فقرة", description: "محاذاة الفقرة لليمين.", keywords: ["align", "right"] },
+    { id: "wd19", type: "shortcut", shortcut: "Ctrl + J", arabicName: "ضبط كلي", englishName: "Justify", program: "Word", category: "Word", subCategory: "فقرة", description: "ضبط نهايات الأسطر لتكون متساوية.", keywords: ["align", "full"] },
+    { id: "wd20", type: "shortcut", shortcut: "Ctrl + 1", arabicName: "تباعد مفرد", englishName: "Single Space", program: "Word", category: "Word", subCategory: "فقرة", description: "جعل تباعد الأسطر 1.0.", keywords: ["line", "spacing"] },
+    { id: "wd21", type: "shortcut", shortcut: "Ctrl + 2", arabicName: "تباعد مزدوج", englishName: "Double Space", program: "Word", category: "Word", subCategory: "فقرة", description: "جعل تباعد الأسطر 2.0.", keywords: ["line", "spacing"] },
+    { id: "wd22", type: "shortcut", shortcut: "Ctrl + 5", arabicName: "تباعد 1.5", englishName: "1.5 Space", program: "Word", category: "Word", subCategory: "فقرة", description: "جعل تباعد الأسطر 1.5.", keywords: ["line", "spacing"] },
+    { id: "wd23", type: "shortcut", shortcut: "Ctrl + 0", arabicName: "إضافة مسافة", englishName: "Add Space", program: "Word", category: "Word", subCategory: "فقرة", description: "إضافة/إزالة 12 نقطة قبل الفقرة.", keywords: ["padding", "margin"] },
+    { id: "wd24", type: "shortcut", shortcut: "Ctrl + M", arabicName: "زيادة المسافة البادئة", englishName: "Indent", program: "Word", category: "Word", subCategory: "فقرة", description: "تحريك الفقرة للداخل.", keywords: ["indent", "tab"] },
+    { id: "wd25", type: "shortcut", shortcut: "Ctrl + Shift + M", arabicName: "إنقاص المسافة البادئة", englishName: "Un-Indent", program: "Word", category: "Word", subCategory: "فقرة", description: "إرجاع الفقرة للخارج.", keywords: ["indent", "back"] },
+    { id: "wd26", type: "shortcut", shortcut: "Ctrl + Shift + S", arabicName: "تطبيق الأنماط", englishName: "Apply Styles", program: "Word", category: "Word", subCategory: "فقرة", description: "فتح نافذة الأنماط (Styles).", keywords: ["header", "format"] },
+
+    // --- Insert (إدراج) ---
+    { id: "wd27", type: "shortcut", shortcut: "Ctrl + Enter", arabicName: "فاصل صفحات", englishName: "Page Break", program: "Word", category: "Word", subCategory: "إدراج", description: "بدء صفحة جديدة فوراً.", keywords: ["new", "page"] },
+    { id: "wd28", type: "shortcut", shortcut: "Shift + Enter", arabicName: "فاصل أسطر", englishName: "Line Break", program: "Word", category: "Word", subCategory: "إدراج", description: "النزول لسطر جديد دون فقرة جديدة.", keywords: ["soft", "return"] },
+    { id: "wd29", type: "shortcut", shortcut: "Ctrl + K", arabicName: "ارتباط تشعبي", englishName: "Hyperlink", program: "Word", category: "Word", subCategory: "إدراج", description: "إدراج رابط إنترنت.", keywords: ["link", "web"] },
+    { id: "wd30", type: "shortcut", shortcut: "Alt + Shift + D", arabicName: "إدراج التاريخ", englishName: "Insert Date", program: "Word", category: "Word", subCategory: "إدراج", description: "إدراج تاريخ اليوم الحالي.", keywords: ["time", "today"] },
+    { id: "wd31", type: "shortcut", shortcut: "Alt + Shift + T", arabicName: "إدراج الوقت", englishName: "Insert Time", program: "Word", category: "Word", subCategory: "إدراج", description: "إدراج الوقت الحالي.", keywords: ["clock", "now"] },
+    { id: "wd32", type: "shortcut", shortcut: "Ctrl + Alt + C", arabicName: "رمز حقوق النسخ", englishName: "Copyright", program: "Word", category: "Word", subCategory: "إدراج", description: "إدراج رمز ©.", keywords: ["symbol", "rights"] },
+    { id: "wd33", type: "shortcut", shortcut: "Ctrl + Alt + R", arabicName: "رمز مسجل", englishName: "Registered", program: "Word", category: "Word", subCategory: "إدراج", description: "إدراج رمز ®.", keywords: ["symbol", "tm"] },
+    { id: "wd34", type: "shortcut", shortcut: "Ctrl + Alt + T", arabicName: "رمز علامة تجارية", englishName: "Trademark", program: "Word", category: "Word", subCategory: "إدراج", description: "إدراج رمز ™.", keywords: ["symbol", "brand"] },
+    { id: "wd35", type: "shortcut", shortcut: "Ctrl + Alt + F", arabicName: "حاشية سفلية", englishName: "Footnote", program: "Word", category: "Word", subCategory: "إدراج", description: "إدراج ملاحظة أسفل الصفحة.", keywords: ["note", "ref"] },
+    { id: "wd36", type: "shortcut", shortcut: "Ctrl + Alt + D", arabicName: "تعليق ختامي", englishName: "Endnote", program: "Word", category: "Word", subCategory: "إدراج", description: "إدراج ملاحظة في نهاية المستند.", keywords: ["note", "ref"] },
+
+    // --- Navigation (تنقل) ---
+    { id: "wd37", type: "shortcut", shortcut: "Ctrl + Home", arabicName: "بداية المستند", englishName: "Doc Start", program: "Word", category: "Word", subCategory: "تنقل", description: "الانتقال لأول المستند.", keywords: ["top", "jump"] },
+    { id: "wd38", type: "shortcut", shortcut: "Ctrl + End", arabicName: "نهاية المستند", englishName: "Doc End", program: "Word", category: "Word", subCategory: "تنقل", description: "الانتقال لآخر المستند.", keywords: ["bottom", "jump"] },
+    { id: "wd39", type: "shortcut", shortcut: "Ctrl + ←", arabicName: "كلمة لليسار", englishName: "Word Left", program: "Word", category: "Word", subCategory: "تنقل", description: "القفز كلمة كاملة لليسار.", keywords: ["move", "fast"] },
+    { id: "wd40", type: "shortcut", shortcut: "Ctrl + →", arabicName: "كلمة لليمين", englishName: "Word Right", program: "Word", category: "Word", subCategory: "تنقل", description: "القفز كلمة كاملة لليمين.", keywords: ["move", "fast"] },
+    { id: "wd41", type: "shortcut", shortcut: "Ctrl + ↑", arabicName: "فقرة لأعلى", englishName: "Para Up", program: "Word", category: "Word", subCategory: "تنقل", description: "الانتقال لبداية الفقرة السابقة.", keywords: ["move", "up"] },
+    { id: "wd42", type: "shortcut", shortcut: "Ctrl + ↓", arabicName: "فقرة لأسفل", englishName: "Para Down", program: "Word", category: "Word", subCategory: "تنقل", description: "الانتقال لبداية الفقرة التالية.", keywords: ["move", "down"] },
+    { id: "wd43", type: "shortcut", shortcut: "Ctrl + G", arabicName: "انتقال إلى", englishName: "Go To", program: "Word", category: "Word", subCategory: "تنقل", description: "الانتقال لرقم صفحة محدد.", keywords: ["page", "find"] },
+    { id: "wd44", type: "shortcut", shortcut: "Alt + Ctrl + Z", arabicName: "آخر تعديل", englishName: "Last Edit", program: "Word", category: "Word", subCategory: "تنقل", description: "العودة لآخر مكان قمت بالتعديل فيه.", keywords: ["back", "history"] },
+
+    // --- Selection (تحديد) ---
+    { id: "wd45", type: "shortcut", shortcut: "Shift + ↓", arabicName: "تحديد سطر", englishName: "Select Line", program: "Word", category: "Word", subCategory: "تحديد", description: "تحديد النص سطراً بسطر لأسفل.", keywords: ["highlight", "text"] },
+    { id: "wd46", type: "shortcut", shortcut: "Ctrl + Shift + ↓", arabicName: "تحديد فقرة", englishName: "Select Para", program: "Word", category: "Word", subCategory: "تحديد", description: "تحديد حتى نهاية الفقرة.", keywords: ["highlight", "block"] },
+    { id: "wd47", type: "shortcut", shortcut: "Ctrl + Click", arabicName: "تحديد جملة", englishName: "Select Sentence", program: "Word", category: "Word", subCategory: "تحديد", description: "انقر بالماوس مع Ctrl لتحديد الجملة.", keywords: ["mouse", "click"] },
+    { id: "wd48", type: "shortcut", shortcut: "Alt + Drag", arabicName: "تحديد عمودي", englishName: "Vertical Select", program: "Word", category: "Word", subCategory: "تحديد", description: "تحديد نص بشكل مربع/عمودي.", keywords: ["box", "block"] },
+    { id: "wd49", type: "shortcut", shortcut: "F8", arabicName: "وضع التحديد", englishName: "Extend Selection", program: "Word", category: "Word", subCategory: "تحديد", description: "توسيع التحديد (اضغط مراراً).", keywords: ["mode", "highlight"] },
+
+    // --- Editing & View (تحرير وعرض) ---
+    { id: "wd50", type: "shortcut", shortcut: "F7", arabicName: "تدقيق إملائي", englishName: "Spell Check", program: "Word", category: "Word", subCategory: "تحرير", description: "تشغيل المدقق الإملائي.", keywords: ["grammar", "error"] },
+    { id: "wd51", type: "shortcut", shortcut: "Shift + F7", arabicName: "قاموس المرادفات", englishName: "Thesaurus", program: "Word", category: "Word", subCategory: "تحرير", description: "البحث عن مرادفات للكلمة.", keywords: ["synonym", "dict"] },
+    { id: "wd52", type: "shortcut", shortcut: "Ctrl + H", arabicName: "استبدال", englishName: "Replace", program: "Word", category: "Word", subCategory: "تحرير", description: "البحث عن نص واستبداله.", keywords: ["find", "change"] },
+    { id: "wd53", type: "shortcut", shortcut: "Ctrl + F1", arabicName: "إخفاء الشريط", englishName: "Toggle Ribbon", program: "Word", category: "Word", subCategory: "عرض", description: "إظهار/إخفاء شريط الأدوات العلوي.", keywords: ["menu", "hide"] },
+    { id: "wd54", type: "shortcut", shortcut: "Alt + Ctrl + I", arabicName: "معاينة الطباعة", englishName: "Print Preview", program: "Word", category: "Word", subCategory: "عرض", description: "عرض المستند كما سيطبع.", keywords: ["paper", "view"] },
+    { id: "wd55", type: "shortcut", shortcut: "Alt + Ctrl + P", arabicName: "تخطيط الطباعة", englishName: "Print Layout", program: "Word", category: "Word", subCategory: "عرض", description: "التبديل لعرض تخطيط الطباعة.", keywords: ["view", "mode"] },
+    { id: "wd56", type: "shortcut", shortcut: "Alt + Ctrl + O", arabicName: "تخطيط التفصيل", englishName: "Outline View", program: "Word", category: "Word", subCategory: "عرض", description: "التبديل لعرض المخطط التفصيلي.", keywords: ["view", "structure"] },
+    { id: "wd57", type: "shortcut", shortcut: "Alt + Ctrl + N", arabicName: "مسودة", englishName: "Draft View", program: "Word", category: "Word", subCategory: "عرض", description: "التبديل لعرض المسودة.", keywords: ["view", "simple"] },
+    { id: "wd58", type: "shortcut", shortcut: "Ctrl + Scroll", arabicName: "تكبير/تصغير", englishName: "Zoom", program: "Word", category: "Word", subCategory: "عرض", description: "تغيير نسبة عرض المستند.", keywords: ["view", "size"] },
+
+    // --- Tables (جداول) ---
+    { id: "wd59", type: "shortcut", shortcut: "Tab", arabicName: "الخلية التالية", englishName: "Next Cell", program: "Word", category: "Word", subCategory: "جداول", description: "الانتقال للخلية التالية في الجدول.", keywords: ["table", "move"] },
+    { id: "wd60", type: "shortcut", shortcut: "Shift + Tab", arabicName: "الخلية السابقة", englishName: "Prev Cell", program: "Word", category: "Word", subCategory: "جداول", description: "الانتقال للخلية السابقة.", keywords: ["table", "back"] },
+    { id: "wd61", type: "shortcut", shortcut: "Alt + Home", arabicName: "أول الصف", englishName: "Row Start", program: "Word", category: "Word", subCategory: "جداول", description: "أول خلية في الصف الحالي.", keywords: ["table", "start"] },
+    { id: "wd62", type: "shortcut", shortcut: "Alt + End", arabicName: "آخر الصف", englishName: "Row End", program: "Word", category: "Word", subCategory: "جداول", description: "آخر خلية في الصف الحالي.", keywords: ["table", "finish"] },
+    { id: "wd63", type: "shortcut", shortcut: "Alt + PageUp", arabicName: "أول العمود", englishName: "Col Top", program: "Word", category: "Word", subCategory: "جداول", description: "أول خلية في العمود.", keywords: ["table", "top"] },
+    { id: "wd64", type: "shortcut", shortcut: "Alt + PageDown", arabicName: "آخر العمود", englishName: "Col Bottom", program: "Word", category: "Word", subCategory: "جداول", description: "آخر خلية في العمود.", keywords: ["table", "bottom"] },
+
+    // --- Fields (حقول) ---
+    { id: "wd65", type: "shortcut", shortcut: "Alt + F9", arabicName: "أكواد الحقول", englishName: "Field Codes", program: "Word", category: "Word", subCategory: "حقول", description: "إظهار/إخفاء أكواد الحقول.", keywords: ["code", "toggle"] },
+    { id: "wd66", type: "shortcut", shortcut: "F9", arabicName: "تحديث الحقل", englishName: "Update Field", program: "Word", category: "Word", subCategory: "حقول", description: "تحديث قيمة الحقل المحدد.", keywords: ["refresh", "calc"] },
+    { id: "wd67", type: "shortcut", shortcut: "Ctrl + F9", arabicName: "حقل فارغ", englishName: "Empty Field", program: "Word", category: "Word", subCategory: "حقول", description: "إدراج أقواس حقل فارغة { }.", keywords: ["insert", "code"] },
+
+    // --- Misc (متفرقات) ---
+    { id: "wd68", type: "shortcut", shortcut: "F12", arabicName: "حفظ باسم", englishName: "Save As", program: "Word", category: "Word", subCategory: "ملف", description: "فتح نافذة حفظ باسم مباشرة.", keywords: ["file", "disk"] },
+    { id: "wd69", type: "shortcut", shortcut: "Ctrl + F12", arabicName: "فتح", englishName: "Open", program: "Word", category: "Word", subCategory: "ملف", description: "فتح مستند.", keywords: ["file", "load"] },
+    { id: "wd70", type: "shortcut", shortcut: "Ctrl + Shift + F12", arabicName: "طباعة", englishName: "Print", program: "Word", category: "Word", subCategory: "ملف", description: "نافذة الطباعة.", keywords: ["file", "paper"] },
+    { id: "wd71", type: "shortcut", shortcut: "Alt + F4", arabicName: "إغلاق Word", englishName: "Exit", program: "Word", category: "Word", subCategory: "ملف", description: "إغلاق البرنامج.", keywords: ["close", "quit"] },
+    { id: "wd72", type: "shortcut", shortcut: "Ctrl + W", arabicName: "إغلاق المستند", englishName: "Close Doc", program: "Word", category: "Word", subCategory: "ملف", description: "إغلاق الملف الحالي فقط.", keywords: ["close", "file"] },
+    { id: "wd73", type: "shortcut", shortcut: "Ctrl + Shift + C", arabicName: "نسخ التنسيق", englishName: "Copy Format", program: "Word", category: "Word", subCategory: "تنسيق", description: "نسخ نمط النص فقط.", keywords: ["painter", "style"] },
+    { id: "wd74", type: "shortcut", shortcut: "Ctrl + Shift + V", arabicName: "لصق التنسيق", englishName: "Paste Format", program: "Word", category: "Word", subCategory: "تنسيق", description: "تطبيق النمط المنسوخ.", keywords: ["painter", "style"] },
+    { id: "wd75", type: "shortcut", shortcut: "Ctrl + Alt + V", arabicName: "لصق خاص", englishName: "Paste Special", program: "Word", category: "Word", subCategory: "تحرير", description: "لصق بخيارات متقدمة.", keywords: ["format", "plain"] },
+    { id: "wd76", type: "shortcut", shortcut: "Alt + Ctrl + S", arabicName: "انقسام النافذة", englishName: "Split Window", program: "Word", category: "Word", subCategory: "عرض", description: "قسم نافذة المستند لجزئين.", keywords: ["view", "two"] },
+    { id: "wd77", type: "shortcut", shortcut: "Ctrl + Shift + E", arabicName: "تعقب التغييرات", englishName: "Track Changes", program: "Word", category: "Word", subCategory: "مراجعة", description: "تشغيل/إيقاف تعقب التعديلات.", keywords: ["review", "edit"] },
+    { id: "wd78", type: "shortcut", shortcut: "Alt + Shift + C", arabicName: "إغلاق اللوحة", englishName: "Close Pane", program: "Word", category: "Word", subCategory: "عرض", description: "إغلاق اللوحة الجانبية النشطة.", keywords: ["sidebar", "hide"] },
+    { id: "wd79", type: "shortcut", shortcut: "F4", arabicName: "تكرار", englishName: "Repeat", program: "Word", category: "Word", subCategory: "تحرير", description: "تكرار آخر إجراء قمت به.", keywords: ["redo", "again"] },
+    { id: "wd80", type: "shortcut", shortcut: "Ctrl + Shift + G", arabicName: "عدد الكلمات", englishName: "Word Count", program: "Word", category: "Word", subCategory: "مراجعة", description: "إظهار إحصائيات الكلمات والأسطر.", keywords: ["stats", "info"] }
+];

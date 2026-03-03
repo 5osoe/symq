@@ -1,0 +1,78 @@
+
+const DATA_BROWSER = [
+    // --- Tabs & Windows (التبويبات والنوافذ) ---
+    { id: "br01", type: "shortcut", shortcut: "Ctrl + T", arabicName: "تبويب جديد", englishName: "New Tab", program: "Browser", category: "المتصفح", subCategory: "تبويبات", description: "فتح لسان جديد.", keywords: ["chrome", "edge", "open"] },
+    { id: "br02", type: "shortcut", shortcut: "Ctrl + W", arabicName: "إغلاق تبويب", englishName: "Close Tab", program: "Browser", category: "المتصفح", subCategory: "تبويبات", description: "إغلاق اللسان الحالي.", keywords: ["exit", "remove"] },
+    { id: "br03", type: "shortcut", shortcut: "Ctrl + Shift + T", arabicName: "استعادة تبويب", englishName: "Reopen Tab", program: "Browser", category: "المتصفح", subCategory: "تبويبات", description: "فتح آخر تبويب تم إغلاقه.", keywords: ["undo", "restore"] },
+    { id: "br04", type: "shortcut", shortcut: "Ctrl + Tab", arabicName: "التبويب التالي", englishName: "Next Tab", program: "Browser", category: "المتصفح", subCategory: "تبويبات", description: "الانتقال للسان الأيسر.", keywords: ["switch", "cycle"] },
+    { id: "br05", type: "shortcut", shortcut: "Ctrl + Shift + Tab", arabicName: "التبويب السابق", englishName: "Prev Tab", program: "Browser", category: "المتصفح", subCategory: "تبويبات", description: "الانتقال للسان الأيمن.", keywords: ["switch", "cycle"] },
+    { id: "br06", type: "shortcut", shortcut: "Ctrl + 1..8", arabicName: "ذهاب للرقم", englishName: "Go to #", program: "Browser", category: "المتصفح", subCategory: "تبويبات", description: "الانتقال للتبويب رقم X.", keywords: ["jump", "select"] },
+    { id: "br07", type: "shortcut", shortcut: "Ctrl + 9", arabicName: "التبويب الأخير", englishName: "Last Tab", program: "Browser", category: "المتصفح", subCategory: "تبويبات", description: "الانتقال لآخر تبويب مفتوح.", keywords: ["jump", "end"] },
+    { id: "br08", type: "shortcut", shortcut: "Ctrl + N", arabicName: "نافذة جديدة", englishName: "New Window", program: "Browser", category: "المتصفح", subCategory: "تبويبات", description: "فتح نافذة متصفح جديدة.", keywords: ["create", "blank"] },
+    { id: "br09", type: "shortcut", shortcut: "Ctrl + Shift + N", arabicName: "وضع المتخفي", englishName: "Incognito", program: "Browser", category: "المتصفح", subCategory: "تبويبات", description: "فتح نافذة خاصة (Chrome/Edge).", keywords: ["private", "secret"] },
+    { id: "br10", type: "shortcut", shortcut: "Ctrl + Shift + P", arabicName: "نافذة خاصة", englishName: "Private Window", program: "Browser", category: "المتصفح", subCategory: "تبويبات", description: "فتح نافذة خاصة (Firefox).", keywords: ["incognito", "secret"] },
+    { id: "br11", type: "shortcut", shortcut: "Ctrl + Shift + W", arabicName: "إغلاق النافذة", englishName: "Close Window", program: "Browser", category: "المتصفح", subCategory: "تبويبات", description: "إغلاق النافذة بكل تبويباتها.", keywords: ["exit", "quit"] },
+
+    // --- Navigation (التصفح) ---
+    { id: "br12", type: "shortcut", shortcut: "Alt + ←", arabicName: "للخلف", englishName: "Back", program: "Browser", category: "المتصفح", subCategory: "تصفح", description: "الرجوع للصفحة السابقة.", keywords: ["history", "prev"] },
+    { id: "br13", type: "shortcut", shortcut: "Alt + →", arabicName: "للأمام", englishName: "Forward", program: "Browser", category: "المتصفح", subCategory: "تصفح", description: "التقدم للصفحة التالية.", keywords: ["history", "next"] },
+    { id: "br14", type: "shortcut", shortcut: "F5", arabicName: "تحديث", englishName: "Refresh", program: "Browser", category: "المتصفح", subCategory: "تصفح", description: "إعادة تحميل الصفحة.", keywords: ["reload", "update"] },
+    { id: "br15", type: "shortcut", shortcut: "Ctrl + R", arabicName: "تحديث", englishName: "Reload", program: "Browser", category: "المتصفح", subCategory: "تصفح", description: "إعادة تحميل الصفحة (بديل).", keywords: ["refresh", "update"] },
+    { id: "br16", type: "shortcut", shortcut: "Ctrl + F5", arabicName: "تحديث قسري", englishName: "Hard Refresh", program: "Browser", category: "المتصفح", subCategory: "تصفح", description: "تحديث وتجاهل الذاكرة المخبأة (Cache).", keywords: ["clean", "reload"] },
+    { id: "br17", type: "shortcut", shortcut: "Esc", arabicName: "إيقاف", englishName: "Stop", program: "Browser", category: "المتصفح", subCategory: "تصفح", description: "إيقاف تحميل الصفحة.", keywords: ["cancel", "loading"] },
+    { id: "br18", type: "shortcut", shortcut: "Alt + Home", arabicName: "الرئيسية", englishName: "Home", program: "Browser", category: "المتصفح", subCategory: "تصفح", description: "الذهاب للصفحة الرئيسية.", keywords: ["start", "page"] },
+
+    // --- Address Bar & Search (العنوان والبحث) ---
+    { id: "br19", type: "shortcut", shortcut: "Ctrl + L", arabicName: "شريط العنوان", englishName: "Address Bar", program: "Browser", category: "المتصفح", subCategory: "بحث", description: "تحديد رابط الصفحة الحالي.", keywords: ["url", "link"] },
+    { id: "br20", type: "shortcut", shortcut: "Alt + D", arabicName: "تحديد العنوان", englishName: "Focus URL", program: "Browser", category: "المتصفح", subCategory: "بحث", description: "اختصار بديل لتحديد الرابط.", keywords: ["url", "link"] },
+    { id: "br21", type: "shortcut", shortcut: "Ctrl + K", arabicName: "بحث جوجل", englishName: "Google Search", program: "Browser", category: "المتصفح", subCategory: "بحث", description: "الكتابة في شريط البحث فوراً.", keywords: ["query", "find"] },
+    { id: "br22", type: "shortcut", shortcut: "Ctrl + E", arabicName: "بحث سريع", englishName: "Quick Search", program: "Browser", category: "المتصفح", subCategory: "بحث", description: "اختصار بديل للبحث.", keywords: ["query", "find"] },
+    { id: "br23", type: "shortcut", shortcut: "Ctrl + Enter", arabicName: "إكمال العنوان", englishName: "Complete .com", program: "Browser", category: "المتصفح", subCategory: "بحث", description: "إضافة www. و .com للنص.", keywords: ["url", "suffix"] },
+    { id: "br24", type: "shortcut", shortcut: "Ctrl + F", arabicName: "بحث في الصفحة", englishName: "Find in Page", program: "Browser", category: "المتصفح", subCategory: "بحث", description: "البحث عن نص داخل الصفحة.", keywords: ["find", "text"] },
+    { id: "br25", type: "shortcut", shortcut: "Ctrl + G", arabicName: "النتيجة التالية", englishName: "Find Next", program: "Browser", category: "المتصفح", subCategory: "بحث", description: "الانتقال لنتيجة البحث التالية.", keywords: ["next", "match"] },
+    { id: "br26", type: "shortcut", shortcut: "Ctrl + Shift + G", arabicName: "النتيجة السابقة", englishName: "Find Prev", program: "Browser", category: "المتصفح", subCategory: "بحث", description: "الانتقال لنتيجة البحث السابقة.", keywords: ["back", "match"] },
+
+    // --- Zoom & View (العرض والتكبير) ---
+    { id: "br27", type: "shortcut", shortcut: "Ctrl + +", arabicName: "تكبير", englishName: "Zoom In", program: "Browser", category: "المتصفح", subCategory: "عرض", description: "تكبير حجم محتوى الصفحة.", keywords: ["magnify", "size"] },
+    { id: "br28", type: "shortcut", shortcut: "Ctrl + -", arabicName: "تصغير", englishName: "Zoom Out", program: "Browser", category: "المتصفح", subCategory: "عرض", description: "تصغير حجم محتوى الصفحة.", keywords: ["shrink", "size"] },
+    { id: "br29", type: "shortcut", shortcut: "Ctrl + 0", arabicName: "حجم طبيعي", englishName: "Reset Zoom", program: "Browser", category: "المتصفح", subCategory: "عرض", description: "إعادة الحجم إلى 100%.", keywords: ["default", "reset"] },
+    { id: "br30", type: "shortcut", shortcut: "F11", arabicName: "ملء الشاشة", englishName: "Fullscreen", program: "Browser", category: "المتصفح", subCategory: "عرض", description: "تفعيل وضع ملء الشاشة.", keywords: ["view", "max"] },
+    { id: "br31", type: "shortcut", shortcut: "Space", arabicName: "تمرير لأسفل", englishName: "Scroll Down", program: "Browser", category: "المتصفح", subCategory: "عرض", description: "النزول صفحة كاملة.", keywords: ["page", "move"] },
+    { id: "br32", type: "shortcut", shortcut: "Shift + Space", arabicName: "تمرير لأعلى", englishName: "Scroll Up", program: "Browser", category: "المتصفح", subCategory: "عرض", description: "الصعود صفحة كاملة.", keywords: ["page", "move"] },
+    { id: "br33", type: "shortcut", shortcut: "Home", arabicName: "أول الصفحة", englishName: "Top of Page", program: "Browser", category: "المتصفح", subCategory: "عرض", description: "الانتقال لرأس الصفحة.", keywords: ["start", "jump"] },
+    { id: "br34", type: "shortcut", shortcut: "End", arabicName: "آخر الصفحة", englishName: "Bottom of Page", program: "Browser", category: "المتصفح", subCategory: "عرض", description: "الانتقال لتذييل الصفحة.", keywords: ["finish", "jump"] },
+
+    // --- History & Bookmarks (السجل والمفضلة) ---
+    { id: "br35", type: "shortcut", shortcut: "Ctrl + H", arabicName: "السجل", englishName: "History", program: "Browser", category: "المتصفح", subCategory: "أدوات", description: "فتح صفحة تأريخ التصفح.", keywords: ["visits", "log"] },
+    { id: "br36", type: "shortcut", shortcut: "Ctrl + J", arabicName: "تنزيلات", englishName: "Downloads", program: "Browser", category: "المتصفح", subCategory: "أدوات", description: "فتح قائمة الملفات المحملة.", keywords: ["files", "save"] },
+    { id: "br37", type: "shortcut", shortcut: "Ctrl + D", arabicName: "إضافة مفضلة", englishName: "Bookmark", program: "Browser", category: "المتصفح", subCategory: "أدوات", description: "حفظ الصفحة الحالية في المفضلة.", keywords: ["star", "save"] },
+    { id: "br38", type: "shortcut", shortcut: "Ctrl + Shift + D", arabicName: "حفظ كل التبويبات", englishName: "Bookmark All", program: "Browser", category: "المتصفح", subCategory: "أدوات", description: "حفظ كل الصفحات المفتوحة كمفضلة.", keywords: ["star", "save"] },
+    { id: "br39", type: "shortcut", shortcut: "Ctrl + Shift + O", arabicName: "مدير المفضلة", englishName: "Bookmark Manager", program: "Browser", category: "المتصفح", subCategory: "أدوات", description: "فتح صفحة إدارة المفضلة.", keywords: ["edit", "list"] },
+    { id: "br40", type: "shortcut", shortcut: "Ctrl + Shift + B", arabicName: "شريط المفضلة", englishName: "Bookmark Bar", program: "Browser", category: "المتصفح", subCategory: "عرض", description: "إظهار/إخفاء شريط الإشارات المرجعية.", keywords: ["view", "hide"] },
+    { id: "br41", type: "shortcut", shortcut: "Ctrl + Shift + Delete", arabicName: "محو البيانات", englishName: "Clear Data", program: "Browser", category: "المتصفح", subCategory: "أدوات", description: "فتح نافذة حذف ملفات تعريف الارتباط والكاش.", keywords: ["privacy", "cache"] },
+
+    // --- Developer & Misc (مطورين ومتفرقات) ---
+    { id: "br42", type: "shortcut", shortcut: "F12", arabicName: "أدوات المطور", englishName: "Dev Tools", program: "Browser", category: "المتصفح", subCategory: "مطور", description: "فتح لوحة أدوات التطوير (Console/Inspector).", keywords: ["code", "debug"] },
+    { id: "br43", type: "shortcut", shortcut: "Ctrl + Shift + I", arabicName: "فحص العنصر", englishName: "Inspect", program: "Browser", category: "المتصفح", subCategory: "مطور", description: "فتح أدوات المطور.", keywords: ["code", "html"] },
+    { id: "br44", type: "shortcut", shortcut: "Ctrl + Shift + J", arabicName: "الكونسول", englishName: "Console", program: "Browser", category: "المتصفح", subCategory: "مطور", description: "فتح تبويب Console مباشرة.", keywords: ["log", "js"] },
+    { id: "br45", type: "shortcut", shortcut: "Ctrl + U", arabicName: "مصدر الصفحة", englishName: "View Source", program: "Browser", category: "المتصفح", subCategory: "مطور", description: "عرض كود HTML للصفحة.", keywords: ["code", "raw"] },
+    { id: "br46", type: "shortcut", shortcut: "Shift + Esc", arabicName: "مدير مهام المتصفح", englishName: "Browser Task Manager", program: "Browser", category: "المتصفح", subCategory: "أدوات", description: "عرض استهلاك التبويبات للذاكرة.", keywords: ["ram", "cpu"] },
+    { id: "br47", type: "shortcut", shortcut: "Ctrl + P", arabicName: "طباعة", englishName: "Print", program: "Browser", category: "المتصفح", subCategory: "أدوات", description: "طباعة الصفحة الحالية.", keywords: ["paper", "pdf"] },
+    { id: "br48", type: "shortcut", shortcut: "Ctrl + S", arabicName: "حفظ الصفحة", englishName: "Save Page", program: "Browser", category: "المتصفح", subCategory: "أدوات", description: "حفظ الصفحة كملف HTML.", keywords: ["disk", "download"] },
+    { id: "br49", type: "shortcut", shortcut: "Ctrl + O", arabicName: "فتح ملف", englishName: "Open File", program: "Browser", category: "المتصفح", subCategory: "أدوات", description: "فتح ملف محلي في المتصفح.", keywords: ["load", "disk"] },
+    { id: "br50", type: "shortcut", shortcut: "Alt + Shift + I", arabicName: "إرسال ملاحظات", englishName: "Feedback", program: "Browser", category: "المتصفح", subCategory: "أدوات", description: "فتح نموذج الملاحظات.", keywords: ["report", "bug"] },
+
+    // --- Chrome Specific / Common ---
+    { id: "br51", type: "shortcut", shortcut: "Ctrl + Shift + M", arabicName: "تبديل المستخدم", englishName: "Switch User", program: "Browser", category: "المتصفح", subCategory: "أدوات", description: "تبديل البروفايل (Profile).", keywords: ["profile", "account"] },
+    { id: "br52", type: "shortcut", shortcut: "Ctrl + Shift + C", arabicName: "تحديد عنصر", englishName: "Select Element", program: "Browser", category: "المتصفح", subCategory: "مطور", description: "أداة اختيار العناصر للفحص.", keywords: ["inspect", "mouse"] },
+    { id: "br53", type: "shortcut", shortcut: "Alt + E", arabicName: "القائمة", englishName: "Menu", program: "Browser", category: "المتصفح", subCategory: "أدوات", description: "فتح قائمة الإعدادات.", keywords: ["settings", "options"] },
+    { id: "br54", type: "shortcut", shortcut: "Alt + F", arabicName: "القائمة (بديل)", englishName: "Menu (Alt)", program: "Browser", category: "المتصفح", subCategory: "أدوات", description: "فتح قائمة الإعدادات.", keywords: ["settings", "options"] },
+
+    // --- Mouse & Gestures (Drag) ---
+    { id: "br55", type: "shortcut", shortcut: "Ctrl + Click", arabicName: "فتح في خلفية", englishName: "Open Background", program: "Browser", category: "المتصفح", subCategory: "ماوس", description: "فتح الرابط في تبويب جديد دون الانتقال إليه.", keywords: ["tab", "link"] },
+    { id: "br56", type: "shortcut", shortcut: "Ctrl + Shift + Click", arabicName: "فتح وانتقال", englishName: "Open & Focus", program: "Browser", category: "المتصفح", subCategory: "ماوس", description: "فتح الرابط في تبويب جديد والانتقال إليه.", keywords: ["tab", "link"] },
+    { id: "br57", type: "shortcut", shortcut: "Shift + Click", arabicName: "نافذة جديدة", englishName: "Open Window", program: "Browser", category: "المتصفح", subCategory: "ماوس", description: "فتح الرابط في نافذة جديدة.", keywords: ["window", "link"] },
+    { id: "br58", type: "shortcut", shortcut: "Drag Tab", arabicName: "فصل التبويب", englishName: "Detach Tab", program: "Browser", category: "المتصفح", subCategory: "ماوس", description: "سحب التبويب للخارج لفتح نافذة جديدة.", keywords: ["window", "move"] },
+    { id: "br59", type: "shortcut", shortcut: "Middle Click", arabicName: "إغلاق/فتح", englishName: "Close/Open", program: "Browser", category: "المتصفح", subCategory: "ماوس", description: "النقر بالعجلة يغلق التبويب أو يفتح الرابط.", keywords: ["wheel", "tab"] },
+    { id: "br60", type: "shortcut", shortcut: "Shift + Scroll", arabicName: "تصفح أفقي", englishName: "Horizontal Scroll", program: "Browser", category: "المتصفح", subCategory: "ماوس", description: "التمرير يميناً ويساراً.", keywords: ["move", "wheel"] }
+];

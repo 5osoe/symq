@@ -1,0 +1,52 @@
+
+const DATA_EXPLORER = [
+    // --- Navigation (التنقل) ---
+    { id: "fx01", type: "shortcut", shortcut: "Win + E", arabicName: "فتح المستكشف", englishName: "Open Explorer", program: "Explorer", category: "مستكشف الملفات", subCategory: "تنقل", description: "فتح نافذة مستكشف ملفات جديدة.", keywords: ["files", "my computer"] },
+    { id: "fx02", type: "shortcut", shortcut: "Alt + ↑", arabicName: "المجلد الأعلى", englishName: "Up One Level", program: "Explorer", category: "مستكشف الملفات", subCategory: "تنقل", description: "الانتقال للمجلد الأب (المحتوي).", keywords: ["parent", "back"] },
+    { id: "fx03", type: "shortcut", shortcut: "Alt + ←", arabicName: "للخلف", englishName: "Back", program: "Explorer", category: "مستكشف الملفات", subCategory: "تنقل", description: "الرجوع للمجلد الذي كنت فيه.", keywords: ["history", "prev"] },
+    { id: "fx04", type: "shortcut", shortcut: "Alt + →", arabicName: "للأمام", englishName: "Forward", program: "Explorer", category: "مستكشف الملفات", subCategory: "تنقل", description: "التقدم للمجلد التالي في السجل.", keywords: ["history", "next"] },
+    { id: "fx05", type: "shortcut", shortcut: "Backspace", arabicName: "للخلف (بديل)", englishName: "Back (Alt)", program: "Explorer", category: "مستكشف الملفات", subCategory: "تنقل", description: "الرجوع للخلف (قد لا يعمل في كل النسخ).", keywords: ["prev", "history"] },
+    { id: "fx06", type: "shortcut", shortcut: "Enter", arabicName: "فتح المجلد", englishName: "Open Folder", program: "Explorer", category: "مستكشف الملفات", subCategory: "تنقل", description: "الدخول للمجلد أو فتح الملف المحدد.", keywords: ["go", "select"] },
+    { id: "fx07", type: "shortcut", shortcut: "Home", arabicName: "أول القائمة", englishName: "Top of List", program: "Explorer", category: "مستكشف الملفات", subCategory: "تنقل", description: "تحديد أول ملف في المجلد.", keywords: ["start", "first"] },
+    { id: "fx08", type: "shortcut", shortcut: "End", arabicName: "آخر القائمة", englishName: "End of List", program: "Explorer", category: "مستكشف الملفات", subCategory: "تنقل", description: "تحديد آخر ملف في المجلد.", keywords: ["finish", "last"] },
+
+    // --- File Management (إدارة الملفات) ---
+    { id: "fx09", type: "shortcut", shortcut: "Ctrl + Shift + N", arabicName: "مجلد جديد", englishName: "New Folder", program: "Explorer", category: "مستكشف الملفات", subCategory: "إدارة", description: "إنشاء مجلد جديد فوراً.", keywords: ["create", "dir"] },
+    { id: "fx10", type: "shortcut", shortcut: "F2", arabicName: "إعادة تسمية", englishName: "Rename", program: "Explorer", category: "مستكشف الملفات", subCategory: "إدارة", description: "تغيير اسم الملف المحدد.", keywords: ["name", "edit"] },
+    { id: "fx11", type: "shortcut", shortcut: "Delete", arabicName: "حذف", englishName: "Delete", program: "Explorer", category: "مستكشف الملفات", subCategory: "إدارة", description: "نقل الملف لسلة المحذوفات.", keywords: ["trash", "remove"] },
+    { id: "fx12", type: "shortcut", shortcut: "Shift + Delete", arabicName: "حذف نهائي", englishName: "Permanent Delete", program: "Explorer", category: "مستكشف الملفات", subCategory: "إدارة", description: "حذف الملف فوراً دون سلة المهملات.", keywords: ["destroy", "remove"] },
+    { id: "fx13", type: "shortcut", shortcut: "Alt + Enter", arabicName: "الخصائص", englishName: "Properties", program: "Explorer", category: "مستكشف الملفات", subCategory: "إدارة", description: "عرض خصائص وحجم الملف.", keywords: ["info", "size"] },
+    { id: "fx14", type: "shortcut", shortcut: "Ctrl + C", arabicName: "نسخ", englishName: "Copy", program: "Explorer", category: "مستكشف الملفات", subCategory: "إدارة", description: "نسخ الملفات المحددة.", keywords: ["clone", "file"] },
+    { id: "fx15", type: "shortcut", shortcut: "Ctrl + X", arabicName: "قص", englishName: "Cut", program: "Explorer", category: "مستكشف الملفات", subCategory: "إدارة", description: "نقل الملفات المحددة.", keywords: ["move", "file"] },
+    { id: "fx16", type: "shortcut", shortcut: "Ctrl + V", arabicName: "لصق", englishName: "Paste", program: "Explorer", category: "مستكشف الملفات", subCategory: "إدارة", description: "لصق الملفات المنسوخة.", keywords: ["drop", "file"] },
+    { id: "fx17", type: "shortcut", shortcut: "Ctrl + A", arabicName: "تحديد الكل", englishName: "Select All", program: "Explorer", category: "مستكشف الملفات", subCategory: "إدارة", description: "تحديد جميع الملفات في المجلد.", keywords: ["highlight", "all"] },
+    { id: "fx18", type: "shortcut", shortcut: "Ctrl + W", arabicName: "إغلاق النافذة", englishName: "Close Window", program: "Explorer", category: "مستكشف الملفات", subCategory: "إدارة", description: "إغلاق نافذة المستكشف الحالية.", keywords: ["exit", "close"] },
+    { id: "fx19", type: "shortcut", shortcut: "Ctrl + F", arabicName: "بحث", englishName: "Search Box", program: "Explorer", category: "مستكشف الملفات", subCategory: "إدارة", description: "التركيز على شريط البحث.", keywords: ["find", "query"] },
+    { id: "fx20", type: "shortcut", shortcut: "F11", arabicName: "ملء الشاشة", englishName: "Fullscreen", program: "Explorer", category: "مستكشف الملفات", subCategory: "إدارة", description: "تكبير النافذة لملء الشاشة.", keywords: ["view", "max"] },
+
+    // --- View Modes (طرق العرض) ---
+    { id: "fx21", type: "shortcut", shortcut: "Ctrl + Shift + 1", arabicName: "أيقونات ضخمة", englishName: "Extra Large Icons", program: "Explorer", category: "مستكشف الملفات", subCategory: "عرض", description: "عرض بأيقونات كبيرة جداً.", keywords: ["view", "size"] },
+    { id: "fx22", type: "shortcut", shortcut: "Ctrl + Shift + 2", arabicName: "أيقونات كبيرة", englishName: "Large Icons", program: "Explorer", category: "مستكشف الملفات", subCategory: "عرض", description: "عرض بأيقونات كبيرة.", keywords: ["view", "size"] },
+    { id: "fx23", type: "shortcut", shortcut: "Ctrl + Shift + 3", arabicName: "أيقونات متوسطة", englishName: "Medium Icons", program: "Explorer", category: "مستكشف الملفات", subCategory: "عرض", description: "عرض بأيقونات متوسطة.", keywords: ["view", "size"] },
+    { id: "fx24", type: "shortcut", shortcut: "Ctrl + Shift + 4", arabicName: "أيقونات صغيرة", englishName: "Small Icons", program: "Explorer", category: "مستكشف الملفات", subCategory: "عرض", description: "عرض بأيقونات صغيرة.", keywords: ["view", "size"] },
+    { id: "fx25", type: "shortcut", shortcut: "Ctrl + Shift + 5", arabicName: "قائمة", englishName: "List View", program: "Explorer", category: "مستكشف الملفات", subCategory: "عرض", description: "عرض الملفات كقائمة.", keywords: ["view", "compact"] },
+    { id: "fx26", type: "shortcut", shortcut: "Ctrl + Shift + 6", arabicName: "تفاصيل", englishName: "Details View", program: "Explorer", category: "مستكشف الملفات", subCategory: "عرض", description: "عرض مع التفاصيل (الحجم، التاريخ).", keywords: ["view", "info"] },
+    { id: "fx27", type: "shortcut", shortcut: "Ctrl + Shift + 7", arabicName: "تجانب", englishName: "Tiles View", program: "Explorer", category: "مستكشف الملفات", subCategory: "عرض", description: "عرض كبلاطات.", keywords: ["view", "grid"] },
+    { id: "fx28", type: "shortcut", shortcut: "Ctrl + Shift + 8", arabicName: "محتوى", englishName: "Content View", program: "Explorer", category: "مستكشف الملفات", subCategory: "عرض", description: "عرض المحتوى.", keywords: ["view", "rows"] },
+
+    // --- Panes & Layout (الأشرطة واللوحات) ---
+    { id: "fx29", type: "shortcut", shortcut: "Alt + P", arabicName: "لوحة المعاينة", englishName: "Preview Pane", program: "Explorer", category: "مستكشف الملفات", subCategory: "عرض", description: "إظهار/إخفاء معاينة الملف.", keywords: ["sidebar", "image"] },
+    { id: "fx30", type: "shortcut", shortcut: "Alt + Shift + P", arabicName: "لوحة التفاصيل", englishName: "Details Pane", program: "Explorer", category: "مستكشف الملفات", subCategory: "عرض", description: "إظهار/إخفاء تفاصيل الملف الجانبية.", keywords: ["sidebar", "info"] },
+    { id: "fx31", type: "shortcut", shortcut: "Ctrl + F1", arabicName: "الشريط", englishName: "Ribbon", program: "Explorer", category: "مستكشف الملفات", subCategory: "عرض", description: "تصغير/توسيع شريط الأدوات العلوي.", keywords: ["menu", "tools"] },
+    { id: "fx32", type: "shortcut", shortcut: "Num Lock + *", arabicName: "توسيع الكل", englishName: "Expand All", program: "Explorer", category: "مستكشف الملفات", subCategory: "شجرة", description: "توسيع كل المجلدات الفرعية (لوحة التنقل).", keywords: ["tree", "folder"] },
+    { id: "fx33", type: "shortcut", shortcut: "Num Lock + +", arabicName: "توسيع المجلد", englishName: "Expand Folder", program: "Explorer", category: "مستكشف الملفات", subCategory: "شجرة", description: "توسيع المجلد المحدد.", keywords: ["tree", "open"] },
+    { id: "fx34", type: "shortcut", shortcut: "Num Lock + -", arabicName: "طي المجلد", englishName: "Collapse Folder", program: "Explorer", category: "مستكشف الملفات", subCategory: "شجرة", description: "طي المجلد المحدد.", keywords: ["tree", "close"] },
+    { id: "fx35", type: "shortcut", shortcut: "Ctrl + Shift + E", arabicName: "توسيع للأصل", englishName: "Expand to Current", program: "Explorer", category: "مستكشف الملفات", subCategory: "شجرة", description: "إظهار المجلد الحالي في شجرة التنقل.", keywords: ["tree", "locate"] },
+
+    // --- Address Bar (شريط العنوان) ---
+    { id: "fx36", type: "shortcut", shortcut: "Alt + D", arabicName: "شريط العنوان", englishName: "Address Bar", program: "Explorer", category: "مستكشف الملفات", subCategory: "تنقل", description: "تحديد مسار المجلد الحالي.", keywords: ["path", "url"] },
+    { id: "fx37", type: "shortcut", shortcut: "Ctrl + L", arabicName: "شريط العنوان (بديل)", englishName: "Address Bar (Alt)", program: "Explorer", category: "مستكشف الملفات", subCategory: "تنقل", description: "تحديد مسار المجلد.", keywords: ["path", "url"] },
+    { id: "fx38", type: "shortcut", shortcut: "F4", arabicName: "قائمة العنوان", englishName: "Address List", program: "Explorer", category: "مستكشف الملفات", subCategory: "تنقل", description: "فتح قائمة المسارات السابقة.", keywords: ["history", "dropdown"] },
+    { id: "fx39", type: "shortcut", shortcut: "F5", arabicName: "تحديث", englishName: "Refresh", program: "Explorer", category: "مستكشف الملفات", subCategory: "إدارة", description: "تحديث محتويات المجلد.", keywords: ["reload", "update"] },
+    { id: "fx40", type: "shortcut", shortcut: "F6", arabicName: "تنقل دائري", englishName: "Cycle Panes", program: "Explorer", category: "مستكشف الملفات", subCategory: "تنقل", description: "التنقل بين الألواح (شجرة، ملفات، عنوان).", keywords: ["switch", "focus"] }
+];

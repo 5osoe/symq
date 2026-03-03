@@ -1,0 +1,100 @@
+
+const DATA_EXCEL = [
+    // --- Navigation (تنقل) ---
+    { id: "ex01", type: "shortcut", shortcut: "Ctrl + Arrow", arabicName: "حافة البيانات", englishName: "Edge of Data", program: "Excel", category: "Excel", subCategory: "تنقل", description: "الانتقال لآخر خلية ممتلئة.", keywords: ["jump", "last"] },
+    { id: "ex02", type: "shortcut", shortcut: "Ctrl + Home", arabicName: "بداية الورقة", englishName: "Sheet Start", program: "Excel", category: "Excel", subCategory: "تنقل", description: "الانتقال للخلية A1.", keywords: ["top", "first"] },
+    { id: "ex03", type: "shortcut", shortcut: "Ctrl + End", arabicName: "نهاية الورقة", englishName: "Sheet End", program: "Excel", category: "Excel", subCategory: "تنقل", description: "الانتقال لآخر خلية مستخدمة.", keywords: ["bottom", "last"] },
+    { id: "ex04", type: "shortcut", shortcut: "Page Down", arabicName: "شاشة لأسفل", englishName: "Page Down", program: "Excel", category: "Excel", subCategory: "تنقل", description: "النزول بمقدار شاشة.", keywords: ["scroll", "view"] },
+    { id: "ex05", type: "shortcut", shortcut: "Page Up", arabicName: "شاشة لأعلى", englishName: "Page Up", program: "Excel", category: "Excel", subCategory: "تنقل", description: "الصعود بمقدار شاشة.", keywords: ["scroll", "view"] },
+    { id: "ex06", type: "shortcut", shortcut: "Alt + PageDown", arabicName: "شاشة لليسار", englishName: "Screen Left", program: "Excel", category: "Excel", subCategory: "تنقل", description: "التحرك شاشة لليسار.", keywords: ["scroll", "horizontal"] },
+    { id: "ex07", type: "shortcut", shortcut: "Alt + PageUp", arabicName: "شاشة لليمين", englishName: "Screen Right", program: "Excel", category: "Excel", subCategory: "تنقل", description: "التحرك شاشة لليمين.", keywords: ["scroll", "horizontal"] },
+    { id: "ex08", type: "shortcut", shortcut: "Ctrl + PageDown", arabicName: "الورقة التالية", englishName: "Next Sheet", program: "Excel", category: "Excel", subCategory: "تنقل", description: "الانتقال لورقة العمل التالية.", keywords: ["tab", "switch"] },
+    { id: "ex09", type: "shortcut", shortcut: "Ctrl + PageUp", arabicName: "الورقة السابقة", englishName: "Prev Sheet", program: "Excel", category: "Excel", subCategory: "تنقل", description: "الانتقال لورقة العمل السابقة.", keywords: ["tab", "switch"] },
+    { id: "ex10", type: "shortcut", shortcut: "Tab", arabicName: "الخلية التالية", englishName: "Next Cell", program: "Excel", category: "Excel", subCategory: "تنقل", description: "تحرك لليسار.", keywords: ["move", "right"] },
+    { id: "ex11", type: "shortcut", shortcut: "Shift + Tab", arabicName: "الخلية السابقة", englishName: "Prev Cell", program: "Excel", category: "Excel", subCategory: "تنقل", description: "تحرك لليمين.", keywords: ["move", "left"] },
+    { id: "ex12", type: "shortcut", shortcut: "Enter", arabicName: "خلية لأسفل", englishName: "Down Cell", program: "Excel", category: "Excel", subCategory: "تنقل", description: "إكمال الإدخال والنزول.", keywords: ["move", "down"] },
+    { id: "ex13", type: "shortcut", shortcut: "Shift + Enter", arabicName: "خلية لأعلى", englishName: "Up Cell", program: "Excel", category: "Excel", subCategory: "تنقل", description: "إكمال الإدخال والصعود.", keywords: ["move", "up"] },
+    { id: "ex14", type: "shortcut", shortcut: "Ctrl + Backspace", arabicName: "الخلية النشطة", englishName: "Active Cell", program: "Excel", category: "Excel", subCategory: "تنقل", description: "إظهار الخلية النشطة إذا كانت خارج العرض.", keywords: ["focus", "show"] },
+    { id: "ex15", type: "shortcut", shortcut: "Ctrl + G", arabicName: "انتقال إلى", englishName: "Go To", program: "Excel", category: "Excel", subCategory: "تنقل", description: "الانتقال لمرجع خلية محدد.", keywords: ["jump", "find"] },
+
+    // --- Selection (تحديد) ---
+    { id: "ex16", type: "shortcut", shortcut: "Shift + Space", arabicName: "تحديد الصف", englishName: "Select Row", program: "Excel", category: "Excel", subCategory: "تحديد", description: "تحديد الصف الحالي كاملاً.", keywords: ["highlight", "line"] },
+    { id: "ex17", type: "shortcut", shortcut: "Ctrl + Space", arabicName: "تحديد العمود", englishName: "Select Col", program: "Excel", category: "Excel", subCategory: "تحديد", description: "تحديد العمود الحالي كاملاً.", keywords: ["highlight", "column"] },
+    { id: "ex18", type: "shortcut", shortcut: "Ctrl + A", arabicName: "تحديد الكل", englishName: "Select All", program: "Excel", category: "Excel", subCategory: "تحديد", description: "تحديد الجدول أو الورقة كاملة.", keywords: ["highlight", "sheet"] },
+    { id: "ex19", type: "shortcut", shortcut: "Shift + Arrow", arabicName: "توسيع التحديد", englishName: "Extend Select", program: "Excel", category: "Excel", subCategory: "تحديد", description: "إضافة خلايا للتحديد.", keywords: ["add", "range"] },
+    { id: "ex20", type: "shortcut", shortcut: "Ctrl + Shift + Arrow", arabicName: "تحديد للنهاية", englishName: "Select to End", program: "Excel", category: "Excel", subCategory: "تحديد", description: "تحديد الخلايا حتى آخر بيان.", keywords: ["highlight", "range"] },
+    { id: "ex21", type: "shortcut", shortcut: "Shift + F8", arabicName: "إضافة للتحديد", englishName: "Add to Selection", program: "Excel", category: "Excel", subCategory: "تحديد", description: "تحديد خلايا غير متجاورة.", keywords: ["multi", "range"] },
+    { id: "ex22", type: "shortcut", shortcut: "Ctrl + Shift + O", arabicName: "خلايا التعليقات", englishName: "Select Comments", program: "Excel", category: "Excel", subCategory: "تحديد", description: "تحديد كل الخلايا التي بها تعليق.", keywords: ["notes", "find"] },
+    
+    // --- Editing & Entry (تحرير وإدخال) ---
+    { id: "ex23", type: "shortcut", shortcut: "F2", arabicName: "تحرير الخلية", englishName: "Edit Cell", program: "Excel", category: "Excel", subCategory: "تحرير", description: "تعديل محتوى الخلية النشطة.", keywords: ["modify", "type"] },
+    { id: "ex24", type: "shortcut", shortcut: "Alt + Enter", arabicName: "سطر جديد", englishName: "New Line", program: "Excel", category: "Excel", subCategory: "تحرير", description: "بدء سطر جديد داخل نفس الخلية.", keywords: ["wrap", "text"] },
+    { id: "ex25", type: "shortcut", shortcut: "Ctrl + ;", arabicName: "إدراج التاريخ", englishName: "Insert Date", program: "Excel", category: "Excel", subCategory: "تحرير", description: "إدخال تاريخ اليوم.", keywords: ["today", "time"] },
+    { id: "ex26", type: "shortcut", shortcut: "Ctrl + Shift + :", arabicName: "إدراج الوقت", englishName: "Insert Time", program: "Excel", category: "Excel", subCategory: "تحرير", description: "إدخال الوقت الحالي.", keywords: ["clock", "now"] },
+    { id: "ex27", type: "shortcut", shortcut: "Ctrl + D", arabicName: "ملء لأسفل", englishName: "Fill Down", program: "Excel", category: "Excel", subCategory: "تحرير", description: "نسخ القيمة من الخلية العليا.", keywords: ["copy", "repeat"] },
+    { id: "ex28", type: "shortcut", shortcut: "Ctrl + R", arabicName: "ملء لليسار", englishName: "Fill Right", program: "Excel", category: "Excel", subCategory: "تحرير", description: "نسخ القيمة من الخلية اليمنى.", keywords: ["copy", "repeat"] },
+    { id: "ex29", type: "shortcut", shortcut: "Ctrl + Z", arabicName: "تراجع", englishName: "Undo", program: "Excel", category: "Excel", subCategory: "تحرير", description: "التراجع عن التغيير الأخير.", keywords: ["back", "oops"] },
+    { id: "ex30", type: "shortcut", shortcut: "Ctrl + Y", arabicName: "إعادة", englishName: "Redo", program: "Excel", category: "Excel", subCategory: "تحرير", description: "إعادة الإجراء المتراجع عنه.", keywords: ["forward", "again"] },
+    { id: "ex31", type: "shortcut", shortcut: "Delete", arabicName: "مسح المحتوى", englishName: "Clear Content", program: "Excel", category: "Excel", subCategory: "تحرير", description: "حذف النص مع إبقاء التنسيق.", keywords: ["remove", "text"] },
+    { id: "ex32", type: "shortcut", shortcut: "Ctrl + K", arabicName: "ارتباط تشعبي", englishName: "Hyperlink", program: "Excel", category: "Excel", subCategory: "تحرير", description: "إدراج رابط.", keywords: ["link", "url"] },
+    { id: "ex33", type: "shortcut", shortcut: "Shift + F2", arabicName: "إدراج تعليق", englishName: "Insert Comment", program: "Excel", category: "Excel", subCategory: "تحرير", description: "إضافة ملاحظة للخلية.", keywords: ["note", "review"] },
+    { id: "ex34", type: "shortcut", shortcut: "Alt + F1", arabicName: "مخطط سريع", englishName: "Quick Chart", program: "Excel", category: "Excel", subCategory: "تحرير", description: "إنشاء رسم بياني في نفس الورقة.", keywords: ["graph", "plot"] },
+    { id: "ex35", type: "shortcut", shortcut: "F11", arabicName: "ورقة مخطط", englishName: "Chart Sheet", program: "Excel", category: "Excel", subCategory: "تحرير", description: "إنشاء رسم بياني في ورقة جديدة.", keywords: ["graph", "plot"] },
+
+    // --- Formatting (تنسيق) ---
+    { id: "ex36", type: "shortcut", shortcut: "Ctrl + 1", arabicName: "تنسيق الخلايا", englishName: "Format Cells", program: "Excel", category: "Excel", subCategory: "تنسيق", description: "فتح نافذة خيارات التنسيق الكاملة.", keywords: ["dialog", "options"] },
+    { id: "ex37", type: "shortcut", shortcut: "Ctrl + B", arabicName: "عريض", englishName: "Bold", program: "Excel", category: "Excel", subCategory: "تنسيق", description: "تغميق الخط.", keywords: ["style", "thick"] },
+    { id: "ex38", type: "shortcut", shortcut: "Ctrl + I", arabicName: "مائل", englishName: "Italic", program: "Excel", category: "Excel", subCategory: "تنسيق", description: "إمالة الخط.", keywords: ["style", "font"] },
+    { id: "ex39", type: "shortcut", shortcut: "Ctrl + U", arabicName: "تسطير", englishName: "Underline", program: "Excel", category: "Excel", subCategory: "تنسيق", description: "وضع خط تحت المحتوى.", keywords: ["style", "line"] },
+    { id: "ex40", type: "shortcut", shortcut: "Ctrl + 5", arabicName: "يتوسطه خط", englishName: "Strikethrough", program: "Excel", category: "Excel", subCategory: "تنسيق", description: "شطب النص بخط.", keywords: ["style", "cross"] },
+    { id: "ex41", type: "shortcut", shortcut: "Ctrl + Shift + ~", arabicName: "تنسيق عام", englishName: "General Format", program: "Excel", category: "Excel", subCategory: "تنسيق", description: "إزالة تنسيق الأرقام.", keywords: ["number", "reset"] },
+    { id: "ex42", type: "shortcut", shortcut: "Ctrl + Shift + $", arabicName: "تنسيق عملة", englishName: "Currency Format", program: "Excel", category: "Excel", subCategory: "تنسيق", description: "تطبيق تنسيق العملة.", keywords: ["money", "number"] },
+    { id: "ex43", type: "shortcut", shortcut: "Ctrl + Shift + %", arabicName: "نسبة مئوية", englishName: "Percent Format", program: "Excel", category: "Excel", subCategory: "تنسيق", description: "تطبيق النسبة المئوية.", keywords: ["math", "number"] },
+    { id: "ex44", type: "shortcut", shortcut: "Ctrl + Shift + ^", arabicName: "تنسيق علمي", englishName: "Scientific Format", program: "Excel", category: "Excel", subCategory: "تنسيق", description: "تطبيق التنسيق الأسي.", keywords: ["math", "exp"] },
+    { id: "ex45", type: "shortcut", shortcut: "Ctrl + Shift + #", arabicName: "تنسيق التاريخ", englishName: "Date Format", program: "Excel", category: "Excel", subCategory: "تنسيق", description: "تطبيق تاريخ (يوم-شهر-سنة).", keywords: ["time", "day"] },
+    { id: "ex46", type: "shortcut", shortcut: "Ctrl + Shift + @", arabicName: "تنسيق الوقت", englishName: "Time Format", program: "Excel", category: "Excel", subCategory: "تنسيق", description: "تطبيق تنسيق الوقت.", keywords: ["clock", "hour"] },
+    { id: "ex47", type: "shortcut", shortcut: "Ctrl + Shift + !", arabicName: "تنسيق أرقام", englishName: "Number Format", program: "Excel", category: "Excel", subCategory: "تنسيق", description: "رقم مع فاصلة عشرية ومنزلتين.", keywords: ["decimal", "comma"] },
+    { id: "ex48", type: "shortcut", shortcut: "Ctrl + Shift + &", arabicName: "إطار خارجي", englishName: "Outline Border", program: "Excel", category: "Excel", subCategory: "تنسيق", description: "إضافة حدود للخلايا المحددة.", keywords: ["border", "box"] },
+    { id: "ex49", type: "shortcut", shortcut: "Ctrl + Shift + _", arabicName: "إزالة الإطار", englishName: "Remove Border", program: "Excel", category: "Excel", subCategory: "تنسيق", description: "حذف الحدود من الخلايا.", keywords: ["border", "clean"] },
+
+    // --- Insert/Delete (إضافة وحذف) ---
+    { id: "ex50", type: "shortcut", shortcut: "Ctrl + Shift + +", arabicName: "إدراج خلايا", englishName: "Insert Cells", program: "Excel", category: "Excel", subCategory: "إضافة/حذف", description: "إدراج صفوف أو أعمدة جديدة.", keywords: ["add", "new"] },
+    { id: "ex51", type: "shortcut", shortcut: "Ctrl + -", arabicName: "حذف خلايا", englishName: "Delete Cells", program: "Excel", category: "Excel", subCategory: "إضافة/حذف", description: "حذف الصفوف أو الأعمدة المحددة.", keywords: ["remove", "cut"] },
+    { id: "ex52", type: "shortcut", shortcut: "Ctrl + 9", arabicName: "إخفاء صفوف", englishName: "Hide Rows", program: "Excel", category: "Excel", subCategory: "إضافة/حذف", description: "إخفاء الصفوف المحددة.", keywords: ["view", "invisible"] },
+    { id: "ex53", type: "shortcut", shortcut: "Ctrl + 0", arabicName: "إخفاء أعمدة", englishName: "Hide Columns", program: "Excel", category: "Excel", subCategory: "إضافة/حذف", description: "إخفاء الأعمدة المحددة.", keywords: ["view", "invisible"] },
+    { id: "ex54", type: "shortcut", shortcut: "Ctrl + Shift + 9", arabicName: "إظهار صفوف", englishName: "Unhide Rows", program: "Excel", category: "Excel", subCategory: "إضافة/حذف", description: "إظهار الصفوف المخفية.", keywords: ["view", "visible"] },
+    { id: "ex55", type: "shortcut", shortcut: "Ctrl + Shift + 0", arabicName: "إظهار أعمدة", englishName: "Unhide Columns", program: "Excel", category: "Excel", subCategory: "إضافة/حذف", description: "إظهار الأعمدة المخفية.", keywords: ["view", "visible"] },
+
+    // --- Functions & Formulas (دوال) ---
+    { id: "ex56", type: "shortcut", shortcut: "Alt + =", arabicName: "جمع تلقائي", englishName: "AutoSum", program: "Excel", category: "Excel", subCategory: "دوال", description: "إدراج دالة الجمع SUM فوراً.", keywords: ["math", "total"] },
+    { id: "ex57", type: "shortcut", shortcut: "Shift + F3", arabicName: "إدراج دالة", englishName: "Insert Function", program: "Excel", category: "Excel", subCategory: "دوال", description: "فتح نافذة اختيار الدالة.", keywords: ["formula", "wizard"] },
+    { id: "ex58", type: "shortcut", shortcut: "F4", arabicName: "تثبيت المرجع", englishName: "Toggle Ref", program: "Excel", category: "Excel", subCategory: "دوال", description: "إضافة $ للمرجع (مطلق/نسبي).", keywords: ["absolute", "lock"] },
+    { id: "ex59", type: "shortcut", shortcut: "Ctrl + `", arabicName: "إظهار الصيغ", englishName: "Show Formulas", program: "Excel", category: "Excel", subCategory: "دوال", description: "التبديل بين عرض القيم والصيغ.", keywords: ["view", "code"] },
+    { id: "ex60", type: "shortcut", shortcut: "F9", arabicName: "حساب الآن", englishName: "Calculate Now", program: "Excel", category: "Excel", subCategory: "دوال", description: "إعادة حساب كل المصنف.", keywords: ["refresh", "math"] },
+    { id: "ex61", type: "shortcut", shortcut: "Shift + F9", arabicName: "حساب الورقة", englishName: "Calc Sheet", program: "Excel", category: "Excel", subCategory: "دوال", description: "إعادة حساب الورقة الحالية فقط.", keywords: ["refresh", "math"] },
+    { id: "ex62", type: "shortcut", shortcut: "Ctrl + Shift + U", arabicName: "شريط الصيغة", englishName: "Expand Bar", program: "Excel", category: "Excel", subCategory: "دوال", description: "توسيع شريط المعادلات.", keywords: ["view", "formula"] },
+    { id: "ex63", type: "shortcut", shortcut: "Ctrl + T", arabicName: "إنشاء جدول", englishName: "Create Table", program: "Excel", category: "Excel", subCategory: "دوال", description: "تحويل النطاق لجدول ديناميكي.", keywords: ["format", "data"] },
+    { id: "ex64", type: "shortcut", shortcut: "Ctrl + Shift + L", arabicName: "تصفية", englishName: "Filter", program: "Excel", category: "Excel", subCategory: "دوال", description: "تفعيل/إلغاء أزرار التصفية.", keywords: ["data", "sort"] },
+
+    // --- Workbook (مصنف) ---
+    { id: "ex65", type: "shortcut", shortcut: "Ctrl + N", arabicName: "جديد", englishName: "New", program: "Excel", category: "Excel", subCategory: "مصنف", description: "فتح ملف إكسل جديد.", keywords: ["file", "create"] },
+    { id: "ex66", type: "shortcut", shortcut: "Ctrl + O", arabicName: "فتح", englishName: "Open", program: "Excel", category: "Excel", subCategory: "مصنف", description: "فتح ملف موجود.", keywords: ["file", "load"] },
+    { id: "ex67", type: "shortcut", shortcut: "Ctrl + S", arabicName: "حفظ", englishName: "Save", program: "Excel", category: "Excel", subCategory: "مصنف", description: "حفظ التغييرات.", keywords: ["file", "disk"] },
+    { id: "ex68", type: "shortcut", shortcut: "F12", arabicName: "حفظ باسم", englishName: "Save As", program: "Excel", category: "Excel", subCategory: "مصنف", description: "حفظ نسخة جديدة.", keywords: ["file", "disk"] },
+    { id: "ex69", type: "shortcut", shortcut: "Ctrl + P", arabicName: "طباعة", englishName: "Print", program: "Excel", category: "Excel", subCategory: "مصنف", description: "نافذة الطباعة.", keywords: ["file", "paper"] },
+    { id: "ex70", type: "shortcut", shortcut: "Ctrl + F6", arabicName: "النافذة التالية", englishName: "Next Window", program: "Excel", category: "Excel", subCategory: "مصنف", description: "التبديل بين ملفات إكسل المفتوحة.", keywords: ["switch", "file"] },
+    { id: "ex71", type: "shortcut", shortcut: "Ctrl + Shift + F6", arabicName: "النافذة السابقة", englishName: "Prev Window", program: "Excel", category: "Excel", subCategory: "مصنف", description: "العودة للملف السابق.", keywords: ["switch", "file"] },
+    { id: "ex72", type: "shortcut", shortcut: "Alt + F4", arabicName: "إغلاق إكسل", englishName: "Exit", program: "Excel", category: "Excel", subCategory: "مصنف", description: "إغلاق البرنامج.", keywords: ["close", "quit"] },
+    { id: "ex73", type: "shortcut", shortcut: "Ctrl + F4", arabicName: "إغلاق الملف", englishName: "Close File", program: "Excel", category: "Excel", subCategory: "مصنف", description: "إغلاق المصنف الحالي.", keywords: ["close", "window"] },
+
+    // --- Drag & Drop (بالماوس) ---
+    { id: "ex74", type: "shortcut", shortcut: "Ctrl + Drag", arabicName: "نسخ ورقة", englishName: "Copy Sheet", program: "Excel", category: "Excel", subCategory: "ماوس", description: "اسحب تبويب الورقة مع Ctrl لنسخها.", keywords: ["duplicate", "sheet"] },
+    { id: "ex75", type: "shortcut", shortcut: "Alt + Drag", arabicName: "نقل لورقة أخرى", englishName: "Move to Sheet", program: "Excel", category: "Excel", subCategory: "ماوس", description: "اسحب التحديد لورقة أخرى بالضغط على Alt.", keywords: ["move", "data"] },
+    { id: "ex76", type: "shortcut", shortcut: "Double Click", arabicName: "احتواء تلقائي", englishName: "AutoFit", program: "Excel", category: "Excel", subCategory: "ماوس", description: "نقرتين على حد العمود لتوسيع العرض.", keywords: ["size", "width"] },
+
+    // --- Advanced (متقدم) ---
+    { id: "ex77", type: "shortcut", shortcut: "Alt + F8", arabicName: "ماكرو", englishName: "Macros", program: "Excel", category: "Excel", subCategory: "متقدم", description: "فتح نافذة الماكرو.", keywords: ["vba", "code"] },
+    { id: "ex78", type: "shortcut", shortcut: "Alt + F11", arabicName: "محرر VBA", englishName: "VBA Editor", program: "Excel", category: "Excel", subCategory: "متقدم", description: "فتح محرر فيجوال بيسك.", keywords: ["code", "dev"] },
+    { id: "ex79", type: "shortcut", shortcut: "Ctrl + F3", arabicName: "مدير الأسماء", englishName: "Name Manager", program: "Excel", category: "Excel", subCategory: "متقدم", description: "إدارة النطاقات المسماة.", keywords: ["range", "name"] },
+    { id: "ex80", type: "shortcut", shortcut: "Ctrl + Alt + V", arabicName: "لصق خاص", englishName: "Paste Special", program: "Excel", category: "Excel", subCategory: "تحرير", description: "نافذة اللصق المتقدم.", keywords: ["format", "values"] }
+];
