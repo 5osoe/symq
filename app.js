@@ -168,7 +168,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isShortcut = item.type === 'shortcut';
                 const mainDisplay = isShortcut ? item.shortcut : item.symbol;
                 
-                // Keyboard HTML for display
                 let keyboardHTML = '';
                 if (!isShortcut && item.keyboardMethod) {
                     const k = item.keyboardMethod;
@@ -233,8 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 downloadBtn.onclick = (e) => {
                     e.stopPropagation();
-                    // Pass the entire item data to the export function
-                    handleExport(item, downloadBtn);
+                    handleDownload(card, item.englishName || 'symq-card', downloadBtn);
                 };
 
                 fragment.appendChild(card);
@@ -302,67 +300,51 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Phase 3: Isolated Export System ---
-    async function handleExport(data, btnElement) {
-        if (typeof html2canvas === 'undefined') {
+    // --- High Performance Export System (html-to-image) ---
+    async function handleDownload(cardElement, fileName, btnElement) {
+        if (typeof htmlToImage === 'undefined') {
             alert('خطأ: مكتبة التحميل غير متوفرة.');
             return;
         }
 
-        // 1. UI Feedback
+        // 1. Set Loading State
         const originalText = btnElement.textContent;
-        btnElement.textContent = "جاري التحميل...";
+        btnElement.textContent = "جاري...";
         btnElement.disabled = true;
 
         try {
-            // 2. Create Isolated Export Card
-            const exportCard = document.createElement("div");
-            exportCard.className = "export-card";
-            
-            const isShortcut = data.type === 'shortcut';
-            const displaySymbol = isShortcut ? data.shortcut : data.symbol;
-            const symbolClass = isShortcut ? 'export-symbol shortcut-mode' : 'export-symbol';
-
-            exportCard.innerHTML = `
-                <div class="export-brand">SymQ</div>
-                <div class="${symbolClass}">${displaySymbol}</div>
-                <div class="export-title">${data.arabicName}</div>
-                <div class="export-sub">${data.englishName || ""}</div>
-                
-                <div class="export-footer">
-                    <span class="export-tag">${data.category}</span>
-                    ${data.subCategory ? `<span class="export-tag">${data.subCategory}</span>` : ''}
-                </div>
-            `;
-
-            document.body.appendChild(exportCard);
-
-            // 3. Wait for fonts
+            // 2. Wait for fonts
             await document.fonts.ready;
 
-            // 4. Capture
-            const canvas = await html2canvas(exportCard, {
-                scale: 4, // High Resolution
-                backgroundColor: "#ffffff",
-                useCORS: true,
-                logging: false
+            // 3. Capture with High Performance
+            const dataUrl = await htmlToImage.toPng(cardElement, {
+                quality: 1.0,
+                pixelRatio: 3, // Balanced for speed and quality
+                backgroundColor: '#ffffff',
+                cacheBust: true,
+                filter: (node) => {
+                    // Exclude the action buttons from the screenshot
+                    return node.className !== 'card-actions';
+                },
+                style: {
+                    transform: 'none', // Reset transform to avoid hover effects
+                    boxShadow: 'none', // Remove shadow for clean export
+                    border: '1px solid #E0E0E0' // Ensure border is visible
+                }
             });
 
-            // 5. Download
-            const link = document.createElement("a");
-            const safeName = (data.englishName || data.arabicName || 'card').replace(/\s+/g, '-').toLowerCase();
-            link.download = `symq-${safeName}.png`;
-            link.href = canvas.toDataURL("image/png", 1.0);
+            // 4. Download
+            const link = document.createElement('a');
+            const safeName = fileName.replace(/\s+/g, '-').toLowerCase();
+            link.download = `${safeName}.png`;
+            link.href = dataUrl;
             link.click();
 
-            // 6. Cleanup
-            document.body.removeChild(exportCard);
-
-        } catch (err) {
-            console.error("Export Failed:", err);
-            alert("حدث خطأ أثناء إنشاء الصورة.");
+        } catch (error) {
+            console.error("Export Failed:", error);
+            alert('حدث خطأ أثناء تحميل الصورة.');
         } finally {
-            // 7. Restore Button
+            // 5. Reset Button
             btnElement.textContent = originalText;
             btnElement.disabled = false;
         }
