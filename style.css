@@ -464,6 +464,33 @@ button:active, .nav-item:active, .icon-btn-mobile:active {
 
 .tag-sub { color: var(--accent); background: rgba(225, 6, 0, 0.03); border-color: rgba(225, 6, 0, 0.1); }
 
+/* --- Shortcut Type Badge --- */
+.shortcut-type-badge {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 100px;
+    margin-bottom: 6px;
+    border: 1px solid;
+    letter-spacing: 0.01em;
+}
+.badge-toolkey {
+    color: #2563eb;
+    background: rgba(37, 99, 235, 0.07);
+    border-color: rgba(37, 99, 235, 0.2);
+}
+.badge-cmd {
+    color: #7c3aed;
+    background: rgba(124, 58, 237, 0.07);
+    border-color: rgba(124, 58, 237, 0.2);
+}
+.badge-combo {
+    color: #059669;
+    background: rgba(5, 150, 105, 0.07);
+    border-color: rgba(5, 150, 105, 0.2);
+}
+
 /* --- Back to Top --- */
 .back-to-top {
     position: fixed;

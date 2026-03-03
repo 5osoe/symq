@@ -205,11 +205,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
                 
-                // --- Card HTML (Simplified: No download/export, just copy icon) ---
+                // --- Shortcut Type Badge ---
+                let shortcutTypeBadge = '';
+                if (isShortcut && item.shortcutType) {
+                    const badgeMap = {
+                        'tool-key': { label: '⌨ مفتاح أداة', cls: 'badge-toolkey' },
+                        'cmd':      { label: '⌘ أمر Command Bar', cls: 'badge-cmd' },
+                        'combo':    { label: '⌨ تركيبة مفاتيح', cls: 'badge-combo' }
+                    };
+                    const b = badgeMap[item.shortcutType];
+                    if (b) shortcutTypeBadge = `<div class="shortcut-type-badge ${b.cls}">${b.label}</div>`;
+                }
+
+                // --- Card HTML ---
+                // زر النسخ فقط للرموز (symbols)، الاختصارات بدون نسخ
                 card.innerHTML = `
-                    <button class="copy-icon-btn" title="نسخ" aria-label="نسخ">${ICONS.copy}</button>
+                    ${!isShortcut ? `<button class="copy-icon-btn" title="نسخ الرمز" aria-label="نسخ">${ICONS.copy}</button>` : ''}
                     
                     <div class="${isShortcut ? 'text-shortcut' : 'card-symbol'}">${mainDisplay}</div>
+                    ${shortcutTypeBadge}
                     <div class="card-name-ar">${item.arabicName}</div>
                     <div class="card-name-en">${item.englishName}</div>
                     ${item.description ? `<div class="card-desc">${item.description}</div>` : '<div class="card-desc"></div>'}
@@ -222,19 +236,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `;
                 
-                // Copy Event
-                const copyBtn = card.querySelector('.copy-icon-btn');
-                
-                // Copy via button click
-                copyBtn.onclick = (e) => {
-                    e.stopPropagation();
-                    handleCopy(mainDisplay, copyBtn);
-                };
-
-                // Copy via card click
-                card.onclick = () => {
-                   handleCopy(mainDisplay, copyBtn);
-                };
+                // النسخ فقط للرموز عبر زر النسخ
+                if (!isShortcut) {
+                    const copyBtn = card.querySelector('.copy-icon-btn');
+                    if (copyBtn) {
+                        copyBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            handleCopy(mainDisplay, copyBtn);
+                        };
+                    }
+                    // النسخ عند الضغط على البطاقة أيضاً فقط للرموز
+                    card.onclick = () => {
+                        const btn = card.querySelector('.copy-icon-btn');
+                        if (btn) handleCopy(mainDisplay, btn);
+                    };
+                }
 
                 fragment.appendChild(card);
             });
