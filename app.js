@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Group Definitions
     const GROUPS = {
         "الرموز": ["الكل", "التشكيل", "علامات الترقيم", "الرموز الرياضية", "الأسس والمؤشرات", "العملات"],
-        "الاختصارات": ["ويندوز", "تحرير عام", "Word", "Excel", "PowerPoint", "المتصفح", "مستكشف الملفات"]
+        "الاختصارات": ["ويندوز", "تحرير عام", "Word", "Excel", "PowerPoint", "المتصفح", "مستكشف الملفات", "Photoshop", "Illustrator", "VS Code", "Terminal", "AutoCAD", "Premiere"]
     };
 
     // --- Data Aggregation ---
@@ -22,7 +22,13 @@ document.addEventListener('DOMContentLoaded', () => {
         ...(typeof DATA_EXCEL !== 'undefined' ? DATA_EXCEL : []),
         ...(typeof DATA_POWERPOINT !== 'undefined' ? DATA_POWERPOINT : []),
         ...(typeof DATA_BROWSER !== 'undefined' ? DATA_BROWSER : []),
-        ...(typeof DATA_EXPLORER !== 'undefined' ? DATA_EXPLORER : [])
+        ...(typeof DATA_EXPLORER !== 'undefined' ? DATA_EXPLORER : []),
+        ...(typeof DATA_PHOTOSHOP !== 'undefined' ? DATA_PHOTOSHOP : []),
+        ...(typeof DATA_ILLUSTRATOR !== 'undefined' ? DATA_ILLUSTRATOR : []),
+        ...(typeof DATA_VSCODE !== 'undefined' ? DATA_VSCODE : []),
+        ...(typeof DATA_TERMINAL !== 'undefined' ? DATA_TERMINAL : []),
+        ...(typeof DATA_AUTOCAD !== 'undefined' ? DATA_AUTOCAD : []),
+        ...(typeof DATA_PREMIERE !== 'undefined' ? DATA_PREMIERE : [])
     ];
 
     // --- State ---
