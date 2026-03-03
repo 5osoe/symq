@@ -64,6 +64,12 @@ document.addEventListener('DOMContentLoaded', () => {
     clearBtn.title = 'مسح البحث';
     ui.searchContainer.appendChild(clearBtn);
 
+    // Icons (SVG Strings for performance)
+    const ICONS = {
+        copy: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`,
+        check: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`
+    };
+
     // --- Core Logic ---
 
     function debounce(func, wait) {
@@ -170,9 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // --- Keyboard Data Extraction ---
                 let keyboardHTML = '';
-                let keyboardTextValue = "-";
-                let layoutValue = "-";
-                let unicodeValue = null;
 
                 if (!isShortcut && item.keyboardMethod) {
                     const k = item.keyboardMethod;
@@ -185,30 +188,21 @@ document.addEventListener('DOMContentLoaded', () => {
                         keyboardHTML += `<div class="symbol-keyboard">`;
                         if (hasLayout) {
                             keyboardHTML += `<div class="kbd-row"><span class="kbd-label">التخطيط</span><span class="kbd-val">${k.layout}</span></div>`;
-                            layoutValue = k.layout;
                         }
                         if (hasCombo) {
                             keyboardHTML += `<div class="kbd-row"><span class="kbd-label">مفاتيح</span><span class="kbd-val">${k.combination}</span></div>`;
                         }
                         if (hasAlt) {
                             keyboardHTML += `<div class="kbd-row"><span class="kbd-label">Alt</span><span class="kbd-val">${k.altCode}</span></div>`;
-                            unicodeValue = k.altCode;
                         }
                         keyboardHTML += `</div>`;
-
-                        // For Export (Combine keys and alt)
-                        let parts = [];
-                        if (k.combination) parts.push(k.combination);
-                        if (k.altCode) parts.push(k.altCode);
-                        if (parts.length > 0) keyboardTextValue = parts.join(" / ");
                     }
-                } else if (isShortcut) {
-                    // For Shortcuts, the "Symbol" IS the keyboard text essentially
-                    keyboardTextValue = item.shortcut;
                 }
                 
-                // --- Card HTML ---
+                // --- Card HTML (Simplified: No download/export, just copy icon) ---
                 card.innerHTML = `
+                    <button class="copy-icon-btn" title="نسخ" aria-label="نسخ">${ICONS.copy}</button>
+                    
                     <div class="${isShortcut ? 'text-shortcut' : 'card-symbol'}">${mainDisplay}</div>
                     <div class="card-name-ar">${item.arabicName}</div>
                     <div class="card-name-en">${item.englishName}</div>
@@ -220,35 +214,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="card-cat">${item.category}</div>
                         ${item.subCategory ? `<div class="tag-sub">${item.subCategory}</div>` : ''}
                     </div>
-
-                    <div class="card-actions">
-                        <button class="card-action-btn copy-btn">نسخ</button>
-                        <button class="card-action-btn download-btn">تحميل</button>
-                    </div>
                 `;
                 
-                // Add event listeners for buttons
-                const copyBtn = card.querySelector('.copy-btn');
-                const downloadBtn = card.querySelector('.download-btn');
+                // Copy Event
+                const copyBtn = card.querySelector('.copy-icon-btn');
                 
+                // Copy via button click
                 copyBtn.onclick = (e) => {
                     e.stopPropagation();
                     handleCopy(mainDisplay, copyBtn);
                 };
-                
-                downloadBtn.onclick = (e) => {
-                    e.stopPropagation();
-                    // Call the New Canvas Export Function
-                    exportCardCanvas({
-                        symbol: mainDisplay,
-                        shortcut: isShortcut ? item.shortcut : null,
-                        arabicName: item.arabicName,
-                        englishName: item.englishName,
-                        keyboardText: keyboardTextValue,
-                        layout: layoutValue,
-                        category: item.category,
-                        code: unicodeValue
-                    }, downloadBtn);
+
+                // Copy via card click
+                card.onclick = () => {
+                   handleCopy(mainDisplay, copyBtn);
                 };
 
                 fragment.appendChild(card);
@@ -299,109 +278,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleCopy(text, btnElement) {
         navigator.clipboard.writeText(text).then(() => {
-            const originalText = btnElement.textContent;
-            btnElement.textContent = "تم النسخ";
-            btnElement.classList.add('success');
+            // Visual Feedback: Switch to Check Icon
+            const originalIcon = ICONS.copy;
+            btnElement.innerHTML = ICONS.check;
+            btnElement.classList.add('copied');
+            
             setTimeout(() => {
-                btnElement.textContent = originalText;
-                btnElement.classList.remove('success');
+                btnElement.innerHTML = originalIcon;
+                btnElement.classList.remove('copied');
             }, 1500);
         });
-    }
-
-    // --- Layout 2.0: Professional Canvas Export ---
-    async function exportCardCanvas(data, btnElement) {
-        
-        // UI Feedback
-        const originalText = btnElement.textContent;
-        btnElement.textContent = "جاري...";
-        btnElement.disabled = true;
-
-        try {
-            await document.fonts.ready;
-
-            const size = 2200; // High resolution
-            const canvas = document.createElement("canvas");
-            canvas.width = size;
-            canvas.height = size;
-
-            const ctx = canvas.getContext("2d");
-
-            // 1. Background
-            ctx.fillStyle = "#ffffff";
-            ctx.fillRect(0, 0, size, size);
-
-            ctx.textAlign = "center";
-
-            // ===== 2. SYMBOL =====
-            ctx.fillStyle = "#111111";
-            ctx.direction = "rtl";
-            // Reduce size if text is long (e.g. shortcut)
-            const mainText = data.symbol || data.shortcut;
-            const fontSize = mainText.length > 5 ? 280 : 480;
-            ctx.font = `bold ${fontSize}px sans-serif`;
-            ctx.fillText(mainText, size / 2, 650);
-
-            // ===== 3. ARABIC NAME =====
-            ctx.font = "bold 160px 'Cairo', sans-serif";
-            ctx.fillStyle = "#000000";
-            ctx.fillText(data.arabicName, size / 2, 950);
-
-            // ===== 4. ENGLISH NAME =====
-            ctx.direction = "ltr";
-            ctx.fillStyle = "#666666";
-            ctx.font = "120px 'Cairo', sans-serif";
-            ctx.fillText(data.englishName || "", size / 2, 1100);
-
-            // ===== 5. DIVIDER =====
-            ctx.strokeStyle = "#EAEAEA";
-            ctx.lineWidth = 6;
-            ctx.beginPath();
-            ctx.moveTo(400, 1250);
-            ctx.lineTo(size - 400, 1250);
-            ctx.stroke();
-
-            // ===== 6. DETAILS SECTION =====
-            ctx.fillStyle = "#222222";
-            ctx.font = "110px 'Cairo', sans-serif"; // Using Cairo/Sans
-
-            // Layout (Right side)
-            ctx.direction = "rtl";
-            ctx.fillText("التخطيط: " + (data.layout || "-"), size - 600, 1450);
-
-            // Category
-            ctx.fillText("الفئة: " + (data.category || "-"), size - 600, 1600);
-
-            // Keyboard (Left side) - Using Monospace for keys
-            ctx.direction = "ltr";
-            ctx.font = "110px 'Roboto Mono', sans-serif"; 
-            ctx.fillText("Keys: " + (data.keyboardText || "-"), 600, 1450);
-
-            // Code (if exists)
-            if (data.code) {
-                ctx.fillText("Code: " + data.code, 600, 1600);
-            }
-
-            // ===== 7. BRANDING =====
-            ctx.fillStyle = "#E10600";
-            ctx.font = "bold 100px 'Roboto Mono', monospace";
-            ctx.textAlign = "center";
-            ctx.fillText("SymQ", size / 2, 1950);
-
-            // 8. Download
-            const link = document.createElement("a");
-            const safeName = (data.englishName || data.arabicName || 'card').replace(/\s+/g, '-').toLowerCase();
-            link.download = `symq-${safeName}.png`;
-            link.href = canvas.toDataURL("image/png", 1.0);
-            link.click();
-
-        } catch (err) {
-            console.error(err);
-            alert('حدث خطأ أثناء التصدير.');
-        } finally {
-            btnElement.textContent = originalText;
-            btnElement.disabled = false;
-        }
     }
 
     // --- Sidebar Handling ---
