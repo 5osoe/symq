@@ -503,46 +503,83 @@ button:active, .card-action-btn:active, .nav-item:active, .icon-btn-mobile:activ
     background-color: var(--accent-hover);
 }
 
-/* --- High Resolution Export Styling (Phase 5) --- */
-.card.export-mode {
-    width: 800px !important;
-    max-width: 800px !important;
-    height: auto !important;
-    position: fixed;
-    top: -9999px;
-    left: -9999px;
-    z-index: -999;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
+/* --- Isolated Export System (New) --- */
+.export-card {
+    width: 1000px;
+    padding: 120px 80px;
     background: #ffffff;
-    padding: 60px !important; /* Extra padding for export */
-    align-items: center; /* Center Content */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    font-family: var(--font-ui);
+    color: var(--text-primary);
+    position: fixed;
+    left: -9999px;
+    top: 0;
+    box-sizing: border-box;
+    z-index: 9999;
 }
 
-.card.export-mode .card-symbol {
-    font-size: 6rem; /* Huge symbol */
-    height: 140px;
+.export-brand {
+    font-family: var(--font-mono);
+    font-size: 32px;
+    color: var(--accent);
+    margin-bottom: 100px;
+    font-weight: 700;
+    letter-spacing: -2px;
+}
+
+.export-symbol {
+    font-size: 240px;
+    margin-bottom: 80px;
+    line-height: 1;
+    color: var(--text-primary);
+    font-family: var(--font-ui);
+}
+
+/* Specific size for shortcuts in export */
+.export-symbol.shortcut-mode {
+    font-size: 120px;
+    font-family: var(--font-mono);
+    background: #F3F4F6;
+    padding: 40px 80px;
+    border-radius: 40px;
+    direction: ltr;
+}
+
+.export-title {
+    font-size: 64px;
+    font-weight: 700;
     margin-bottom: 24px;
+    color: var(--text-primary);
 }
 
-.card.export-mode .text-shortcut {
-    font-size: 2.5rem;
-    padding: 20px 40px;
-    margin-bottom: 30px;
+.export-sub {
+    font-size: 40px;
+    color: var(--text-secondary);
+    margin-bottom: 80px;
+    font-family: var(--font-ui);
 }
 
-.card.export-mode .card-name-ar { font-size: 2rem; margin-bottom: 8px; }
-.card.export-mode .card-name-en { font-size: 1.5rem; margin-bottom: 24px; color: var(--text-secondary); }
-.card.export-mode .card-desc { font-size: 1.2rem; max-width: 90%; margin: 0 auto 30px auto; }
-.card.export-mode .card-footer { width: 100%; margin-top: 40px; padding-top: 30px; border-top: 2px solid var(--border-light); }
-.card.export-mode .card-cat, 
-.card.export-mode .tag-sub { font-size: 1rem; padding: 8px 16px; border-radius: 100px; }
+.export-footer {
+    width: 100%;
+    border-top: 4px solid var(--border-light);
+    padding-top: 60px;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+}
 
-/* Hide keyboard info and actions in export */
-.card.export-mode .symbol-keyboard,
-.card.export-mode .card-actions { display: none !important; }
+.export-tag {
+    font-size: 32px;
+    padding: 16px 40px;
+    background: var(--bg-hover);
+    border-radius: 100px;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
 
 /* --- Mobile / Sidebar --- */
 .filter-btn-mobile { display: none; }

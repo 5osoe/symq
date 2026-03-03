@@ -168,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isShortcut = item.type === 'shortcut';
                 const mainDisplay = isShortcut ? item.shortcut : item.symbol;
                 
+                // Keyboard HTML for display
                 let keyboardHTML = '';
                 if (!isShortcut && item.keyboardMethod) {
                     const k = item.keyboardMethod;
@@ -232,7 +233,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 downloadBtn.onclick = (e) => {
                     e.stopPropagation();
-                    handleDownload(card, item.englishName || 'symq-card', downloadBtn);
+                    // Pass the entire item data to the export function
+                    handleExport(item, downloadBtn);
                 };
 
                 fragment.appendChild(card);
@@ -300,59 +302,73 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Phase 5: Ultra High-Res Export (Clone Strategy) ---
-    async function handleDownload(originalCard, fileName, btnElement) {
+    // --- Phase 3: Isolated Export System ---
+    async function handleExport(data, btnElement) {
         if (typeof html2canvas === 'undefined') {
             alert('خطأ: مكتبة التحميل غير متوفرة.');
             return;
         }
 
-        // 1. Feedback
+        // 1. UI Feedback
         const originalText = btnElement.textContent;
         btnElement.textContent = "جاري التحميل...";
         btnElement.disabled = true;
 
         try {
-            // 2. Clone the card
-            const clone = originalCard.cloneNode(true);
+            // 2. Create Isolated Export Card
+            const exportCard = document.createElement("div");
+            exportCard.className = "export-card";
             
-            // 3. Apply export styling class (Fixed width, Clean layout)
-            clone.classList.add('export-mode');
-            
-            // 4. Position off-screen (Handled by CSS class, but ensuring here)
-            document.body.appendChild(clone);
+            const isShortcut = data.type === 'shortcut';
+            const displaySymbol = isShortcut ? data.shortcut : data.symbol;
+            const symbolClass = isShortcut ? 'export-symbol shortcut-mode' : 'export-symbol';
 
-            // 5. Ensure fonts are loaded
+            exportCard.innerHTML = `
+                <div class="export-brand">SymQ</div>
+                <div class="${symbolClass}">${displaySymbol}</div>
+                <div class="export-title">${data.arabicName}</div>
+                <div class="export-sub">${data.englishName || ""}</div>
+                
+                <div class="export-footer">
+                    <span class="export-tag">${data.category}</span>
+                    ${data.subCategory ? `<span class="export-tag">${data.subCategory}</span>` : ''}
+                </div>
+            `;
+
+            document.body.appendChild(exportCard);
+
+            // 3. Wait for fonts
             await document.fonts.ready;
 
-            // 6. Capture with High Scale
-            const canvas = await html2canvas(clone, {
-                scale: 4, // Ultra High Resolution
-                useCORS: true,
+            // 4. Capture
+            const canvas = await html2canvas(exportCard, {
+                scale: 4, // High Resolution
                 backgroundColor: "#ffffff",
+                useCORS: true,
                 logging: false
             });
 
-            // 7. Download
-            const link = document.createElement('a');
-            link.download = `${fileName.replace(/\s+/g, '-').toLowerCase()}.png`;
+            // 5. Download
+            const link = document.createElement("a");
+            const safeName = (data.englishName || data.arabicName || 'card').replace(/\s+/g, '-').toLowerCase();
+            link.download = `symq-${safeName}.png`;
             link.href = canvas.toDataURL("image/png", 1.0);
             link.click();
 
-            // 8. Cleanup
-            clone.remove();
+            // 6. Cleanup
+            document.body.removeChild(exportCard);
 
         } catch (err) {
             console.error("Export Failed:", err);
-            alert("حدث خطأ أثناء تحميل الصورة.");
+            alert("حدث خطأ أثناء إنشاء الصورة.");
         } finally {
-            // 9. Restore Button
+            // 7. Restore Button
             btnElement.textContent = originalText;
             btnElement.disabled = false;
         }
     }
 
-    // --- Sidebar Handling (Mobile Scroll Lock) ---
+    // --- Sidebar Handling ---
     function openSidebar() {
         ui.sidebar.classList.add('open');
         ui.backdrop.classList.add('open');
