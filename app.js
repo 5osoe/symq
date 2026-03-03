@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     
     // --- Configuration ---
-    const DEBOUNCE_DELAY = 300;
+    const DEBOUNCE_DELAY = 250; // Faster response
     
     // Group Definitions
     const GROUPS = {
-        "الرموز": ["الكل", "التشكيل", "علامات الترقيم", "رياضيات", "الأسس والمؤشرات", "العملات"],
+        "الرموز": ["الكل", "التشكيل", "علامات الترقيم", "الرموز الرياضية", "الأسس والمؤشرات", "العملات"],
         "الاختصارات": ["ويندوز", "تحرير عام", "Word", "Excel", "PowerPoint", "المتصفح", "مستكشف الملفات"]
     };
 
@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebar: document.getElementById('sidebar'),
         backdrop: document.getElementById('backdrop'),
         searchInput: document.getElementById('searchInput'),
+        searchContainer: document.querySelector('.search-bar-container'),
         title: document.getElementById('activeCategoryTitle'),
         count: document.getElementById('itemCount'),
         empty: document.getElementById('emptyState'),
@@ -54,6 +55,13 @@ document.addEventListener('DOMContentLoaded', () => {
     subFilterSelect.id = 'subCategoryFilter';
     subFilterSelect.className = 'sub-filter hidden';
     ui.contentHeader.appendChild(subFilterSelect);
+
+    // --- Phase 3: Add Clear Button ---
+    let clearBtn = document.createElement('span');
+    clearBtn.innerHTML = '&times;';
+    clearBtn.className = 'search-clear hidden';
+    clearBtn.title = 'مسح البحث';
+    ui.searchContainer.appendChild(clearBtn);
 
     // --- Core Logic ---
 
@@ -102,9 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderSidebar() {
         ui.sidebarContent.innerHTML = '';
 
-        // Iterate through defined groups
         for (const [groupName, categories] of Object.entries(GROUPS)) {
-            // Check if group has any items
             const groupHasItems = categories.some(cat => {
                 if(cat === 'الكل') return true;
                 return ALL_DATA.some(d => d.category === cat);
@@ -112,18 +118,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!groupHasItems) continue;
 
-            // Group Title
             const title = document.createElement('div');
             title.className = 'nav-group-title';
             title.textContent = groupName;
             ui.sidebarContent.appendChild(title);
 
-            // List
             const ul = document.createElement('ul');
             ul.className = 'nav-list';
 
             categories.forEach(catName => {
-                // Skip empty categories
                 if(catName !== 'الكل' && !ALL_DATA.some(d => d.category === catName)) return;
 
                 const li = document.createElement('li');
@@ -132,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 let count = catName === 'الكل' ? ALL_DATA.length : ALL_DATA.filter(d => d.category === catName).length;
                 
+                // Simplified clean item
                 li.innerHTML = `<span>${catName}</span> <span>${count}</span>`;
                 li.onclick = () => setCategory(catName);
                 ul.appendChild(li);
@@ -148,10 +152,20 @@ document.addEventListener('DOMContentLoaded', () => {
         ui.title.textContent = state.search ? 'نتائج البحث' : state.category;
         ui.count.textContent = `${data.length} عنصر`;
 
+        // Empty State & Grid Clear
         ui.grid.innerHTML = '';
         
+        // Manage Clear Button Visibility
+        if (state.search.length > 0) {
+            clearBtn.classList.remove('hidden');
+        } else {
+            clearBtn.classList.add('hidden');
+        }
+
         if (data.length === 0) {
             ui.empty.classList.remove('hidden');
+            const emptyP = ui.empty.querySelector('p');
+            if(emptyP) emptyP.textContent = state.search ? `لا توجد نتائج لـ "${state.search}"` : "لا توجد عناصر هنا.";
         } else {
             ui.empty.classList.add('hidden');
             const fragment = document.createDocumentFragment();
@@ -163,11 +177,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isShortcut = item.type === 'shortcut';
                 const mainDisplay = isShortcut ? item.shortcut : item.symbol;
                 
+                // --- Phase 2: Keyboard Logic (Preserved & Styled) ---
+                let keyboardHTML = '';
+                if (!isShortcut && item.keyboardMethod) {
+                    const k = item.keyboardMethod;
+                    const hasLayout = k.layout && k.layout.trim() !== '';
+                    const hasCombo = k.combination && k.combination.trim() !== '';
+                    const hasAlt = k.altCode && k.altCode.trim() !== '';
+
+                    if (hasLayout || hasCombo || hasAlt) {
+                        keyboardHTML += `<div class="symbol-keyboard">`;
+                        // Removed header "طريقة الكتابة" to reduce noise, kept layout simple
+                        if (hasLayout) {
+                            keyboardHTML += `
+                            <div class="kbd-row">
+                                <span class="kbd-label">التخطيط</span>
+                                <span class="kbd-val">${k.layout}</span>
+                            </div>`;
+                        }
+                        if (hasCombo) {
+                            keyboardHTML += `
+                            <div class="kbd-row">
+                                <span class="kbd-label">مفاتيح</span>
+                                <span class="kbd-val">${k.combination}</span>
+                            </div>`;
+                        }
+                        if (hasAlt) {
+                            keyboardHTML += `
+                            <div class="kbd-row">
+                                <span class="kbd-label">Alt</span>
+                                <span class="kbd-val">${k.altCode}</span>
+                            </div>`;
+                        }
+                        keyboardHTML += `</div>`;
+                    }
+                }
+                // -----------------------------
+                
                 card.innerHTML = `
                     <div class="${isShortcut ? 'text-shortcut' : 'card-symbol'}">${mainDisplay}</div>
                     <div class="card-name-ar">${item.arabicName}</div>
                     <div class="card-name-en">${item.englishName}</div>
                     ${item.description ? `<div class="card-desc">${item.description}</div>` : '<div class="card-desc"></div>'}
+                    
+                    ${keyboardHTML}
+
                     <div class="card-footer">
                         <div class="card-cat">${item.category}</div>
                         ${item.subCategory ? `<div class="tag-sub">${item.subCategory}</div>` : ''}
@@ -207,24 +261,31 @@ document.addEventListener('DOMContentLoaded', () => {
     function setCategory(name) {
         state.category = name;
         state.subCategory = 'الكل';
-        state.search = '';
-        ui.searchInput.value = '';
+        // Clear search when switching categories? Usually better UX to keep it or clear it.
+        // Let's clear it to show the category fully.
+        clearSearch(false); 
         
         renderSubFilters();
-        renderSidebar(); // Update active state
+        renderSidebar();
         renderGrid();
         closeSidebar();
     }
 
+    function clearSearch(shouldRender = true) {
+        state.search = '';
+        ui.searchInput.value = '';
+        if(shouldRender) renderGrid();
+    }
+
     function handleCopy(text, card) {
         navigator.clipboard.writeText(text).then(() => {
-            // Subtle feedback
+            // Refined feedback: subtle border change
             card.style.borderColor = '#22c55e'; // Green
-            card.style.backgroundColor = '#f0fdf4';
+            card.style.background = '#f0fdf4';
             setTimeout(() => {
                 card.style.borderColor = '';
-                card.style.backgroundColor = '';
-            }, 300);
+                card.style.background = '';
+            }, 400);
         });
     }
 
@@ -232,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function openSidebar() {
         ui.sidebar.classList.add('open');
         ui.backdrop.classList.add('open');
-        document.body.style.overflow = 'hidden'; // Prevent scroll
+        document.body.style.overflow = 'hidden'; 
     }
 
     function closeSidebar() {
@@ -243,13 +304,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Listeners ---
 
-    // Search with Debounce
     ui.searchInput.addEventListener('input', debounce((e) => {
         state.search = e.target.value;
         renderGrid();
     }, DEBOUNCE_DELAY));
 
-    // Keyboard Shortcuts
+    // Clear Button Action
+    clearBtn.addEventListener('click', () => {
+        clearSearch();
+        ui.searchInput.focus();
+    });
+
     document.addEventListener('keydown', (e) => {
         if (e.key === '/' && document.activeElement !== ui.searchInput) {
             e.preventDefault();
@@ -264,7 +329,12 @@ document.addEventListener('DOMContentLoaded', () => {
     ui.mobileBtn.addEventListener('click', openSidebar);
     ui.closeBtn.addEventListener('click', closeSidebar);
     ui.backdrop.addEventListener('click', closeSidebar);
-    ui.resetBtn.addEventListener('click', () => setCategory('الكل'));
+    
+    // Reset from empty state
+    ui.resetBtn.addEventListener('click', () => {
+        clearSearch(false);
+        setCategory('الكل');
+    });
     
     subFilterSelect.addEventListener('change', (e) => {
         state.subCategory = e.target.value;
