@@ -168,48 +168,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isShortcut = item.type === 'shortcut';
                 const mainDisplay = isShortcut ? item.shortcut : item.symbol;
                 
-                // --- Keyboard HTML for display UI ---
+                // --- Keyboard Data Extraction ---
                 let keyboardHTML = '';
-                let keyboardTextForExport = ''; // For Canvas Export
-                
+                let keyboardTextValue = "-";
+                let layoutValue = "-";
+                let unicodeValue = null;
+
                 if (!isShortcut && item.keyboardMethod) {
                     const k = item.keyboardMethod;
                     const hasLayout = k.layout && k.layout.trim() !== '';
                     const hasCombo = k.combination && k.combination.trim() !== '';
                     const hasAlt = k.altCode && k.altCode.trim() !== '';
 
+                    // For HTML Display
                     if (hasLayout || hasCombo || hasAlt) {
                         keyboardHTML += `<div class="symbol-keyboard">`;
-                        let parts = [];
-                        
                         if (hasLayout) {
-                            keyboardHTML += `
-                            <div class="kbd-row">
-                                <span class="kbd-label">التخطيط</span>
-                                <span class="kbd-val">${k.layout}</span>
-                            </div>`;
+                            keyboardHTML += `<div class="kbd-row"><span class="kbd-label">التخطيط</span><span class="kbd-val">${k.layout}</span></div>`;
+                            layoutValue = k.layout;
                         }
                         if (hasCombo) {
-                            keyboardHTML += `
-                            <div class="kbd-row">
-                                <span class="kbd-label">مفاتيح</span>
-                                <span class="kbd-val">${k.combination}</span>
-                            </div>`;
-                            parts.push(k.combination);
+                            keyboardHTML += `<div class="kbd-row"><span class="kbd-label">مفاتيح</span><span class="kbd-val">${k.combination}</span></div>`;
                         }
                         if (hasAlt) {
-                            keyboardHTML += `
-                            <div class="kbd-row">
-                                <span class="kbd-label">Alt</span>
-                                <span class="kbd-val">${k.altCode}</span>
-                            </div>`;
-                            parts.push(k.altCode);
+                            keyboardHTML += `<div class="kbd-row"><span class="kbd-label">Alt</span><span class="kbd-val">${k.altCode}</span></div>`;
+                            unicodeValue = k.altCode;
                         }
                         keyboardHTML += `</div>`;
-                        keyboardTextForExport = parts.join("  •  ");
+
+                        // For Export (Combine keys and alt)
+                        let parts = [];
+                        if (k.combination) parts.push(k.combination);
+                        if (k.altCode) parts.push(k.altCode);
+                        if (parts.length > 0) keyboardTextValue = parts.join(" / ");
                     }
+                } else if (isShortcut) {
+                    // For Shortcuts, the "Symbol" IS the keyboard text essentially
+                    keyboardTextValue = item.shortcut;
                 }
                 
+                // --- Card HTML ---
                 card.innerHTML = `
                     <div class="${isShortcut ? 'text-shortcut' : 'card-symbol'}">${mainDisplay}</div>
                     <div class="card-name-ar">${item.arabicName}</div>
@@ -240,13 +238,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 downloadBtn.onclick = (e) => {
                     e.stopPropagation();
-                    // Pure Canvas Export
+                    // Call the New Canvas Export Function
                     exportCardCanvas({
                         symbol: mainDisplay,
+                        shortcut: isShortcut ? item.shortcut : null,
                         arabicName: item.arabicName,
                         englishName: item.englishName,
-                        keyboardText: keyboardTextForExport,
-                        category: item.category
+                        keyboardText: keyboardTextValue,
+                        layout: layoutValue,
+                        category: item.category,
+                        code: unicodeValue
                     }, downloadBtn);
                 };
 
@@ -282,18 +283,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function setCategory(name) {
         state.category = name;
         state.subCategory = 'الكل';
-        
         clearSearch(false); 
-        
         renderSubFilters();
         renderSidebar();
         renderGrid();
         closeSidebar();
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
+        window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function clearSearch(shouldRender = true) {
@@ -307,7 +302,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const originalText = btnElement.textContent;
             btnElement.textContent = "تم النسخ";
             btnElement.classList.add('success');
-            
             setTimeout(() => {
                 btnElement.textContent = originalText;
                 btnElement.classList.remove('success');
@@ -315,8 +309,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- High Performance Canvas Export System ---
+    // --- Layout 2.0: Professional Canvas Export ---
     async function exportCardCanvas(data, btnElement) {
+        
+        // UI Feedback
         const originalText = btnElement.textContent;
         btnElement.textContent = "جاري...";
         btnElement.disabled = true;
@@ -324,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             await document.fonts.ready;
 
-            const size = 2000; // High resolution square
+            const size = 2200; // High resolution
             const canvas = document.createElement("canvas");
             canvas.width = size;
             canvas.height = size;
@@ -336,46 +332,63 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.fillRect(0, 0, size, size);
 
             ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
+
+            // ===== 2. SYMBOL =====
+            ctx.fillStyle = "#111111";
             ctx.direction = "rtl";
+            // Reduce size if text is long (e.g. shortcut)
+            const mainText = data.symbol || data.shortcut;
+            const fontSize = mainText.length > 5 ? 280 : 480;
+            ctx.font = `bold ${fontSize}px sans-serif`;
+            ctx.fillText(mainText, size / 2, 650);
 
-            // 2. Main Symbol / Shortcut
-            const symbolText = data.symbol || "";
-            let fontSize = 420;
-            // Adjust font size for longer text (shortcuts)
-            if (symbolText.length > 3) fontSize = 280;
-            if (symbolText.length > 10) fontSize = 160;
-
-            ctx.fillStyle = "#1F1F1F";
-            // Use Roboto Mono for shortcuts/symbols to match UI, Cairo for generic
-            const fontName = symbolText.length > 1 ? "Roboto Mono" : "Cairo";
-            ctx.font = `500 ${fontSize}px '${fontName}', sans-serif`;
-            ctx.fillText(symbolText, size / 2, 800);
-
-            // 3. Arabic Name
+            // ===== 3. ARABIC NAME =====
+            ctx.font = "bold 160px 'Cairo', sans-serif";
             ctx.fillStyle = "#000000";
-            ctx.font = "bold 140px 'Cairo', sans-serif";
-            ctx.fillText(data.arabicName, size / 2, 1150);
+            ctx.fillText(data.arabicName, size / 2, 950);
 
-            // 4. English Name
-            ctx.direction = "ltr"; // English needs LTR
-            ctx.fillStyle = "#707070";
-            ctx.font = "500 90px 'Cairo', sans-serif";
-            ctx.fillText(data.englishName || "", size / 2, 1300);
+            // ===== 4. ENGLISH NAME =====
+            ctx.direction = "ltr";
+            ctx.fillStyle = "#666666";
+            ctx.font = "120px 'Cairo', sans-serif";
+            ctx.fillText(data.englishName || "", size / 2, 1100);
 
-            // 5. Keyboard Info (if exists)
-            if (data.keyboardText) {
-                ctx.fillStyle = "#9E9E9E";
-                ctx.font = "500 80px 'Roboto Mono', monospace";
-                ctx.fillText(data.keyboardText, size / 2, 1550);
+            // ===== 5. DIVIDER =====
+            ctx.strokeStyle = "#EAEAEA";
+            ctx.lineWidth = 6;
+            ctx.beginPath();
+            ctx.moveTo(400, 1250);
+            ctx.lineTo(size - 400, 1250);
+            ctx.stroke();
+
+            // ===== 6. DETAILS SECTION =====
+            ctx.fillStyle = "#222222";
+            ctx.font = "110px 'Cairo', sans-serif"; // Using Cairo/Sans
+
+            // Layout (Right side)
+            ctx.direction = "rtl";
+            ctx.fillText("التخطيط: " + (data.layout || "-"), size - 600, 1450);
+
+            // Category
+            ctx.fillText("الفئة: " + (data.category || "-"), size - 600, 1600);
+
+            // Keyboard (Left side) - Using Monospace for keys
+            ctx.direction = "ltr";
+            ctx.font = "110px 'Roboto Mono', sans-serif"; 
+            ctx.fillText("Keys: " + (data.keyboardText || "-"), 600, 1450);
+
+            // Code (if exists)
+            if (data.code) {
+                ctx.fillText("Code: " + data.code, 600, 1600);
             }
 
-            // 6. Branding / Footer
+            // ===== 7. BRANDING =====
             ctx.fillStyle = "#E10600";
-            ctx.font = "bold 70px 'Roboto Mono', monospace";
-            ctx.fillText("SymQ", size / 2, 1850);
+            ctx.font = "bold 100px 'Roboto Mono', monospace";
+            ctx.textAlign = "center";
+            ctx.fillText("SymQ", size / 2, 1950);
 
-            // 7. Download
+            // 8. Download
             const link = document.createElement("a");
             const safeName = (data.englishName || data.arabicName || 'card').replace(/\s+/g, '-').toLowerCase();
             link.download = `symq-${safeName}.png`;
@@ -383,8 +396,8 @@ document.addEventListener('DOMContentLoaded', () => {
             link.click();
 
         } catch (err) {
-            console.error("Export Error:", err);
-            alert("حدث خطأ غير متوقع أثناء التصدير.");
+            console.error(err);
+            alert('حدث خطأ أثناء التصدير.');
         } finally {
             btnElement.textContent = originalText;
             btnElement.disabled = false;
