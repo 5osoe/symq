@@ -168,7 +168,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isShortcut = item.type === 'shortcut';
                 const mainDisplay = isShortcut ? item.shortcut : item.symbol;
                 
+                // --- Keyboard HTML for display UI ---
                 let keyboardHTML = '';
+                let keyboardTextForExport = ''; // For Canvas Export
+                
                 if (!isShortcut && item.keyboardMethod) {
                     const k = item.keyboardMethod;
                     const hasLayout = k.layout && k.layout.trim() !== '';
@@ -177,6 +180,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     if (hasLayout || hasCombo || hasAlt) {
                         keyboardHTML += `<div class="symbol-keyboard">`;
+                        let parts = [];
+                        
                         if (hasLayout) {
                             keyboardHTML += `
                             <div class="kbd-row">
@@ -190,6 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <span class="kbd-label">مفاتيح</span>
                                 <span class="kbd-val">${k.combination}</span>
                             </div>`;
+                            parts.push(k.combination);
                         }
                         if (hasAlt) {
                             keyboardHTML += `
@@ -197,8 +203,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <span class="kbd-label">Alt</span>
                                 <span class="kbd-val">${k.altCode}</span>
                             </div>`;
+                            parts.push(k.altCode);
                         }
                         keyboardHTML += `</div>`;
+                        keyboardTextForExport = parts.join("  •  ");
                     }
                 }
                 
@@ -232,7 +240,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 downloadBtn.onclick = (e) => {
                     e.stopPropagation();
-                    handleDownload(card, item.englishName || 'symq-card', downloadBtn);
+                    // Pure Canvas Export
+                    exportCardCanvas({
+                        symbol: mainDisplay,
+                        arabicName: item.arabicName,
+                        englishName: item.englishName,
+                        keyboardText: keyboardTextForExport,
+                        category: item.category
+                    }, downloadBtn);
                 };
 
                 fragment.appendChild(card);
@@ -300,51 +315,77 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- High Performance Export System (html-to-image) ---
-    async function handleDownload(cardElement, fileName, btnElement) {
-        if (typeof htmlToImage === 'undefined') {
-            alert('خطأ: مكتبة التحميل غير متوفرة.');
-            return;
-        }
-
-        // 1. Set Loading State
+    // --- High Performance Canvas Export System ---
+    async function exportCardCanvas(data, btnElement) {
         const originalText = btnElement.textContent;
         btnElement.textContent = "جاري...";
         btnElement.disabled = true;
 
         try {
-            // 2. Wait for fonts
             await document.fonts.ready;
 
-            // 3. Capture with High Performance
-            const dataUrl = await htmlToImage.toPng(cardElement, {
-                quality: 1.0,
-                pixelRatio: 3, // Balanced for speed and quality
-                backgroundColor: '#ffffff',
-                cacheBust: true,
-                filter: (node) => {
-                    // Exclude the action buttons from the screenshot
-                    return node.className !== 'card-actions';
-                },
-                style: {
-                    transform: 'none', // Reset transform to avoid hover effects
-                    boxShadow: 'none', // Remove shadow for clean export
-                    border: '1px solid #E0E0E0' // Ensure border is visible
-                }
-            });
+            const size = 2000; // High resolution square
+            const canvas = document.createElement("canvas");
+            canvas.width = size;
+            canvas.height = size;
 
-            // 4. Download
-            const link = document.createElement('a');
-            const safeName = fileName.replace(/\s+/g, '-').toLowerCase();
-            link.download = `${safeName}.png`;
-            link.href = dataUrl;
+            const ctx = canvas.getContext("2d");
+
+            // 1. Background
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, size, size);
+
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.direction = "rtl";
+
+            // 2. Main Symbol / Shortcut
+            const symbolText = data.symbol || "";
+            let fontSize = 420;
+            // Adjust font size for longer text (shortcuts)
+            if (symbolText.length > 3) fontSize = 280;
+            if (symbolText.length > 10) fontSize = 160;
+
+            ctx.fillStyle = "#1F1F1F";
+            // Use Roboto Mono for shortcuts/symbols to match UI, Cairo for generic
+            const fontName = symbolText.length > 1 ? "Roboto Mono" : "Cairo";
+            ctx.font = `500 ${fontSize}px '${fontName}', sans-serif`;
+            ctx.fillText(symbolText, size / 2, 800);
+
+            // 3. Arabic Name
+            ctx.fillStyle = "#000000";
+            ctx.font = "bold 140px 'Cairo', sans-serif";
+            ctx.fillText(data.arabicName, size / 2, 1150);
+
+            // 4. English Name
+            ctx.direction = "ltr"; // English needs LTR
+            ctx.fillStyle = "#707070";
+            ctx.font = "500 90px 'Cairo', sans-serif";
+            ctx.fillText(data.englishName || "", size / 2, 1300);
+
+            // 5. Keyboard Info (if exists)
+            if (data.keyboardText) {
+                ctx.fillStyle = "#9E9E9E";
+                ctx.font = "500 80px 'Roboto Mono', monospace";
+                ctx.fillText(data.keyboardText, size / 2, 1550);
+            }
+
+            // 6. Branding / Footer
+            ctx.fillStyle = "#E10600";
+            ctx.font = "bold 70px 'Roboto Mono', monospace";
+            ctx.fillText("SymQ", size / 2, 1850);
+
+            // 7. Download
+            const link = document.createElement("a");
+            const safeName = (data.englishName || data.arabicName || 'card').replace(/\s+/g, '-').toLowerCase();
+            link.download = `symq-${safeName}.png`;
+            link.href = canvas.toDataURL("image/png", 1.0);
             link.click();
 
-        } catch (error) {
-            console.error("Export Failed:", error);
-            alert('حدث خطأ أثناء تحميل الصورة.');
+        } catch (err) {
+            console.error("Export Error:", err);
+            alert("حدث خطأ غير متوقع أثناء التصدير.");
         } finally {
-            // 5. Reset Button
             btnElement.textContent = originalText;
             btnElement.disabled = false;
         }
