@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 downloadBtn.onclick = (e) => {
                     e.stopPropagation();
-                    handleDownload(card, item.englishName || 'symq-card');
+                    handleDownload(card, item.englishName || 'symq-card', downloadBtn);
                 };
 
                 fragment.appendChild(card);
@@ -300,28 +300,56 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function handleDownload(cardElement, fileName) {
-        cardElement.classList.add('capturing');
-        
+    // --- Phase 5: Ultra High-Res Export (Clone Strategy) ---
+    async function handleDownload(originalCard, fileName, btnElement) {
         if (typeof html2canvas === 'undefined') {
-            alert('خطأ: مكتبة التحميل لم يتم تحميلها بشكل صحيح.');
-            cardElement.classList.remove('capturing');
+            alert('خطأ: مكتبة التحميل غير متوفرة.');
             return;
         }
 
-        html2canvas(cardElement, {
-            backgroundColor: "#ffffff",
-            scale: 2 // High resolution
-        }).then(canvas => {
+        // 1. Feedback
+        const originalText = btnElement.textContent;
+        btnElement.textContent = "جاري التحميل...";
+        btnElement.disabled = true;
+
+        try {
+            // 2. Clone the card
+            const clone = originalCard.cloneNode(true);
+            
+            // 3. Apply export styling class (Fixed width, Clean layout)
+            clone.classList.add('export-mode');
+            
+            // 4. Position off-screen (Handled by CSS class, but ensuring here)
+            document.body.appendChild(clone);
+
+            // 5. Ensure fonts are loaded
+            await document.fonts.ready;
+
+            // 6. Capture with High Scale
+            const canvas = await html2canvas(clone, {
+                scale: 4, // Ultra High Resolution
+                useCORS: true,
+                backgroundColor: "#ffffff",
+                logging: false
+            });
+
+            // 7. Download
             const link = document.createElement('a');
             link.download = `${fileName.replace(/\s+/g, '-').toLowerCase()}.png`;
-            link.href = canvas.toDataURL();
+            link.href = canvas.toDataURL("image/png", 1.0);
             link.click();
-            cardElement.classList.remove('capturing');
-        }).catch(err => {
-            console.error(err);
-            cardElement.classList.remove('capturing');
-        });
+
+            // 8. Cleanup
+            clone.remove();
+
+        } catch (err) {
+            console.error("Export Failed:", err);
+            alert("حدث خطأ أثناء تحميل الصورة.");
+        } finally {
+            // 9. Restore Button
+            btnElement.textContent = originalText;
+            btnElement.disabled = false;
+        }
     }
 
     // --- Sidebar Handling (Mobile Scroll Lock) ---
@@ -347,7 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Back to Top Logic (Optimized with Passive Listener)
+    // Back to Top Logic
     window.addEventListener('scroll', () => {
         if (window.scrollY > 300) {
             ui.backToTop.classList.add('visible');

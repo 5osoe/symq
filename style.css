@@ -35,7 +35,7 @@
     --font-mono: 'Roboto Mono', monospace;
 }
 
-/* --- Phase 4: Custom Scrollbar (Red Theme) --- */
+/* --- Custom Scrollbar (Red Theme) --- */
 /* Firefox */
 * {
     scrollbar-width: thin;
@@ -55,7 +55,7 @@
 ::-webkit-scrollbar-thumb {
     background-color: var(--accent);
     border-radius: 10px;
-    border: 3px solid var(--bg-hover); /* Creates padding effect */
+    border: 3px solid var(--bg-hover);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -64,7 +64,7 @@
 
 /* Reset & Base */
 html {
-    scroll-behavior: smooth; /* Global Smooth Scroll */
+    scroll-behavior: smooth;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
@@ -80,16 +80,16 @@ body {
     min-height: 100vh;
 }
 
-/* --- Micro Interactions: Buttons --- */
+/* --- Micro Interactions --- */
 button, .nav-item, .card, .icon-btn-mobile {
     transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 button:active, .card-action-btn:active, .nav-item:active, .icon-btn-mobile:active {
-    transform: scale(0.96); /* Subtle press effect */
+    transform: scale(0.96);
 }
 
-/* --- Header Refinement --- */
+/* --- Header --- */
 .app-header {
     height: var(--header-height);
     border-bottom: 1px solid var(--border-light);
@@ -123,7 +123,7 @@ button:active, .card-action-btn:active, .nav-item:active, .icon-btn-mobile:activ
     min-width: 70px;
 }
 
-/* Search Bar Refinement */
+/* Search Bar */
 .search-bar-container {
     flex-grow: 1;
     position: relative;
@@ -147,7 +147,7 @@ button:active, .card-action-btn:active, .nav-item:active, .icon-btn-mobile:activ
 #searchInput:focus {
     background: var(--bg-surface);
     border-color: var(--border-focus);
-    box-shadow: 0 0 0 3px rgba(225, 6, 0, 0.08); /* Soft glow */
+    box-shadow: 0 0 0 3px rgba(225, 6, 0, 0.08);
 }
 
 #searchInput::placeholder {
@@ -190,7 +190,7 @@ button:active, .card-action-btn:active, .nav-item:active, .icon-btn-mobile:activ
     background: rgba(0,0,0,0.03);
 }
 
-/* Mobile Controls Wrapper */
+/* Mobile Controls */
 .mobile-controls {
     display: none;
     align-items: center;
@@ -211,7 +211,7 @@ button:active, .card-action-btn:active, .nav-item:active, .icon-btn-mobile:activ
 }
 .icon-btn-mobile:hover { background: var(--bg-hover); }
 
-/* --- Layout Refinement --- */
+/* --- Layout --- */
 .layout-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -222,7 +222,7 @@ button:active, .card-action-btn:active, .nav-item:active, .icon-btn-mobile:activ
     min-height: calc(100vh - var(--header-height));
 }
 
-/* --- Sidebar (Desktop) --- */
+/* --- Sidebar --- */
 .sidebar {
     position: sticky;
     top: calc(var(--header-height) + var(--space-3));
@@ -279,7 +279,7 @@ button:active, .card-action-btn:active, .nav-item:active, .icon-btn-mobile:activ
     color: rgba(225, 6, 0, 0.6);
 }
 
-/* --- Content Area --- */
+/* --- Content --- */
 .content-header {
     display: flex;
     justify-content: space-between;
@@ -299,7 +299,7 @@ button:active, .card-action-btn:active, .nav-item:active, .icon-btn-mobile:activ
     padding: 0; 
 }
 
-/* Sub-filter Dropdown */
+/* Sub-filter */
 .sub-filter {
     padding: 6px 12px;
     border: 1px solid var(--border-light);
@@ -315,14 +315,14 @@ button:active, .card-action-btn:active, .nav-item:active, .icon-btn-mobile:activ
 .sub-filter:hover { border-color: #d0d0d0; }
 .sub-filter:focus { border-color: var(--accent); }
 
-/* --- Grid Refinement --- */
+/* --- Grid --- */
 .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: var(--space-3);
 }
 
-/* --- Cards Refinement --- */
+/* --- Cards --- */
 .card {
     background: var(--bg-surface);
     border: 1px solid var(--border-light);
@@ -340,7 +340,7 @@ button:active, .card-action-btn:active, .nav-item:active, .icon-btn-mobile:activ
 .card:hover {
     border-color: var(--border-medium);
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.04); /* Softer shadow */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.04);
 }
 
 .card-symbol {
@@ -441,8 +441,6 @@ button:active, .card-action-btn:active, .nav-item:active, .icon-btn-mobile:activ
     border-top: 1px solid var(--border-light);
 }
 
-.card.capturing .card-actions { display: none !important; }
-
 .card-action-btn {
     flex: 1;
     padding: 6px 0;
@@ -469,7 +467,7 @@ button:active, .card-action-btn:active, .nav-item:active, .icon-btn-mobile:activ
     background: rgba(34, 197, 94, 0.05);
 }
 
-/* --- Back to Top Button --- */
+/* --- Back to Top --- */
 .back-to-top {
     position: fixed;
     bottom: 24px;
@@ -505,12 +503,53 @@ button:active, .card-action-btn:active, .nav-item:active, .icon-btn-mobile:activ
     background-color: var(--accent-hover);
 }
 
-/* --- Mobile / Sidebar Styles --- */
+/* --- High Resolution Export Styling (Phase 5) --- */
+.card.export-mode {
+    width: 800px !important;
+    max-width: 800px !important;
+    height: auto !important;
+    position: fixed;
+    top: -9999px;
+    left: -9999px;
+    z-index: -999;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background: #ffffff;
+    padding: 60px !important; /* Extra padding for export */
+    align-items: center; /* Center Content */
+    text-align: center;
+}
+
+.card.export-mode .card-symbol {
+    font-size: 6rem; /* Huge symbol */
+    height: 140px;
+    margin-bottom: 24px;
+}
+
+.card.export-mode .text-shortcut {
+    font-size: 2.5rem;
+    padding: 20px 40px;
+    margin-bottom: 30px;
+}
+
+.card.export-mode .card-name-ar { font-size: 2rem; margin-bottom: 8px; }
+.card.export-mode .card-name-en { font-size: 1.5rem; margin-bottom: 24px; color: var(--text-secondary); }
+.card.export-mode .card-desc { font-size: 1.2rem; max-width: 90%; margin: 0 auto 30px auto; }
+.card.export-mode .card-footer { width: 100%; margin-top: 40px; padding-top: 30px; border-top: 2px solid var(--border-light); }
+.card.export-mode .card-cat, 
+.card.export-mode .tag-sub { font-size: 1rem; padding: 8px 16px; border-radius: 100px; }
+
+/* Hide keyboard info and actions in export */
+.card.export-mode .symbol-keyboard,
+.card.export-mode .card-actions { display: none !important; }
+
+/* --- Mobile / Sidebar --- */
 .filter-btn-mobile { display: none; }
 .backdrop {
     position: fixed; inset: 0; background: rgba(0,0,0,0.3); 
     z-index: 150; opacity: 0; pointer-events: none; 
-    transition: opacity 0.3s ease; /* Smoother fade */
+    transition: opacity 0.3s ease;
 }
 .backdrop.open { opacity: 1; pointer-events: auto; }
 
@@ -570,7 +609,7 @@ button:active, .card-action-btn:active, .nav-item:active, .icon-btn-mobile:activ
         box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
         padding: var(--space-3);
         transform: translateY(100%);
-        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); /* Apple-like spring */
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         overflow-y: auto;
     }
     .sidebar.open { transform: translateY(0); }
