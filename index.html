@@ -2,98 +2,106 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SymQ | المرجع الشامل للاختصارات</title>
-    
-    <!-- Fonts: Cairo (Professional Arabic) + Inter (English Numbers) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="SymQ - Professional Keyboard Shortcuts & Symbols Reference Index.">
+    <meta name="theme-color" content="#ffffff">
+    <title>SymQ | Reference Index</title>
+
+    <!-- Fonts: Cairo (UI) + Roboto Mono (Technical) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     
-    <!-- Icons -->
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    
-    <!-- Styles -->
+    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="container nav-content">
-            <div class="logo">
-                <div class="logo-box">Q</div>
-                <div class="logo-text">
-                    <h1>SymQ</h1>
-                    <span class="badge-beta">PRO</span>
-                </div>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="container header-layout">
+            <div class="brand">
+                <span class="logo-text">SymQ</span>
+                <span class="version-tag">v3.0</span>
             </div>
             
-            <div class="search-container">
-                <i class="ph ph-magnifying-glass"></i>
-                <input type="text" id="searchInput" placeholder="ابحث عن اختصار، اسم، أو برنامج (مثال: نسخ، Excel)...">
-                <div class="shortcut-hint">/</div>
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" placeholder="Search / بحث..." autocomplete="off">
+                <kbd class="shortcut-hint">/</kbd>
             </div>
-        </div>
-    </nav>
 
-    <div class="main-wrapper container">
+            <button id="mobileMenuBtn" class="icon-btn" aria-label="Menu">
+                <span class="menu-bar"></span>
+                <span class="menu-bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="container main-layout">
         
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h3>الأقسام</h3>
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header-mobile">
+                <h3>Sections</h3>
+                <button id="closeSidebarBtn" class="close-btn">&times;</button>
             </div>
-            <ul id="categoryList" class="category-nav">
-                <!-- Injected via JS -->
-            </ul>
+
+            <nav class="nav-section">
+                <h4 class="nav-label">Symbols</h4>
+                <ul id="navSymbols" class="nav-list">
+                    <!-- Injected via JS -->
+                </ul>
+            </nav>
+
+            <nav class="nav-section">
+                <h4 class="nav-label">Shortcuts</h4>
+                <ul id="navShortcuts" class="nav-list">
+                    <!-- Injected via JS -->
+                </ul>
+            </nav>
         </aside>
 
-        <!-- Main Content -->
-        <main class="content-area">
-            
-            <!-- Mobile Category Filter (Visible only on mobile) -->
-            <div class="mobile-filters">
-                <select id="mobileCategorySelect">
-                    <!-- Injected via JS -->
-                </select>
+        <!-- Content -->
+        <main class="content">
+            <div class="content-head">
+                <h1 id="categoryTitle">Overview</h1>
+                <span id="itemCount" class="meta-text">0 items</span>
             </div>
 
-            <!-- Stats & Header -->
-            <header class="section-header">
-                <div class="header-text">
-                    <h2 id="currentCategoryTitle">كل الاختصارات</h2>
-                    <p id="currentCategoryDesc">تصفح المكتبة الكاملة للاختصارات الإنتاجية.</p>
+            <!-- Content Grid Container -->
+            <div id="contentContainer">
+                <!-- Most Used Section (Dynamic) -->
+                <div id="sectionPopular" class="section-block hidden">
+                    <h3 class="section-title">Most Used</h3>
+                    <div id="gridPopular" class="grid"></div>
                 </div>
-                <div class="header-stats">
-                    <span id="itemCount">0</span> اختصار
-                </div>
-            </header>
 
-            <!-- Grid -->
-            <div id="shortcutsGrid" class="grid-layout">
-                <!-- Cards Injected via JS -->
+                <!-- Main Grid -->
+                <div id="sectionMain" class="section-block">
+                    <h3 id="mainGridTitle" class="section-title hidden">All Items</h3>
+                    <div id="gridMain" class="grid"></div>
+                </div>
             </div>
 
             <!-- Empty State -->
             <div id="emptyState" class="empty-state hidden">
-                <div class="empty-icon"><i class="ph ph-smiley-sad"></i></div>
-                <h3>لا توجد نتائج</h3>
-                <p>جرب البحث بكلمات مختلفة أو تغيير القسم.</p>
-                <button onclick="app.resetSearch()" class="btn-reset">عرض الكل</button>
+                <p>No results found.</p>
+                <button id="resetSearchBtn" class="btn-text">Clear Search</button>
             </div>
 
+            <!-- Footer -->
+            <footer class="app-footer">
+                <p>&copy; 2024 SymQ Index. <span class="divider">/</span> Designed for efficiency.</p>
+            </footer>
         </main>
-    </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast">
-        <i class="ph ph-check-circle-fill"></i>
-        <span>تم نسخ الاختصار بنجاح</span>
     </div>
 
     <!-- Scripts -->
-    <script src="data.js"></script>
+    <script src="data-symbols.js"></script>
+    <script src="data-shortcuts.js"></script>
     <script src="app.js"></script>
+
 </body>
 </html>
