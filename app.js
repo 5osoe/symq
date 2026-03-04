@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const NAV_TREE = [
         { label: 'الكل' },
         {
-            label: 'SYMBOLS', isGroup: true, children: [
+            label: 'الرموز', isGroup: true, children: [
                 { label: 'التشكيل'         },
                 { label: 'علامات الترقيم'  },
                 { label: 'الرموز الرياضية' },
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         },
         {
-            label: 'SHORTCUTS', isGroup: true, children: [
+            label: 'الاختصارات', isGroup: true, children: [
                 { label: 'ويندوز'          },
                 { label: 'مستكشف الملفات' },
                 { label: 'تحرير عام'       },
@@ -136,10 +136,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const sub   = state.subCategory;
 
         let pool;
-        if      (cat === 'الكل')      pool = ALL_DATA;
-        else if (cat === 'SYMBOLS')   pool = ALL_DATA.filter(i => SYMBOL_CATS.has(i.category));
-        else if (cat === 'SHORTCUTS') pool = ALL_DATA.filter(i => SHORTCUT_CATS.has(i.category));
-        else                          pool = CAT_INDEX[cat] || [];
+        if      (cat === 'الكل')         pool = ALL_DATA;
+        else if (cat === 'الرموز')       pool = ALL_DATA.filter(i => SYMBOL_CATS.has(i.category));
+        else if (cat === 'الاختصارات')   pool = ALL_DATA.filter(i => SHORTCUT_CATS.has(i.category));
+        else                              pool = CAT_INDEX[cat] || [];
 
         if (sub !== 'الكل') pool = pool.filter(i => i.subCategory === sub);
         if (query)           pool = pool.filter(i => i._searchText.includes(query));
@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ─── Render: Sub-filters ──────────────────────────────────────────────────
     function renderSubFilters() {
         const cat    = state.category;
-        const isLeaf = cat !== 'الكل' && cat !== 'SYMBOLS' && cat !== 'SHORTCUTS';
+        const isLeaf = cat !== 'الكل' && cat !== 'الرموز' && cat !== 'الاختصارات';
 
         if (isLeaf) {
             const subCats = [...new Set((CAT_INDEX[cat] || []).map(i => i.subCategory).filter(Boolean))].sort();
@@ -224,8 +224,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = getFilteredData();
 
         let titleText = state.search ? 'نتائج البحث' : state.category;
-        if (titleText === 'SYMBOLS')   titleText = 'الرموز';
-        if (titleText === 'SHORTCUTS') titleText = 'الاختصارات';
         ui.title.textContent = titleText;
         ui.count.textContent = `${data.length} عنصر`;
 
@@ -371,6 +369,39 @@ document.addEventListener('DOMContentLoaded', () => {
         state.subCategory = e.target.value;
         renderGrid();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ─── Dark Mode ────────────────────────────────────────────────────────────
+    const darkBtn     = document.getElementById('darkModeBtn');
+    const iconMoon    = document.getElementById('iconMoon');
+    const iconSun     = document.getElementById('iconSun');
+    const themeOverlay = document.getElementById('themeOverlay');
+
+    function applyTheme(dark, animate) {
+        if (!animate) {
+            document.documentElement.classList.toggle('dark', dark);
+            iconMoon.style.display = dark ? 'none'  : '';
+            iconSun.style.display  = dark ? ''      : 'none';
+            return;
+        }
+        // Show brief loading overlay, then flip theme
+        themeOverlay.classList.add('visible');
+        setTimeout(() => {
+            document.documentElement.classList.toggle('dark', dark);
+            iconMoon.style.display = dark ? 'none' : '';
+            iconSun.style.display  = dark ? ''     : 'none';
+            setTimeout(() => themeOverlay.classList.remove('visible'), 250);
+        }, 350);
+    }
+
+    // Init from saved preference
+    const savedDark = localStorage.getItem('symq-dark') === '1';
+    applyTheme(savedDark, false);
+
+    darkBtn.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.contains('dark');
+        localStorage.setItem('symq-dark', isDark ? '0' : '1');
+        applyTheme(!isDark, true);
     });
 
     // ─── Init ─────────────────────────────────────────────────────────────────
