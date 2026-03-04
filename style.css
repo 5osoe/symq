@@ -36,13 +36,11 @@
 }
 
 /* --- Custom Scrollbar (Red Theme) --- */
-/* Firefox */
 * {
     scrollbar-width: thin;
     scrollbar-color: var(--accent) var(--bg-hover);
 }
 
-/* Webkit (Chrome, Edge, Safari) */
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -234,35 +232,58 @@ button:active, .nav-item:active, .icon-btn-mobile:active {
 
 .sidebar-header { display: none; }
 
+/* ── Nav Group Title (section header) ─────────────────── */
 .nav-group-title {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: var(--text-muted);
     font-weight: 700;
-    margin-bottom: var(--space-1);
-    margin-top: var(--space-3);
+    margin-bottom: 6px;
+    margin-top: 4px;           /* separator provides the visual gap */
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: color 0.15s;
+    user-select: none;
 }
 .nav-group-title:first-child { margin-top: 0; }
+.nav-group-title:hover { color: var(--text-secondary); }
+
+/* ── Thin Separator between main sections ─────────────── */
+.nav-separator {
+    height: 1px;
+    background: var(--border-light);
+    margin: 14px 0;
+}
 
 .nav-list { list-style: none; }
 
+/* ── Nav Items ─────────────────────────────────────────── */
 .nav-item {
-    padding: 8px 12px;
+    padding: 7px 10px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     color: var(--text-secondary);
     border-radius: var(--radius-sm);
-    margin-bottom: 2px;
+    margin-bottom: 1px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 4px;
+}
+
+.nav-item span:first-child {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .nav-item span:last-child {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--text-muted);
     font-family: var(--font-mono);
+    flex-shrink: 0;
 }
 
 .nav-item:hover {
@@ -270,13 +291,15 @@ button:active, .nav-item:active, .icon-btn-mobile:active {
     background: var(--bg-hover);
 }
 
+/* Active state: subtle left-border accent + tinted background */
 .nav-item.active {
-    background: transparent;
+    background: rgba(225, 6, 0, 0.05);
     color: var(--accent);
     font-weight: 700;
+    border-right: 2px solid var(--accent); /* RTL: right border */
 }
 .nav-item.active span:last-child {
-    color: rgba(225, 6, 0, 0.6);
+    color: rgba(225, 6, 0, 0.55);
 }
 
 /* --- Content --- */
@@ -335,6 +358,8 @@ button:active, .nav-item:active, .icon-btn-mobile:active {
     cursor: pointer; 
     position: relative;
     height: 100%;
+    /* Performance: promote stable cards to their own layer */
+    will-change: transform;
 }
 
 .card:hover {
@@ -352,7 +377,7 @@ button:active, .nav-item:active, .icon-btn-mobile:active {
 .copy-icon-btn {
     position: absolute;
     top: 8px;
-    left: 8px; /* RTL placement logic, physically top-left */
+    left: 8px;
     width: 32px;
     height: 32px;
     border: none;
@@ -619,9 +644,12 @@ button:active, .nav-item:active, .icon-btn-mobile:active {
     }
 
     .nav-item { padding: 14px 0; border-bottom: 1px solid var(--border-light); border-radius: 0; }
+    .nav-item.active { border-right: none; border-bottom: 1px solid var(--border-light); background: transparent; }
     .nav-item:last-child { border-bottom: none; }
     .nav-item:hover { background: transparent; }
     
+    .nav-separator { margin: 8px 0; }
+
     .content-header { margin-top: var(--space-2); }
 }
 

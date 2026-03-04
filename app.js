@@ -1,322 +1,438 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // --- Configuration ---
-    const DEBOUNCE_DELAY = 250; 
-    
-    // Group Definitions
-    const GROUPS = {
-        "الرموز": ["الكل", "التشكيل", "علامات الترقيم", "الرموز الرياضية", "الأسس والمؤشرات", "العملات"],
-        "الاختصارات": ["ويندوز", "تحرير عام", "Word", "Excel", "PowerPoint", "المتصفح", "مستكشف الملفات", "Photoshop", "Illustrator", "VS Code", "Terminal", "AutoCAD", "Premiere"]
-    };
 
-    // --- Data Aggregation ---
-    const ALL_DATA = [
-        ...(typeof DATA_DIACRITICS !== 'undefined' ? DATA_DIACRITICS : []),
-        ...(typeof DATA_PUNCTUATION !== 'undefined' ? DATA_PUNCTUATION : []),
-        ...(typeof DATA_MATH !== 'undefined' ? DATA_MATH : []),
-        ...(typeof DATA_SUPERSUB !== 'undefined' ? DATA_SUPERSUB : []),
-        ...(typeof DATA_CURRENCY !== 'undefined' ? DATA_CURRENCY : []),
-        ...(typeof DATA_WINDOWS !== 'undefined' ? DATA_WINDOWS : []),
-        ...(typeof DATA_EDITING !== 'undefined' ? DATA_EDITING : []),
-        ...(typeof DATA_WORD !== 'undefined' ? DATA_WORD : []),
-        ...(typeof DATA_EXCEL !== 'undefined' ? DATA_EXCEL : []),
-        ...(typeof DATA_POWERPOINT !== 'undefined' ? DATA_POWERPOINT : []),
-        ...(typeof DATA_BROWSER !== 'undefined' ? DATA_BROWSER : []),
-        ...(typeof DATA_EXPLORER !== 'undefined' ? DATA_EXPLORER : []),
-        ...(typeof DATA_PHOTOSHOP !== 'undefined' ? DATA_PHOTOSHOP : []),
-        ...(typeof DATA_ILLUSTRATOR !== 'undefined' ? DATA_ILLUSTRATOR : []),
-        ...(typeof DATA_VSCODE !== 'undefined' ? DATA_VSCODE : []),
-        ...(typeof DATA_TERMINAL !== 'undefined' ? DATA_TERMINAL : []),
-        ...(typeof DATA_AUTOCAD !== 'undefined' ? DATA_AUTOCAD : []),
-        ...(typeof DATA_PREMIERE !== 'undefined' ? DATA_PREMIERE : [])
+    // ─── Configuration ───────────────────────────────────────────────────────
+    const DEBOUNCE_DELAY = 250;
+
+    // ─── Category → URL slug map ─────────────────────────────────────────────
+    const SLUG_MAP = {
+        'الكل':               'all',
+        'التشكيل':            'diacritics',
+        'علامات الترقيم':     'punctuation',
+        'الرموز الرياضية':    'math',
+        'الأسس والمؤشرات':   'supersub',
+        'العملات':            'currency',
+        'ويندوز':             'windows',
+        'مستكشف الملفات':     'explorer',
+        'تحرير عام':          'editing',
+        'المتصفح':            'browser',
+        'Word':               'word',
+        'Excel':              'excel',
+        'PowerPoint':         'powerpoint',
+        'Photoshop':          'photoshop',
+        'Illustrator':        'illustrator',
+        'Premiere':           'premiere',
+        'VS Code':            'vscode',
+        'AutoCAD':            'autocad',
+        'Terminal':           'terminal',
+    };
+    // Reverse map: slug → category name
+    const SLUG_TO_CAT = Object.fromEntries(
+        Object.entries(SLUG_MAP).map(([cat, slug]) => [slug, cat])
+    );
+
+    // ─── Group / Hierarchy Definitions ───────────────────────────────────────
+    // Each entry: { label, slug, children? }
+    // Top-level items without children are leaf nodes.
+    const NAV_TREE = [
+        { label: 'الكل', slug: 'all' },
+        { label: 'SYMBOLS', isGroup: true, children: [
+            { label: 'التشكيل',          slug: 'diacritics'  },
+            { label: 'علامات الترقيم',   slug: 'punctuation' },
+            { label: 'الرموز الرياضية',  slug: 'math'        },
+            { label: 'الأسس والمؤشرات', slug: 'supersub'    },
+            { label: 'العملات',          slug: 'currency'    },
+        ]},
+        { label: 'SHORTCUTS', isGroup: true, children: [
+            { label: 'ويندوز',           slug: 'windows'     },
+            { label: 'مستكشف الملفات',   slug: 'explorer'    },
+            { label: 'تحرير عام',        slug: 'editing'     },
+            { label: 'المتصفح',          slug: 'browser'     },
+            { label: 'Word',             slug: 'word'        },
+            { label: 'Excel',            slug: 'excel'       },
+            { label: 'PowerPoint',       slug: 'powerpoint'  },
+            { label: 'Photoshop',        slug: 'photoshop'   },
+            { label: 'Illustrator',      slug: 'illustrator' },
+            { label: 'Premiere',         slug: 'premiere'    },
+            { label: 'VS Code',          slug: 'vscode'      },
+            { label: 'AutoCAD',          slug: 'autocad'     },
+            { label: 'Terminal',         slug: 'terminal'    },
+        ]},
     ];
 
-    // --- State ---
+    // Which categories belong to SYMBOLS / SHORTCUTS groups (for group-level filter)
+    const SYMBOL_CATS  = new Set(['التشكيل','علامات الترقيم','الرموز الرياضية','الأسس والمؤشرات','العملات']);
+    const SHORTCUT_CATS = new Set(['ويندوز','مستكشف الملفات','تحرير عام','المتصفح','Word','Excel','PowerPoint','Photoshop','Illustrator','Premiere','VS Code','AutoCAD','Terminal']);
+
+    // ─── Data Aggregation ────────────────────────────────────────────────────
+    const ALL_DATA = [
+        ...(typeof DATA_DIACRITICS   !== 'undefined' ? DATA_DIACRITICS   : []),
+        ...(typeof DATA_PUNCTUATION  !== 'undefined' ? DATA_PUNCTUATION  : []),
+        ...(typeof DATA_MATH         !== 'undefined' ? DATA_MATH         : []),
+        ...(typeof DATA_SUPERSUB     !== 'undefined' ? DATA_SUPERSUB     : []),
+        ...(typeof DATA_CURRENCY     !== 'undefined' ? DATA_CURRENCY     : []),
+        ...(typeof DATA_WINDOWS      !== 'undefined' ? DATA_WINDOWS      : []),
+        ...(typeof DATA_EDITING      !== 'undefined' ? DATA_EDITING      : []),
+        ...(typeof DATA_WORD         !== 'undefined' ? DATA_WORD         : []),
+        ...(typeof DATA_EXCEL        !== 'undefined' ? DATA_EXCEL        : []),
+        ...(typeof DATA_POWERPOINT   !== 'undefined' ? DATA_POWERPOINT   : []),
+        ...(typeof DATA_BROWSER      !== 'undefined' ? DATA_BROWSER      : []),
+        ...(typeof DATA_EXPLORER     !== 'undefined' ? DATA_EXPLORER     : []),
+        ...(typeof DATA_PHOTOSHOP    !== 'undefined' ? DATA_PHOTOSHOP    : []),
+        ...(typeof DATA_ILLUSTRATOR  !== 'undefined' ? DATA_ILLUSTRATOR  : []),
+        ...(typeof DATA_VSCODE       !== 'undefined' ? DATA_VSCODE       : []),
+        ...(typeof DATA_TERMINAL     !== 'undefined' ? DATA_TERMINAL     : []),
+        ...(typeof DATA_AUTOCAD      !== 'undefined' ? DATA_AUTOCAD      : []),
+        ...(typeof DATA_PREMIERE     !== 'undefined' ? DATA_PREMIERE     : []),
+    ];
+
+    // ─── Pre-build searchable strings (once, at init) ─────────────────────────
+    // This prevents re-joining arrays on every keystroke / filter operation.
+    ALL_DATA.forEach(item => {
+        item._searchText = [
+            item.arabicName   || '',
+            item.englishName  || '',
+            item.symbol       || '',
+            item.shortcut     || '',
+            item.description  || '',
+            item.subCategory  || '',
+            ...(item.keywords || []),
+        ].join(' ').toLowerCase();
+    });
+
+    // ─── Pre-build per-category index ─────────────────────────────────────────
+    const CAT_INDEX = {};
+    ALL_DATA.forEach(item => {
+        if (!CAT_INDEX[item.category]) CAT_INDEX[item.category] = [];
+        CAT_INDEX[item.category].push(item);
+    });
+
+    // ─── Per-category item counts (pre-computed) ──────────────────────────────
+    const CAT_COUNTS = { 'الكل': ALL_DATA.length };
+    Object.entries(CAT_INDEX).forEach(([cat, items]) => { CAT_COUNTS[cat] = items.length; });
+
+    // ─── State ────────────────────────────────────────────────────────────────
     let state = {
-        category: 'الكل',
+        category:    'الكل',   // leaf-level category OR group sentinel ('SYMBOLS'/'SHORTCUTS')
         subCategory: 'الكل',
-        search: ''
+        search:      '',
     };
 
-    // --- Elements ---
+    // ─── DOM References ───────────────────────────────────────────────────────
     const ui = {
-        grid: document.getElementById('symbolsGrid'),
-        sidebarContent: document.getElementById('sidebarContent'),
-        sidebar: document.getElementById('sidebar'),
-        backdrop: document.getElementById('backdrop'),
-        searchInput: document.getElementById('searchInput'),
-        searchContainer: document.getElementById('searchContainer'),
-        title: document.getElementById('activeCategoryTitle'),
-        count: document.getElementById('itemCount'),
-        empty: document.getElementById('emptyState'),
-        mobileBtn: document.getElementById('mobileFilterBtn'),
-        mobileSearchToggle: document.getElementById('mobileSearchToggle'),
-        closeBtn: document.getElementById('closeSidebar'),
-        resetBtn: document.getElementById('resetSearch'),
-        backToTop: document.getElementById('backToTop'),
-        contentHeader: document.querySelector('.content-header')
+        grid:              document.getElementById('symbolsGrid'),
+        sidebarContent:    document.getElementById('sidebarContent'),
+        sidebar:           document.getElementById('sidebar'),
+        backdrop:          document.getElementById('backdrop'),
+        searchInput:       document.getElementById('searchInput'),
+        searchContainer:   document.getElementById('searchContainer'),
+        title:             document.getElementById('activeCategoryTitle'),
+        count:             document.getElementById('itemCount'),
+        empty:             document.getElementById('emptyState'),
+        mobileBtn:         document.getElementById('mobileFilterBtn'),
+        mobileSearchToggle:document.getElementById('mobileSearchToggle'),
+        closeBtn:          document.getElementById('closeSidebar'),
+        resetBtn:          document.getElementById('resetSearch'),
+        backToTop:         document.getElementById('backToTop'),
+        contentHeader:     document.querySelector('.content-header'),
     };
 
-    // Subfilter Dropdown
-    let subFilterSelect = document.createElement('select');
+    // ─── Injected Controls ────────────────────────────────────────────────────
+    // Sub-filter dropdown
+    const subFilterSelect = document.createElement('select');
     subFilterSelect.id = 'subCategoryFilter';
     subFilterSelect.className = 'sub-filter hidden';
     ui.contentHeader.appendChild(subFilterSelect);
 
-    // Clear Button
-    let clearBtn = document.createElement('span');
+    // Search clear button
+    const clearBtn = document.createElement('span');
     clearBtn.innerHTML = '&times;';
     clearBtn.className = 'search-clear hidden';
     clearBtn.title = 'مسح البحث';
     ui.searchContainer.appendChild(clearBtn);
 
-    // Icons (SVG Strings for performance)
+    // ─── SVG Icons ────────────────────────────────────────────────────────────
     const ICONS = {
-        copy: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`,
-        check: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`
+        copy:  `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`,
+        check: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`,
     };
 
-    // --- Core Logic ---
-
-    function debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
+    // ─── Utilities ────────────────────────────────────────────────────────────
+    function debounce(fn, wait) {
+        let t;
+        return (...args) => {
+            clearTimeout(t);
+            t = setTimeout(() => fn(...args), wait);
         };
     }
 
+    // ─── URL Routing ──────────────────────────────────────────────────────────
+    function slugFromCategory(cat) {
+        return SLUG_MAP[cat] || 'all';
+    }
+
+    function categoryFromSlug(slug) {
+        return SLUG_TO_CAT[slug] || 'الكل';
+    }
+
+    function pushRoute(cat) {
+        const slug = slugFromCategory(cat);
+        const path = slug === 'all' ? '/' : '/' + slug;
+        if (window.location.pathname !== path) {
+            history.pushState({ category: cat }, '', path);
+        }
+    }
+
+    function readRoute() {
+        const parts = window.location.pathname.replace(/^\//, '').split('/');
+        const slug  = parts[0] || 'all';
+        return categoryFromSlug(slug);
+    }
+
+    // ─── Filtering ────────────────────────────────────────────────────────────
     function getFilteredData() {
         const query = state.search.toLowerCase().trim();
-        
-        return ALL_DATA.filter(item => {
-            if (state.category !== 'الكل' && item.category !== state.category) return false;
-            if (state.subCategory !== 'الكل' && item.subCategory !== state.subCategory) return false;
-            if (!query) return true;
-            
-            const text = [
-                item.arabicName,
-                item.englishName,
-                item.symbol || '',
-                item.shortcut || '',
-                item.description || '',
-                item.subCategory || '',
-                ...(item.keywords || [])
-            ].join(' ').toLowerCase();
+        const cat   = state.category;
+        const sub   = state.subCategory;
 
-            return text.includes(query);
-        });
-    }
-
-    // --- Rendering ---
-
-    function renderSidebar() {
-        ui.sidebarContent.innerHTML = '';
-
-        for (const [groupName, categories] of Object.entries(GROUPS)) {
-            const groupHasItems = categories.some(cat => {
-                if(cat === 'الكل') return true;
-                return ALL_DATA.some(d => d.category === cat);
-            });
-
-            if (!groupHasItems) continue;
-
-            const title = document.createElement('div');
-            title.className = 'nav-group-title';
-            title.textContent = groupName;
-            ui.sidebarContent.appendChild(title);
-
-            const ul = document.createElement('ul');
-            ul.className = 'nav-list';
-
-            categories.forEach(catName => {
-                if(catName !== 'الكل' && !ALL_DATA.some(d => d.category === catName)) return;
-
-                const li = document.createElement('li');
-                li.className = 'nav-item';
-                if (catName === state.category) li.classList.add('active');
-                
-                let count = catName === 'الكل' ? ALL_DATA.length : ALL_DATA.filter(d => d.category === catName).length;
-                
-                li.innerHTML = `<span>${catName}</span> <span>${count}</span>`;
-                li.onclick = () => setCategory(catName);
-                ul.appendChild(li);
-            });
-
-            ui.sidebarContent.appendChild(ul);
+        // Determine the working dataset
+        let pool;
+        if (cat === 'الكل') {
+            pool = ALL_DATA;
+        } else if (cat === 'SYMBOLS') {
+            // Group-level: all symbol categories
+            pool = ALL_DATA.filter(item => SYMBOL_CATS.has(item.category));
+        } else if (cat === 'SHORTCUTS') {
+            pool = ALL_DATA.filter(item => SHORTCUT_CATS.has(item.category));
+        } else {
+            // Leaf category — use pre-built index for O(1) lookup
+            pool = CAT_INDEX[cat] || [];
         }
+
+        // Sub-category filter
+        if (sub !== 'الكل') {
+            pool = pool.filter(item => item.subCategory === sub);
+        }
+
+        // Text search (uses pre-built _searchText)
+        if (query) {
+            pool = pool.filter(item => item._searchText.includes(query));
+        }
+
+        return pool;
     }
 
+    // ─── Rendering: Sidebar ───────────────────────────────────────────────────
+    function renderSidebar() {
+        const frag = document.createDocumentFragment();
+
+        NAV_TREE.forEach((node, idx) => {
+            if (!node.isGroup) {
+                // Top-level leaf (ALL)
+                const li = document.createElement('li');
+                li.className = 'nav-item' + (state.category === 'الكل' ? ' active' : '');
+                li.innerHTML = `<span>${node.label}</span><span>${CAT_COUNTS['الكل']}</span>`;
+                li.onclick = () => setCategory('الكل');
+                frag.appendChild(li);
+            } else {
+                // Group header with separator
+                if (idx > 0) {
+                    const sep = document.createElement('div');
+                    sep.className = 'nav-separator';
+                    frag.appendChild(sep);
+                }
+
+                const groupTitle = document.createElement('div');
+                groupTitle.className = 'nav-group-title';
+                groupTitle.textContent = node.label;
+                // Group title is also clickable → selects entire group
+                groupTitle.title = node.label === 'SYMBOLS' ? 'عرض جميع الرموز' : 'عرض جميع الاختصارات';
+                groupTitle.onclick = () => setCategory(node.label); // 'SYMBOLS' or 'SHORTCUTS'
+                frag.appendChild(groupTitle);
+
+                const ul = document.createElement('ul');
+                ul.className = 'nav-list';
+
+                node.children.forEach(child => {
+                    // Skip if no data for this category
+                    if (!CAT_COUNTS[child.label]) return;
+
+                    const li = document.createElement('li');
+                    li.className = 'nav-item' + (state.category === child.label ? ' active' : '');
+                    li.innerHTML = `<span>${child.label}</span><span>${CAT_COUNTS[child.label] || 0}</span>`;
+                    li.onclick = () => setCategory(child.label);
+                    ul.appendChild(li);
+                });
+
+                frag.appendChild(ul);
+            }
+        });
+
+        ui.sidebarContent.innerHTML = '';
+        ui.sidebarContent.appendChild(frag);
+    }
+
+    // ─── Rendering: Sub-filters ───────────────────────────────────────────────
+    function renderSubFilters() {
+        const cat = state.category;
+        // Only show sub-filter for leaf categories (not group or ALL)
+        const isLeaf = cat !== 'الكل' && cat !== 'SYMBOLS' && cat !== 'SHORTCUTS';
+
+        if (isLeaf) {
+            const pool     = CAT_INDEX[cat] || [];
+            const subCats  = [...new Set(pool.map(i => i.subCategory).filter(Boolean))].sort();
+
+            if (subCats.length > 0) {
+                subFilterSelect.innerHTML = '<option value="الكل">جميع الأقسام</option>';
+                subCats.forEach(sub => {
+                    const opt = document.createElement('option');
+                    opt.value = sub;
+                    opt.textContent = sub;
+                    subFilterSelect.appendChild(opt);
+                });
+                subFilterSelect.value = state.subCategory;
+                subFilterSelect.classList.remove('hidden');
+                return;
+            }
+        }
+
+        subFilterSelect.classList.add('hidden');
+        state.subCategory = 'الكل';
+    }
+
+    // ─── Rendering: Grid ──────────────────────────────────────────────────────
     function renderGrid() {
         const data = getFilteredData();
-        
-        ui.title.textContent = state.search ? 'نتائج البحث' : state.category;
+
+        // Update header
+        let titleText = state.search ? 'نتائج البحث' : state.category;
+        if (titleText === 'SYMBOLS')   titleText = 'الرموز';
+        if (titleText === 'SHORTCUTS') titleText = 'الاختصارات';
+        ui.title.textContent = titleText;
         ui.count.textContent = `${data.length} عنصر`;
 
-        ui.grid.innerHTML = '';
-        
-        if (state.search.length > 0) {
-            clearBtn.classList.remove('hidden');
-        } else {
-            clearBtn.classList.add('hidden');
-        }
+        // Clear button visibility
+        clearBtn.classList.toggle('hidden', state.search.length === 0);
 
+        // Empty state
         if (data.length === 0) {
+            ui.grid.innerHTML = '';
             ui.empty.classList.remove('hidden');
             const emptyP = ui.empty.querySelector('p');
-            if(emptyP) emptyP.textContent = state.search ? `لا توجد نتائج لـ "${state.search}"` : "لا توجد عناصر هنا.";
-        } else {
-            ui.empty.classList.add('hidden');
-            const fragment = document.createDocumentFragment();
-
-            data.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                
-                const isShortcut = item.type === 'shortcut';
-                const mainDisplay = isShortcut ? item.shortcut : item.symbol;
-                
-                // --- Keyboard Data Extraction ---
-                let keyboardHTML = '';
-
-                if (!isShortcut && item.keyboardMethod) {
-                    const k = item.keyboardMethod;
-                    const hasLayout = k.layout && k.layout.trim() !== '';
-                    const hasCombo = k.combination && k.combination.trim() !== '';
-                    const hasAlt = k.altCode && k.altCode.trim() !== '';
-
-                    // For HTML Display
-                    if (hasLayout || hasCombo || hasAlt) {
-                        keyboardHTML += `<div class="symbol-keyboard">`;
-                        if (hasLayout) {
-                            keyboardHTML += `<div class="kbd-row"><span class="kbd-label">التخطيط</span><span class="kbd-val">${k.layout}</span></div>`;
-                        }
-                        if (hasCombo) {
-                            keyboardHTML += `<div class="kbd-row"><span class="kbd-label">مفاتيح</span><span class="kbd-val">${k.combination}</span></div>`;
-                        }
-                        if (hasAlt) {
-                            keyboardHTML += `<div class="kbd-row"><span class="kbd-label">Alt</span><span class="kbd-val">${k.altCode}</span></div>`;
-                        }
-                        keyboardHTML += `</div>`;
-                    }
-                }
-                
-                // --- Shortcut Type Badge ---
-                let shortcutTypeBadge = '';
-                if (isShortcut && item.shortcutType) {
-                    const badgeMap = {
-                        'tool-key': { label: '⌨ مفتاح أداة', cls: 'badge-toolkey' },
-                        'cmd':      { label: '⌘ أمر Command Bar', cls: 'badge-cmd' },
-                        'combo':    { label: '⌨ تركيبة مفاتيح', cls: 'badge-combo' }
-                    };
-                    const b = badgeMap[item.shortcutType];
-                    if (b) shortcutTypeBadge = `<div class="shortcut-type-badge ${b.cls}">${b.label}</div>`;
-                }
-
-                // --- Card HTML ---
-                // زر النسخ فقط للرموز (symbols)، الاختصارات بدون نسخ
-                card.innerHTML = `
-                    ${!isShortcut ? `<button class="copy-icon-btn" title="نسخ الرمز" aria-label="نسخ">${ICONS.copy}</button>` : ''}
-                    
-                    <div class="${isShortcut ? 'text-shortcut' : 'card-symbol'}">${mainDisplay}</div>
-                    ${shortcutTypeBadge}
-                    <div class="card-name-ar">${item.arabicName}</div>
-                    <div class="card-name-en">${item.englishName}</div>
-                    ${item.description ? `<div class="card-desc">${item.description}</div>` : '<div class="card-desc"></div>'}
-                    
-                    ${keyboardHTML}
-
-                    <div class="card-footer">
-                        <div class="card-cat">${item.category}</div>
-                        ${item.subCategory ? `<div class="tag-sub">${item.subCategory}</div>` : ''}
-                    </div>
-                `;
-                
-                // النسخ فقط للرموز عبر زر النسخ
-                if (!isShortcut) {
-                    const copyBtn = card.querySelector('.copy-icon-btn');
-                    if (copyBtn) {
-                        copyBtn.onclick = (e) => {
-                            e.stopPropagation();
-                            handleCopy(mainDisplay, copyBtn);
-                        };
-                    }
-                    // النسخ عند الضغط على البطاقة أيضاً فقط للرموز
-                    card.onclick = () => {
-                        const btn = card.querySelector('.copy-icon-btn');
-                        if (btn) handleCopy(mainDisplay, btn);
-                    };
-                }
-
-                fragment.appendChild(card);
-            });
-
-            ui.grid.appendChild(fragment);
+            if (emptyP) emptyP.textContent = state.search
+                ? `لا توجد نتائج لـ "${state.search}"`
+                : 'لا توجد عناصر هنا.';
+            return;
         }
+
+        ui.empty.classList.add('hidden');
+
+        // Build all cards in a fragment (single DOM write)
+        const frag = document.createDocumentFragment();
+        const badgeMap = {
+            'tool-key': { label: '⌨ مفتاح أداة',      cls: 'badge-toolkey' },
+            'cmd':      { label: '⌘ أمر Command Bar', cls: 'badge-cmd'     },
+            'combo':    { label: '⌨ تركيبة مفاتيح',   cls: 'badge-combo'   },
+        };
+
+        for (let i = 0; i < data.length; i++) {
+            const item       = data[i];
+            const isShortcut = item.type === 'shortcut';
+            const mainDisplay = isShortcut ? item.shortcut : item.symbol;
+
+            // Keyboard method HTML (symbols only)
+            let keyboardHTML = '';
+            if (!isShortcut && item.keyboardMethod) {
+                const k          = item.keyboardMethod;
+                const hasLayout  = k.layout      && k.layout.trim()      !== '';
+                const hasCombo   = k.combination && k.combination.trim() !== '';
+                const hasAlt     = k.altCode     && k.altCode.trim()     !== '';
+
+                if (hasLayout || hasCombo || hasAlt) {
+                    keyboardHTML = '<div class="symbol-keyboard">';
+                    if (hasLayout) keyboardHTML += `<div class="kbd-row"><span class="kbd-label">التخطيط</span><span class="kbd-val">${k.layout}</span></div>`;
+                    if (hasCombo)  keyboardHTML += `<div class="kbd-row"><span class="kbd-label">مفاتيح</span><span class="kbd-val">${k.combination}</span></div>`;
+                    if (hasAlt)    keyboardHTML += `<div class="kbd-row"><span class="kbd-label">Alt</span><span class="kbd-val">${k.altCode}</span></div>`;
+                    keyboardHTML += '</div>';
+                }
+            }
+
+            // Shortcut type badge
+            let shortcutTypeBadge = '';
+            if (isShortcut && item.shortcutType) {
+                const b = badgeMap[item.shortcutType];
+                if (b) shortcutTypeBadge = `<div class="shortcut-type-badge ${b.cls}">${b.label}</div>`;
+            }
+
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                ${!isShortcut ? `<button class="copy-icon-btn" title="نسخ الرمز" aria-label="نسخ">${ICONS.copy}</button>` : ''}
+                <div class="${isShortcut ? 'text-shortcut' : 'card-symbol'}">${mainDisplay}</div>
+                ${shortcutTypeBadge}
+                <div class="card-name-ar">${item.arabicName}</div>
+                <div class="card-name-en">${item.englishName}</div>
+                ${item.description ? `<div class="card-desc">${item.description}</div>` : '<div class="card-desc"></div>'}
+                ${keyboardHTML}
+                <div class="card-footer">
+                    <div class="card-cat">${item.category}</div>
+                    ${item.subCategory ? `<div class="tag-sub">${item.subCategory}</div>` : ''}
+                </div>
+            `;
+
+            if (!isShortcut) {
+                const copyBtn = card.querySelector('.copy-icon-btn');
+                if (copyBtn) {
+                    copyBtn.onclick = (e) => { e.stopPropagation(); handleCopy(mainDisplay, copyBtn); };
+                }
+                card.onclick = () => {
+                    const btn = card.querySelector('.copy-icon-btn');
+                    if (btn) handleCopy(mainDisplay, btn);
+                };
+            }
+
+            frag.appendChild(card);
+        }
+
+        // Single DOM write
+        ui.grid.innerHTML = '';
+        ui.grid.appendChild(frag);
     }
 
-    function renderSubFilters() {
-        const currentData = ALL_DATA.filter(i => i.category === state.category);
-        const subCats = [...new Set(currentData.map(i => i.subCategory).filter(Boolean))];
-
-        if (subCats.length > 0 && state.category !== 'الكل') {
-            subFilterSelect.innerHTML = '<option value="الكل">جميع الأقسام</option>';
-            subCats.sort().forEach(sub => {
-                const opt = document.createElement('option');
-                opt.value = sub;
-                opt.textContent = sub;
-                subFilterSelect.appendChild(opt);
-            });
-            subFilterSelect.value = state.subCategory;
-            subFilterSelect.classList.remove('hidden');
-        } else {
-            subFilterSelect.classList.add('hidden');
-            state.subCategory = 'الكل';
-        }
-    }
-
-    // --- Actions ---
-
-    function setCategory(name) {
-        state.category = name;
+    // ─── Actions ──────────────────────────────────────────────────────────────
+    function setCategory(name, pushToHistory = true) {
+        state.category    = name;
         state.subCategory = 'الكل';
-        clearSearch(false); 
+        clearSearch(false);
+        if (pushToHistory) pushRoute(name);
         renderSubFilters();
         renderSidebar();
         renderGrid();
         closeSidebar();
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function clearSearch(shouldRender = true) {
-        state.search = '';
+        state.search       = '';
         ui.searchInput.value = '';
-        if(shouldRender) renderGrid();
+        if (shouldRender) renderGrid();
     }
 
-    function handleCopy(text, btnElement) {
+    function handleCopy(text, btnEl) {
         navigator.clipboard.writeText(text).then(() => {
-            // Visual Feedback: Switch to Check Icon
-            const originalIcon = ICONS.copy;
-            btnElement.innerHTML = ICONS.check;
-            btnElement.classList.add('copied');
-            
+            btnEl.innerHTML = ICONS.check;
+            btnEl.classList.add('copied');
             setTimeout(() => {
-                btnElement.innerHTML = originalIcon;
-                btnElement.classList.remove('copied');
+                btnEl.innerHTML = ICONS.copy;
+                btnEl.classList.remove('copied');
             }, 1500);
         });
     }
 
-    // --- Sidebar Handling ---
+    // ─── Sidebar Drawer ───────────────────────────────────────────────────────
     function openSidebar() {
         ui.sidebar.classList.add('open');
         ui.backdrop.classList.add('open');
-        document.body.style.overflow = 'hidden'; 
+        document.body.style.overflow = 'hidden';
     }
 
     function closeSidebar() {
@@ -325,9 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
     }
 
-    // --- Event Listeners ---
-
-    // Mobile Search Toggle
+    // ─── Event Listeners ──────────────────────────────────────────────────────
     ui.mobileSearchToggle.addEventListener('click', () => {
         ui.searchContainer.classList.toggle('active');
         if (ui.searchContainer.classList.contains('active')) {
@@ -335,20 +449,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Back to Top Logic
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) {
-            ui.backToTop.classList.add('visible');
-        } else {
-            ui.backToTop.classList.remove('visible');
-        }
+        ui.backToTop.classList.toggle('visible', window.scrollY > 300);
     }, { passive: true });
 
     ui.backToTop.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // Input Events
     ui.searchInput.addEventListener('input', debounce((e) => {
         state.search = e.target.value;
         renderGrid();
@@ -367,29 +475,43 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Escape') {
             closeSidebar();
             ui.searchInput.blur();
-            if (window.innerWidth <= 900) {
-                ui.searchContainer.classList.remove('active');
-            }
+            if (window.innerWidth <= 900) ui.searchContainer.classList.remove('active');
         }
     });
 
     ui.mobileBtn.addEventListener('click', openSidebar);
     ui.closeBtn.addEventListener('click', closeSidebar);
     ui.backdrop.addEventListener('click', closeSidebar);
-    
-    // Reset from empty state
+
     ui.resetBtn.addEventListener('click', () => {
         clearSearch(false);
         setCategory('الكل');
     });
-    
+
     subFilterSelect.addEventListener('change', (e) => {
         state.subCategory = e.target.value;
         renderGrid();
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // --- Init ---
+    // Browser back/forward support
+    window.addEventListener('popstate', (e) => {
+        const cat = e.state?.category || readRoute();
+        state.category    = cat;
+        state.subCategory = 'الكل';
+        clearSearch(false);
+        renderSubFilters();
+        renderSidebar();
+        renderGrid();
+    });
+
+    // ─── Init ─────────────────────────────────────────────────────────────────
+    const initialCat = readRoute();
+    state.category = initialCat;
+    // Replace current history entry so back-button works correctly
+    history.replaceState({ category: initialCat }, '', window.location.pathname);
+
     renderSidebar();
+    renderSubFilters();
     renderGrid();
 });
