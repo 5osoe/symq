@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
             label: 'الرموز', isGroup: true, children: [
                 { label: 'التشكيل'         },
                 { label: 'علامات الترقيم'  },
-                { label: 'الرموز الرياضية' },
+                { label: 'رموز علمية'      },
                 { label: 'الأسس والمؤشرات'},
                 { label: 'العملات'         },
             ]
@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             label: 'الاختصارات', isGroup: true, children: [
                 { label: 'ويندوز'          },
+                { label: 'macOS'           },
+                { label: 'Linux'           },
                 { label: 'مستكشف الملفات' },
                 { label: 'تحرير عام'       },
                 { label: 'المتصفح'         },
@@ -26,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { label: 'PowerPoint'      },
                 { label: 'Photoshop'       },
                 { label: 'Illustrator'     },
+                { label: 'CorelDRAW'       },
                 { label: 'Premiere'        },
                 { label: 'VS Code'         },
                 { label: 'AutoCAD'         },
@@ -34,8 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
         },
     ];
 
-    const SYMBOL_CATS   = new Set(['التشكيل','علامات الترقيم','الرموز الرياضية','الأسس والمؤشرات','العملات']);
-    const SHORTCUT_CATS = new Set(['ويندوز','مستكشف الملفات','تحرير عام','المتصفح','Word','Excel','PowerPoint','Photoshop','Illustrator','Premiere','VS Code','AutoCAD','Terminal']);
+    const SYMBOL_CATS   = new Set(['التشكيل','علامات الترقيم','رموز علمية','الأسس والمؤشرات','العملات']);
+    const SHORTCUT_CATS = new Set(['ويندوز','macOS','Linux','مستكشف الملفات','تحرير عام','المتصفح','Word','Excel','PowerPoint','Photoshop','Illustrator','CorelDRAW','Premiere','VS Code','AutoCAD','Terminal']);
 
     // ─── Data ─────────────────────────────────────────────────────────────────
     const ALL_DATA = [
@@ -45,6 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ...(typeof DATA_SUPERSUB     !== 'undefined' ? DATA_SUPERSUB     : []),
         ...(typeof DATA_CURRENCY     !== 'undefined' ? DATA_CURRENCY     : []),
         ...(typeof DATA_WINDOWS      !== 'undefined' ? DATA_WINDOWS      : []),
+        ...(typeof DATA_MACOS        !== 'undefined' ? DATA_MACOS        : []),
+        ...(typeof DATA_LINUX        !== 'undefined' ? DATA_LINUX        : []),
         ...(typeof DATA_EDITING      !== 'undefined' ? DATA_EDITING      : []),
         ...(typeof DATA_WORD         !== 'undefined' ? DATA_WORD         : []),
         ...(typeof DATA_EXCEL        !== 'undefined' ? DATA_EXCEL        : []),
@@ -53,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ...(typeof DATA_EXPLORER     !== 'undefined' ? DATA_EXPLORER     : []),
         ...(typeof DATA_PHOTOSHOP    !== 'undefined' ? DATA_PHOTOSHOP    : []),
         ...(typeof DATA_ILLUSTRATOR  !== 'undefined' ? DATA_ILLUSTRATOR  : []),
+        ...(typeof DATA_CORELDRAW    !== 'undefined' ? DATA_CORELDRAW    : []),
         ...(typeof DATA_VSCODE       !== 'undefined' ? DATA_VSCODE       : []),
         ...(typeof DATA_TERMINAL     !== 'undefined' ? DATA_TERMINAL     : []),
         ...(typeof DATA_AUTOCAD      !== 'undefined' ? DATA_AUTOCAD      : []),
