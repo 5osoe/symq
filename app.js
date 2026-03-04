@@ -421,5 +421,29 @@ document.addEventListener('DOMContentLoaded', () => {
     // ─── Init ─────────────────────────────────────────────────────────────────
     renderSidebar();
     renderSubFilters();
-    renderGrid();
+
+    // ─── PWA Shortcut: read ?category= from URL ───────────────────────────────
+    (function applyURLCategory() {
+        const params = new URLSearchParams(window.location.search);
+        const cat = params.get('category');
+        if (!cat) { renderGrid(); return; }
+
+        // Check if it's a group label (الرموز / الاختصارات)
+        const isGroup = NAV_TREE.some(n => n.isGroup && n.label === cat);
+        // Check if it's a child category
+        const isChild = NAV_TREE.some(n => n.isGroup && n.children && n.children.some(c => c.label === cat));
+
+        if (isGroup || isChild || cat === 'الكل') {
+            state.category    = cat;
+            state.subCategory = 'الكل';
+            state.search      = '';
+        }
+
+        renderSidebar();
+        renderSubFilters();
+        renderGrid();
+
+        // Clean URL without reload
+        window.history.replaceState({}, '', '/');
+    })();
 });
