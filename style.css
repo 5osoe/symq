@@ -147,6 +147,16 @@ button:active, .nav-item:active, .nav-group-header:active, .icon-btn-mobile:acti
 }
 .icon-btn-mobile:hover { background: var(--bg-hover); }
 
+/* ── Desktop Dark Mode Button ────────────────────────────── */
+.icon-btn-desktop {
+    background: transparent; border: none; color: var(--text-primary);
+    width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s cubic-bezier(0.2,0.8,0.2,1);
+}
+.icon-btn-desktop:hover { background: var(--bg-hover); }
+.icon-btn-desktop:active { transform: scale(0.96); }
+
 /* ── Layout ───────────────────────────────────────────────── */
 .layout-container {
     max-width: 1200px; margin: 0 auto;
@@ -312,6 +322,7 @@ button:active, .nav-item:active, .nav-group-header:active, .icon-btn-mobile:acti
     .layout-container { display: block; padding-top: var(--space-2); }
     .grid { grid-template-columns: 1fr; gap: var(--space-2); }
     .mobile-controls { display: flex; }
+    .icon-btn-desktop { display: none; }
     .search-icon { display: none; }
 
     .search-bar-container {

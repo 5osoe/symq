@@ -372,37 +372,45 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ─── Dark Mode ────────────────────────────────────────────────────────────
-    const darkBtn     = document.getElementById('darkModeBtn');
-    const iconMoon    = document.getElementById('iconMoon');
-    const iconSun     = document.getElementById('iconSun');
-    const themeOverlay = document.getElementById('themeOverlay');
+    const darkBtn        = document.getElementById('darkModeBtn');
+    const darkBtnMobile  = document.getElementById('darkModeBtnMobile');
+    const iconMoon       = document.getElementById('iconMoon');
+    const iconSun        = document.getElementById('iconSun');
+    const iconMoonMobile = document.getElementById('iconMoonMobile');
+    const iconSunMobile  = document.getElementById('iconSunMobile');
+    const themeOverlay   = document.getElementById('themeOverlay');
 
     function applyTheme(dark, animate) {
+        const setIcons = (d) => {
+            iconMoon.style.display       = d ? 'none' : '';
+            iconSun.style.display        = d ? ''     : 'none';
+            iconMoonMobile.style.display = d ? 'none' : '';
+            iconSunMobile.style.display  = d ? ''     : 'none';
+        };
         if (!animate) {
             document.documentElement.classList.toggle('dark', dark);
-            iconMoon.style.display = dark ? 'none'  : '';
-            iconSun.style.display  = dark ? ''      : 'none';
+            setIcons(dark);
             return;
         }
-        // Show brief loading overlay, then flip theme
         themeOverlay.classList.add('visible');
         setTimeout(() => {
             document.documentElement.classList.toggle('dark', dark);
-            iconMoon.style.display = dark ? 'none' : '';
-            iconSun.style.display  = dark ? ''     : 'none';
+            setIcons(dark);
             setTimeout(() => themeOverlay.classList.remove('visible'), 250);
         }, 350);
     }
 
-    // Init from saved preference
-    const savedDark = localStorage.getItem('symq-dark') === '1';
-    applyTheme(savedDark, false);
-
-    darkBtn.addEventListener('click', () => {
+    function toggleDark() {
         const isDark = document.documentElement.classList.contains('dark');
         localStorage.setItem('symq-dark', isDark ? '0' : '1');
         applyTheme(!isDark, true);
-    });
+    }
+
+    // Init from saved preference
+    applyTheme(localStorage.getItem('symq-dark') === '1', false);
+
+    darkBtn.addEventListener('click', toggleDark);
+    darkBtnMobile.addEventListener('click', toggleDark);
 
     // ─── Init ─────────────────────────────────────────────────────────────────
     renderSidebar();
