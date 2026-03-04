@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ALL_DATA = [
         ...(typeof DATA_DIACRITICS   !== 'undefined' ? DATA_DIACRITICS   : []),
         ...(typeof DATA_PUNCTUATION  !== 'undefined' ? DATA_PUNCTUATION  : []),
-        ...(typeof DATA_MATH         !== 'undefined' ? DATA_MATH         : []),
+        ...(typeof DATA_SCIENCE      !== 'undefined' ? DATA_SCIENCE      : []),
         ...(typeof DATA_SUPERSUB     !== 'undefined' ? DATA_SUPERSUB     : []),
         ...(typeof DATA_CURRENCY     !== 'undefined' ? DATA_CURRENCY     : []),
         ...(typeof DATA_WINDOWS      !== 'undefined' ? DATA_WINDOWS      : []),
