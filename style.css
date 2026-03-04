@@ -464,33 +464,6 @@ button:active, .nav-item:active, .icon-btn-mobile:active {
 
 .tag-sub { color: var(--accent); background: rgba(225, 6, 0, 0.03); border-color: rgba(225, 6, 0, 0.1); }
 
-/* --- Shortcut Type Badge --- */
-.shortcut-type-badge {
-    display: inline-block;
-    font-size: 0.6rem;
-    font-weight: 600;
-    padding: 3px 9px;
-    border-radius: 100px;
-    margin-bottom: 6px;
-    border: 1px solid;
-    letter-spacing: 0.01em;
-}
-.badge-toolkey {
-    color: #2563eb;
-    background: rgba(37, 99, 235, 0.07);
-    border-color: rgba(37, 99, 235, 0.2);
-}
-.badge-cmd {
-    color: #7c3aed;
-    background: rgba(124, 58, 237, 0.07);
-    border-color: rgba(124, 58, 237, 0.2);
-}
-.badge-combo {
-    color: #059669;
-    background: rgba(5, 150, 105, 0.07);
-    border-color: rgba(5, 150, 105, 0.2);
-}
-
 /* --- Back to Top --- */
 .back-to-top {
     position: fixed;
@@ -643,3 +616,163 @@ button:active, .nav-item:active, .icon-btn-mobile:active {
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 .card { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+/* ══════════════════════════════════════════════════
+   DESKTOP CONTROLS (dark toggle + lang)
+══════════════════════════════════════════════════ */
+.desktop-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-inline-start: auto;
+}
+
+.ctrl-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--border-light);
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+.ctrl-btn:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-medium);
+    color: var(--text-primary);
+}
+.lang-btn { font-size: 0.65rem; letter-spacing: 1px; }
+
+/* Mobile filter icon (replaces text button) */
+.filter-icon-btn {
+    background: var(--text-primary) !important;
+    color: #fff !important;
+    border: none !important;
+}
+.filter-icon-btn:hover {
+    background: var(--accent) !important;
+    color: #fff !important;
+}
+
+/* Lang button on mobile */
+.lang-btn-mobile {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* ══════════════════════════════════════════════════
+   DARK MODE
+══════════════════════════════════════════════════ */
+:root.dark {
+    --bg-page:       #0F0F0F;
+    --bg-surface:    #161616;
+    --bg-hover:      #1E1E1E;
+    --border-light:  #242424;
+    --border-medium: #2E2E2E;
+    --border-focus:  #E10600;
+    --text-primary:  #F0EDE8;
+    --text-secondary:#8A8A8A;
+    --text-muted:    #555;
+}
+
+/* Header in dark */
+:root.dark .app-header {
+    background: rgba(15, 15, 15, 0.96);
+    border-bottom-color: #1E1E1E;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.04);
+}
+
+/* Cards in dark */
+:root.dark .card {
+    background: var(--bg-surface);
+    border-color: var(--border-light);
+    box-shadow: none;
+}
+:root.dark .card:hover {
+    border-color: #333;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+/* Sidebar in dark */
+:root.dark .sidebar {
+    background: var(--bg-surface);
+    border-color: var(--border-light);
+}
+:root.dark .sidebar-header { border-bottom-color: var(--border-light); }
+
+/* Sub filter in dark */
+:root.dark .sub-filter {
+    background: var(--bg-hover);
+    border-color: var(--border-medium);
+    color: var(--text-primary);
+}
+
+/* Search in dark */
+:root.dark #searchInput {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+    border-color: transparent;
+}
+:root.dark #searchInput:focus {
+    background: var(--bg-surface);
+    border-color: var(--accent);
+}
+
+/* Scrollbar in dark */
+:root.dark * { scrollbar-color: var(--accent) #1E1E1E; }
+:root.dark ::-webkit-scrollbar-track { background: #1E1E1E; }
+
+/* ctrl-btn in dark */
+:root.dark .ctrl-btn {
+    border-color: var(--border-light);
+    color: var(--text-secondary);
+}
+:root.dark .ctrl-btn:hover {
+    background: var(--bg-hover);
+    border-color: var(--border-medium);
+    color: var(--text-primary);
+}
+
+/* filter icon btn stays same in dark */
+:root.dark .filter-icon-btn {
+    background: var(--text-primary) !important;
+    color: var(--bg-page) !important;
+}
+
+/* Smooth theme transition */
+html { transition: background-color 0.25s ease, color 0.25s ease; }
+body { transition: background-color 0.25s ease; }
+.app-header, .card, .sidebar, #searchInput, .ctrl-btn {
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ══════════════════════════════════════════════════
+   SHORTCUT BADGES (from previous session)
+══════════════════════════════════════════════════ */
+.shortcut-type-badge {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 100px;
+    margin-bottom: 6px;
+    border: 1px solid;
+    letter-spacing: 0.01em;
+}
+.badge-toolkey { color: #2563eb; background: rgba(37,99,235,0.07); border-color: rgba(37,99,235,0.2); }
+.badge-cmd     { color: #7c3aed; background: rgba(124,58,237,0.07); border-color: rgba(124,58,237,0.2); }
+.badge-combo   { color: #059669; background: rgba(5,150,105,0.07);  border-color: rgba(5,150,105,0.2); }
+
+:root.dark .badge-toolkey { color: #60a5fa; background: rgba(37,99,235,0.12); border-color: rgba(37,99,235,0.3); }
+:root.dark .badge-cmd     { color: #a78bfa; background: rgba(124,58,237,0.12); border-color: rgba(124,58,237,0.3); }
+:root.dark .badge-combo   { color: #34d399; background: rgba(5,150,105,0.12);  border-color: rgba(5,150,105,0.3); }
+
