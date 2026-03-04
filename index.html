@@ -2,16 +2,147 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SymQ | الرموز والاختصارات</title>
-    
-    <!-- Fonts -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+
+    <!-- ═══════════════════════════════════════════════════════
+         PRIMARY SEO
+    ═══════════════════════════════════════════════════════ -->
+    <title>SymQ | مرجع الرموز واختصارات لوحة المفاتيح</title>
+    <meta name="description" content="مرجعك الشامل للرموز الخاصة واختصارات لوحة المفاتيح. أكثر من 2000 اختصار لويندوز، macOS، Linux، Word، Excel، Photoshop، VS Code والمزيد. ابحث وانسخ بنقرة واحدة.">
+    <meta name="keywords" content="رموز خاصة، اختصارات لوحة المفاتيح، اختصارات ويندوز، اختصارات ماك، اختصارات Excel، اختصارات Word، رموز علمية، رموز الترقيم، رموز العملات، اختصارات Photoshop، اختصارات VS Code، keyboard shortcuts arabic">
+    <meta name="author" content="SymQ">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow">
+    <meta name="theme-color" content="#6366f1" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://symq.vercel.app/">
+
+    <!-- ═══════════════════════════════════════════════════════
+         OPEN GRAPH (Facebook, LinkedIn, WhatsApp, Telegram)
+    ═══════════════════════════════════════════════════════ -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="SymQ">
+    <meta property="og:locale" content="ar_AR">
+    <meta property="og:url" content="https://symq.vercel.app/">
+    <meta property="og:title" content="SymQ | مرجع الرموز واختصارات لوحة المفاتيح">
+    <meta property="og:description" content="مرجعك الشامل للرموز الخاصة واختصارات لوحة المفاتيح. أكثر من 2000 اختصار لويندوز، macOS، Word، Excel، Photoshop والمزيد.">
+    <meta property="og:image" content="https://symq.vercel.app/preview.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="SymQ - مرجع الرموز والاختصارات">
+    <meta property="og:image:type" content="image/png">
+
+    <!-- ═══════════════════════════════════════════════════════
+         TWITTER / X CARD
+    ═══════════════════════════════════════════════════════ -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@SymQapp">
+    <meta name="twitter:creator" content="@SymQapp">
+    <meta name="twitter:title" content="SymQ | مرجع الرموز واختصارات لوحة المفاتيح">
+    <meta name="twitter:description" content="مرجعك الشامل للرموز الخاصة واختصارات لوحة المفاتيح. أكثر من 2000 اختصار لويندوز، macOS، Word، Excel والمزيد.">
+    <meta name="twitter:image" content="https://symq.vercel.app/preview.jpg">
+    <meta name="twitter:image:alt" content="SymQ - مرجع الرموز والاختصارات">
+
+    <!-- ═══════════════════════════════════════════════════════
+         PWA & ICONS
+    ═══════════════════════════════════════════════════════ -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Apple / iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SymQ">
+    <link rel="apple-touch-icon" href="/icon-192x192.png">
+
+    <!-- Standard Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icon-192x192.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+    <!-- Microsoft -->
+    <meta name="msapplication-TileColor" content="#6366f1">
+    <meta name="msapplication-TileImage" content="/icon-192x192.png">
+
+    <!-- ═══════════════════════════════════════════════════════
+         PERFORMANCE
+    ═══════════════════════════════════════════════════════ -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    
+
     <!-- Styles -->
     <link rel="stylesheet" href="style.css">
+
+    <!-- ═══════════════════════════════════════════════════════
+         STRUCTURED DATA (JSON-LD)
+    ═══════════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://symq.vercel.app/#website",
+          "url": "https://symq.vercel.app/",
+          "name": "SymQ",
+          "description": "مرجع الرموز الخاصة واختصارات لوحة المفاتيح",
+          "inLanguage": "ar",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://symq.vercel.app/?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "WebApplication",
+          "@id": "https://symq.vercel.app/#app",
+          "name": "SymQ - الرموز والاختصارات",
+          "url": "https://symq.vercel.app/",
+          "description": "مرجعك الشامل للرموز الخاصة واختصارات لوحة المفاتيح لجميع البرامج والأنظمة",
+          "applicationCategory": "UtilitiesApplication",
+          "operatingSystem": "Any",
+          "browserRequirements": "Requires JavaScript",
+          "inLanguage": "ar",
+          "isAccessibleForFree": true,
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "featureList": [
+            "رموز التشكيل",
+            "علامات الترقيم",
+            "الرموز العلمية",
+            "رموز العملات",
+            "اختصارات ويندوز",
+            "اختصارات macOS",
+            "اختصارات Linux",
+            "اختصارات Word و Excel و PowerPoint",
+            "اختصارات Photoshop و Illustrator",
+            "اختصارات VS Code و Terminal"
+          ]
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://symq.vercel.app/#organization",
+          "name": "SymQ",
+          "url": "https://symq.vercel.app/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://symq.vercel.app/icon-512x512.png",
+            "width": 512,
+            "height": 512
+          }
+        }
+      ]
+    }
+    </script>
+
 </head>
 <body>
 
@@ -27,30 +158,27 @@
             
             <!-- Search Container -->
             <div class="search-bar-container" id="searchContainer">
-                <input type="text" id="searchInput" placeholder="بحث (مثال: نسخ، F5)..." autocomplete="off">
-                <div class="search-icon">/</div>
-                <!-- Clear button injected via JS -->
+                <input type="text" id="searchInput" placeholder="بحث (مثال: نسخ، F5)..." autocomplete="off" aria-label="البحث في الرموز والاختصارات">
+                <div class="search-icon" aria-hidden="true">/</div>
             </div>
 
             <!-- Dark Mode Toggle (Desktop) -->
             <button id="darkModeBtn" class="icon-btn-desktop" aria-label="تغيير الوضع">
-                <svg id="iconMoon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                <svg id="iconSun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                <svg id="iconMoon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <svg id="iconSun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
             </button>
 
             <!-- Mobile Controls -->
             <div class="mobile-controls">
                 <button id="mobileSearchToggle" class="icon-btn-mobile" aria-label="بحث">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </button>
-                <!-- Dark Mode Toggle (Mobile) -->
                 <button id="darkModeBtnMobile" class="icon-btn-mobile" aria-label="تغيير الوضع">
-                    <svg id="iconMoonMobile" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                    <svg id="iconSunMobile" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    <svg id="iconMoonMobile" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    <svg id="iconSunMobile" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
                 </button>
-                <!-- Filter Icon Button -->
                 <button id="mobileFilterBtn" class="icon-btn-mobile" aria-label="التصنيفات">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
                 </button>
             </div>
         </div>
@@ -60,31 +188,30 @@
     <div class="layout-container">
         
         <!-- Sidebar / Bottom Sheet -->
-        <aside class="sidebar" id="sidebar">
+        <aside class="sidebar" id="sidebar" aria-label="قائمة الأقسام">
             <div class="sidebar-header">
                 <h3>تصفح الأقسام</h3>
-                <button id="closeSidebar" class="close-btn">&times;</button>
+                <button id="closeSidebar" class="close-btn" aria-label="إغلاق القائمة">&times;</button>
             </div>
-            <div id="sidebarContent" class="sidebar-content">
+            <div id="sidebarContent" class="sidebar-content" role="navigation" aria-label="أقسام الموقع">
                 <!-- Injected via JS -->
             </div>
         </aside>
 
         <!-- Content -->
-        <main class="content-area">
+        <main class="content-area" role="main">
             <div class="content-header">
                 <div class="title-group">
                     <h1 id="activeCategoryTitle">الكل</h1>
-                    <span id="itemCount" class="count-badge">0 عنصر</span>
+                    <span id="itemCount" class="count-badge" aria-live="polite">0 عنصر</span>
                 </div>
-                <!-- Sub Filter Dropdown Injected via JS -->
             </div>
 
-            <div id="symbolsGrid" class="grid">
+            <div id="symbolsGrid" class="grid" role="list" aria-label="قائمة الرموز والاختصارات">
                 <!-- Cards Injected via JS -->
             </div>
             
-            <div id="emptyState" class="empty-state hidden">
+            <div id="emptyState" class="empty-state hidden" role="status" aria-live="polite">
                 <p>لا توجد نتائج مطابقة.</p>
                 <button id="resetSearch" class="btn-text">عرض الكل</button>
             </div>
@@ -95,12 +222,29 @@
     <!-- Back to Top Button -->
     <button id="backToTop" class="back-to-top" aria-label="العودة للأعلى">↑</button>
 
+    <!-- PWA Install Banner -->
+    <div id="pwaInstallBanner" class="pwa-banner hidden" role="dialog" aria-label="تثبيت التطبيق">
+        <div class="pwa-banner-content">
+            <img src="/icon-192x192.png" alt="SymQ" class="pwa-icon" width="40" height="40">
+            <div class="pwa-text">
+                <strong>ثبّت SymQ</strong>
+                <span>استخدمه بدون إنترنت</span>
+            </div>
+        </div>
+        <div class="pwa-banner-actions">
+            <button id="pwaInstallBtn" class="pwa-btn-install" aria-label="تثبيت التطبيق">تثبيت</button>
+            <button id="pwaInstallDismiss" class="pwa-btn-dismiss" aria-label="إغلاق">✕</button>
+        </div>
+    </div>
+
     <!-- Dark Mode Loading Overlay -->
-    <div id="themeOverlay" class="theme-overlay">
+    <div id="themeOverlay" class="theme-overlay" aria-hidden="true">
         <div class="theme-spinner"></div>
     </div>
 
-    <!-- Data Files -->
+    <!-- ═══════════════════════════════════════
+         DATA FILES
+    ═══════════════════════════════════════ -->
     <script src="symbols-diacritics.js"></script>
     <script src="symbols-punctuation.js"></script>
     <script src="symbols-science.js"></script>
@@ -124,8 +268,89 @@
     <script src="shortcuts-autocad.js"></script>
     <script src="shortcuts-premiere.js"></script>
     
-    <!-- Logic -->
+    <!-- App Logic -->
     <script src="app.js"></script>
+
+    <!-- ═══════════════════════════════════════
+         PWA & SERVICE WORKER REGISTRATION
+    ═══════════════════════════════════════ -->
+    <script>
+    (function() {
+      'use strict';
+
+      // ── Service Worker Registration ──────────────────────────────────────────
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js', { scope: '/' })
+            .then(reg => {
+              // Check for updates every 60 seconds
+              setInterval(() => reg.update(), 60000);
+
+              reg.addEventListener('updatefound', () => {
+                const newWorker = reg.installing;
+                newWorker.addEventListener('statechange', () => {
+                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    // New version available - could show update notification here
+                    console.log('[SymQ] تحديث جديد متاح');
+                  }
+                });
+              });
+            })
+            .catch(err => console.warn('[SymQ] Service Worker error:', err));
+        });
+      }
+
+      // ── PWA Install Banner ───────────────────────────────────────────────────
+      let deferredPrompt = null;
+      const banner = document.getElementById('pwaInstallBanner');
+      const installBtn = document.getElementById('pwaInstallBtn');
+      const dismissBtn = document.getElementById('pwaInstallDismiss');
+
+      // Don't show if already installed or dismissed
+      const dismissed = sessionStorage.getItem('pwa-dismissed');
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+        || window.navigator.standalone === true;
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+
+        if (!dismissed && !isStandalone) {
+          setTimeout(() => {
+            banner && banner.classList.remove('hidden');
+          }, 3000);
+        }
+      });
+
+      installBtn && installBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        banner && banner.classList.add('hidden');
+        console.log('[SymQ] PWA install outcome:', outcome);
+      });
+
+      dismissBtn && dismissBtn.addEventListener('click', () => {
+        banner && banner.classList.add('hidden');
+        sessionStorage.setItem('pwa-dismissed', '1');
+      });
+
+      window.addEventListener('appinstalled', () => {
+        banner && banner.classList.add('hidden');
+        deferredPrompt = null;
+        console.log('[SymQ] تم تثبيت التطبيق بنجاح');
+      });
+
+      // ── Update URL params on search (for SEO-friendly sharing) ──────────────
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) {
+        const params = new URLSearchParams(window.location.search);
+        const q = params.get('q');
+        if (q) searchInput.value = q;
+      }
+    })();
+    </script>
 
 </body>
 </html>

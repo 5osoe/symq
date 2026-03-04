@@ -417,3 +417,116 @@ button:active, .nav-item:active, .nav-group-header:active, .icon-btn-mobile:acti
 @keyframes fadeIn    { from { opacity: 0; transform: translateY(8px);  } to { opacity: 1; transform: translateY(0); } }
 @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 .card { animation: fadeIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards; }
+/* ═══════════════════════════════════════════════════════
+   PWA Install Banner
+═══════════════════════════════════════════════════════ */
+.pwa-banner {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    background: var(--surface, #1e293b);
+    border: 1px solid var(--border, rgba(255,255,255,0.1));
+    border-radius: 1rem;
+    padding: 0.75rem 1rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: calc(100% - 2rem);
+    max-width: 420px;
+    animation: slideUp 0.4s ease;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.pwa-banner.hidden {
+    display: none;
+}
+
+@keyframes slideUp {
+    from { transform: translateX(-50%) translateY(120%); opacity: 0; }
+    to   { transform: translateX(-50%) translateY(0);   opacity: 1; }
+}
+
+.pwa-banner-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.pwa-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.pwa-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.pwa-text strong {
+    font-size: 0.9rem;
+    color: var(--text-primary, #f1f5f9);
+    font-weight: 600;
+}
+
+.pwa-text span {
+    font-size: 0.78rem;
+    color: var(--text-muted, #94a3b8);
+}
+
+.pwa-banner-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.pwa-btn-install {
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.45rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.pwa-btn-install:hover {
+    background: #4f46e5;
+}
+
+.pwa-btn-dismiss {
+    background: transparent;
+    border: none;
+    color: var(--text-muted, #94a3b8);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.25rem;
+    line-height: 1;
+    border-radius: 0.25rem;
+    transition: color 0.2s;
+}
+
+.pwa-btn-dismiss:hover {
+    color: var(--text-primary, #f1f5f9);
+}
+
+/* ── PWA Banner Color Override (matches project accent) ───── */
+.pwa-btn-install {
+    background: var(--accent);
+}
+.pwa-btn-install:hover {
+    background: var(--accent-hover);
+}

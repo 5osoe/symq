@@ -1,0 +1,54 @@
+{
+  "name": "SymQ - الرموز والاختصارات",
+  "short_name": "SymQ",
+  "description": "مرجعك الشامل للرموز الخاصة واختصارات لوحة المفاتيح لجميع البرامج والأنظمة",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f172a",
+  "theme_color": "#6366f1",
+  "lang": "ar",
+  "dir": "rtl",
+  "categories": ["utilities", "productivity", "education"],
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/preview.jpg",
+      "sizes": "1200x630",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "SymQ - الرموز والاختصارات"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "الرموز",
+      "short_name": "رموز",
+      "description": "تصفح الرموز الخاصة",
+      "url": "/?category=رموز",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "اختصارات ويندوز",
+      "short_name": "ويندوز",
+      "description": "اختصارات لوحة مفاتيح ويندوز",
+      "url": "/?category=ويندوز",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    }
+  ],
+  "prefer_related_applications": false
+}
