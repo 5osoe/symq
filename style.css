@@ -586,7 +586,9 @@ button:active, .nav-item:active, .nav-group-header:active, .icon-btn-mobile:acti
     border-radius: 100px; font-family: var(--font-ui);
     font-size: 0.8rem; cursor: pointer;
     transition: all 0.2s ease; font-weight: 500;
+    margin-right: auto;
 }
+.print-btn:not(.hidden) { display: inline-flex !important; }
 .print-btn:hover { border-color: var(--text-primary); color: var(--text-primary); }
 .print-btn svg { flex-shrink: 0; }
 
