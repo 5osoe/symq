@@ -154,13 +154,8 @@ document.addEventListener('DOMContentLoaded', () => {
     clearBtn.title = 'مسح البحث';
     ui.searchContainer.appendChild(clearBtn);
 
-    // Print (Cheat Sheet) button
-    const printBtn = document.createElement('button');
-    printBtn.className = 'print-btn hidden';
-    printBtn.title = 'طباعة هذه الفئة';
-    printBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> طباعة`;
-    printBtn.onclick = () => window.print();
-    ui.contentHeader.appendChild(printBtn);
+    const printBtn = document.getElementById('printBtn');
+    printBtn.addEventListener('click', () => window.print());
 
     // ─── Icons ────────────────────────────────────────────────────────────────
     const ICONS = {
@@ -358,22 +353,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // HTML Entity + Unicode for symbols only
-            let entityHTML = '';
-            if (!isShortcut && item.symbol) {
-                const cp = item.symbol.codePointAt(0);
-                if (cp !== undefined) {
-                    const hex      = cp.toString(16).toUpperCase().padStart(4, '0');
-                    const unicode  = `U+${hex}`;
-                    const dec      = cp;
-                    const entity   = `&#${dec};`;
-                    entityHTML = `<div class="symbol-meta-row">
-                        <span class="sym-meta-item" title="Unicode Code Point"><span class="sym-meta-label">Unicode</span><span class="kbd-val sym-meta-val">${unicode}</span></span>
-                        <span class="sym-meta-item" title="HTML Entity"><span class="sym-meta-label">HTML</span><span class="kbd-val sym-meta-val">${entity}</span></span>
-                    </div>`;
-                }
-            }
-
             let shortcutTypeBadge = '';
             if (isShortcut && item.shortcutType) {
                 const b = badgeMap[item.shortcutType];
@@ -391,7 +370,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="card-name-en">${item.englishName}</div>
                 ${item.description ? `<div class="card-desc">${item.description}</div>` : '<div class="card-desc"></div>'}
                 ${keyboardHTML}
-                ${entityHTML}
                 <div class="card-footer">
                     <div class="card-cat">${item.category}</div>
                     ${item.subCategory ? `<div class="tag-sub">${item.subCategory}</div>` : ''}

@@ -558,25 +558,6 @@ button:active, .nav-item:active, .nav-group-header:active, .icon-btn-mobile:acti
 }
 
 /* ═══════════════════════════════════════════════════════
-   Symbol Meta Row (Unicode + HTML Entity)
-═══════════════════════════════════════════════════════ */
-.symbol-meta-row {
-    display: flex; gap: 8px; margin-top: 8px;
-    padding-top: 8px; border-top: 1px solid var(--border-light);
-    flex-wrap: wrap;
-}
-.sym-meta-item {
-    display: flex; align-items: center; gap: 4px;
-}
-.sym-meta-label {
-    font-size: 0.65rem; color: var(--text-muted);
-    font-weight: 600; letter-spacing: 0.3px;
-}
-.sym-meta-val {
-    font-size: 0.68rem; direction: ltr;
-}
-
-/* ═══════════════════════════════════════════════════════
    Print Button
 ═══════════════════════════════════════════════════════ */
 .print-btn {
@@ -586,7 +567,6 @@ button:active, .nav-item:active, .nav-group-header:active, .icon-btn-mobile:acti
     border-radius: 100px; font-family: var(--font-ui);
     font-size: 0.8rem; cursor: pointer;
     transition: all 0.2s ease; font-weight: 500;
-    margin-right: auto;
 }
 .print-btn:not(.hidden) { display: inline-flex !important; }
 .print-btn:hover { border-color: var(--text-primary); color: var(--text-primary); }
