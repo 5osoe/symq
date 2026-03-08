@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ─── Nav Hierarchy ────────────────────────────────────────────────────────
     const NAV_TREE = [
         { label: 'الكل' },
+        { label: 'المفضلة', isFavorites: true },
         {
             label: 'الرموز', isGroup: true, children: [
                 { label: 'التشكيل'         },
@@ -67,10 +68,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Pre-build search strings once at init
     ALL_DATA.forEach(item => {
+        const sym = item.symbol || '';
         item._searchText = [
             item.arabicName  || '',
             item.englishName || '',
-            item.symbol      || '',
+            sym,
+            sym.normalize('NFC'),
+            sym.normalize('NFD'),
             item.shortcut    || '',
             item.description || '',
             item.subCategory || '',
@@ -88,6 +92,33 @@ document.addEventListener('DOMContentLoaded', () => {
     // Pre-computed counts
     const CAT_COUNTS = { 'الكل': ALL_DATA.length };
     Object.entries(CAT_INDEX).forEach(([cat, items]) => { CAT_COUNTS[cat] = items.length; });
+
+    // ─── Favorites ────────────────────────────────────────────────────────────
+    const FAV_KEY = 'symq-favorites';
+
+    function getFavIds() {
+        try { return new Set(JSON.parse(localStorage.getItem(FAV_KEY)) || []); } catch { return new Set(); }
+    }
+
+    function saveFavIds(set) {
+        localStorage.setItem(FAV_KEY, JSON.stringify([...set]));
+    }
+
+    function getFavItems() {
+        const ids = getFavIds();
+        return ALL_DATA.filter(item => ids.has(item._id));
+    }
+
+    function toggleFav(id) {
+        const ids = getFavIds();
+        ids.has(id) ? ids.delete(id) : ids.add(id);
+        saveFavIds(ids);
+    }
+
+    function isFav(id) { return getFavIds().has(id); }
+
+    // Assign stable _id to every item once
+    ALL_DATA.forEach((item, i) => { item._id = i; });
 
     // ─── State ────────────────────────────────────────────────────────────────
     let state = { category: 'الكل', subCategory: 'الكل', search: '' };
@@ -123,6 +154,14 @@ document.addEventListener('DOMContentLoaded', () => {
     clearBtn.title = 'مسح البحث';
     ui.searchContainer.appendChild(clearBtn);
 
+    // Print (Cheat Sheet) button
+    const printBtn = document.createElement('button');
+    printBtn.className = 'print-btn hidden';
+    printBtn.title = 'طباعة هذه الفئة';
+    printBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> طباعة`;
+    printBtn.onclick = () => window.print();
+    ui.contentHeader.appendChild(printBtn);
+
     // ─── Icons ────────────────────────────────────────────────────────────────
     const ICONS = {
         copy:  `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`,
@@ -135,6 +174,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), wait); };
     }
 
+    // ─── Fuzzy Search (fallback) ───────────────────────────────────────────────
+    function fuzzyMatch(text, query) {
+        if (query.length < 2) return false;
+        let ti = 0, qi = 0, gaps = 0;
+        while (ti < text.length && qi < query.length) {
+            if (text[ti] === query[qi]) { qi++; } else { gaps++; }
+            ti++;
+            if (gaps > query.length * 1.5) return false;
+        }
+        return qi === query.length;
+    }
+
     // ─── Filtering ────────────────────────────────────────────────────────────
     function getFilteredData() {
         const query = state.search.toLowerCase().trim();
@@ -142,13 +193,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const sub   = state.subCategory;
 
         let pool;
-        if      (cat === 'الكل')         pool = ALL_DATA;
+        if      (cat === 'المفضلة')      pool = getFavItems();
+        else if (cat === 'الكل')         pool = ALL_DATA;
         else if (cat === 'الرموز')       pool = ALL_DATA.filter(i => SYMBOL_CATS.has(i.category));
         else if (cat === 'الاختصارات')   pool = ALL_DATA.filter(i => SHORTCUT_CATS.has(i.category));
         else                              pool = CAT_INDEX[cat] || [];
 
         if (sub !== 'الكل') pool = pool.filter(i => i.subCategory === sub);
-        if (query)           pool = pool.filter(i => i._searchText.includes(query));
+
+        if (query) {
+            // Direct match first
+            const exact = pool.filter(i => i._searchText.includes(query));
+            // Symbol exact match
+            const symExact = pool.filter(i => i.symbol && (i.symbol === query || i.symbol.normalize('NFC') === query.normalize('NFC')));
+            if (symExact.length > 0) {
+                const seen = new Set(symExact.map(i => i._id));
+                return [...symExact, ...exact.filter(i => !seen.has(i._id))];
+            }
+            if (exact.length > 0) return exact;
+            // Fuzzy fallback
+            return pool.filter(i => fuzzyMatch(i._searchText, query));
+        }
 
         return pool;
     }
@@ -156,15 +221,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // ─── Render: Sidebar ──────────────────────────────────────────────────────
     function renderSidebar() {
         const frag = document.createDocumentFragment();
+        const favCount = getFavItems().length;
 
         NAV_TREE.forEach((node) => {
 
             // "الكل" — top-level leaf
-            if (!node.isGroup) {
+            if (!node.isGroup && !node.isFavorites) {
                 const li = document.createElement('li');
                 li.className = 'nav-item' + (state.category === 'الكل' ? ' active' : '');
                 li.innerHTML = `<span class="nav-label">الكل</span><span class="nav-count">${CAT_COUNTS['الكل']}</span>`;
                 li.onclick = () => setCategory('الكل');
+                frag.appendChild(li);
+                return;
+            }
+
+            // "المفضلة" — top-level leaf
+            if (node.isFavorites) {
+                const li = document.createElement('li');
+                li.className = 'nav-item nav-fav-item' + (state.category === 'المفضلة' ? ' active' : '');
+                li.innerHTML = `<span class="nav-label"><span class="fav-heart-nav">♥</span> المفضلة</span><span class="nav-count">${favCount}</span>`;
+                li.onclick = () => setCategory('المفضلة');
                 frag.appendChild(li);
                 return;
             }
@@ -204,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ─── Render: Sub-filters ──────────────────────────────────────────────────
     function renderSubFilters() {
         const cat    = state.category;
-        const isLeaf = cat !== 'الكل' && cat !== 'الرموز' && cat !== 'الاختصارات';
+        const isLeaf = cat !== 'الكل' && cat !== 'المفضلة' && cat !== 'الرموز' && cat !== 'الاختصارات';
 
         if (isLeaf) {
             const subCats = [...new Set((CAT_INDEX[cat] || []).map(i => i.subCategory).filter(Boolean))].sort();
@@ -235,11 +311,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         clearBtn.classList.toggle('hidden', state.search.length === 0);
 
+        // Show print button only for specific (non-global) categories
+        const showPrint = !state.search && state.category !== 'الكل' && state.category !== 'المفضلة';
+        printBtn.classList.toggle('hidden', !showPrint);
+
         if (data.length === 0) {
             ui.grid.innerHTML = '';
             ui.empty.classList.remove('hidden');
             const p = ui.empty.querySelector('p');
-            if (p) p.textContent = state.search ? `لا توجد نتائج لـ "${state.search}"` : 'لا توجد عناصر هنا.';
+            if (state.category === 'المفضلة') {
+                if (p) p.innerHTML = 'لا توجد عناصر في المفضلة بعد.<br><span class="fav-empty-hint">اضغط ♥ على أي رمز أو اختصار لحفظه هنا.</span>';
+            } else {
+                if (p) p.textContent = state.search ? `لا توجد نتائج لـ "${state.search}"` : 'لا توجد عناصر هنا.';
+            }
             return;
         }
 
@@ -257,6 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const item        = data[i];
             const isShortcut  = item.type === 'shortcut';
             const mainDisplay = isShortcut ? item.shortcut : item.symbol;
+            const favActive   = isFav(item._id);
 
             let keyboardHTML = '';
             if (!isShortcut && item.keyboardMethod) {
@@ -273,6 +358,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
+            // HTML Entity + Unicode for symbols only
+            let entityHTML = '';
+            if (!isShortcut && item.symbol) {
+                const cp = item.symbol.codePointAt(0);
+                if (cp !== undefined) {
+                    const hex      = cp.toString(16).toUpperCase().padStart(4, '0');
+                    const unicode  = `U+${hex}`;
+                    const dec      = cp;
+                    const entity   = `&#${dec};`;
+                    entityHTML = `<div class="symbol-meta-row">
+                        <span class="sym-meta-item" title="Unicode Code Point"><span class="sym-meta-label">Unicode</span><span class="kbd-val sym-meta-val">${unicode}</span></span>
+                        <span class="sym-meta-item" title="HTML Entity"><span class="sym-meta-label">HTML</span><span class="kbd-val sym-meta-val">${entity}</span></span>
+                    </div>`;
+                }
+            }
+
             let shortcutTypeBadge = '';
             if (isShortcut && item.shortcutType) {
                 const b = badgeMap[item.shortcutType];
@@ -282,6 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.createElement('div');
             card.className = 'card';
             card.innerHTML = `
+                <button class="fav-btn${favActive ? ' fav-active' : ''}" title="${favActive ? 'إزالة من المفضلة' : 'إضافة للمفضلة'}" aria-label="مفضلة">♥</button>
                 ${!isShortcut ? `<button class="copy-icon-btn" title="نسخ الرمز" aria-label="نسخ">${ICONS.copy}</button>` : ''}
                 <div class="${isShortcut ? 'text-shortcut' : 'card-symbol'}">${mainDisplay}</div>
                 ${shortcutTypeBadge}
@@ -289,11 +391,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="card-name-en">${item.englishName}</div>
                 ${item.description ? `<div class="card-desc">${item.description}</div>` : '<div class="card-desc"></div>'}
                 ${keyboardHTML}
+                ${entityHTML}
                 <div class="card-footer">
                     <div class="card-cat">${item.category}</div>
                     ${item.subCategory ? `<div class="tag-sub">${item.subCategory}</div>` : ''}
                 </div>
             `;
+
+            // Fav button
+            const favBtn = card.querySelector('.fav-btn');
+            favBtn.onclick = (e) => {
+                e.stopPropagation();
+                toggleFav(item._id);
+                favBtn.classList.toggle('fav-active');
+                favBtn.title = isFav(item._id) ? 'إزالة من المفضلة' : 'إضافة للمفضلة';
+                renderSidebar();
+                if (state.category === 'المفضلة') renderGrid();
+            };
 
             if (!isShortcut) {
                 const copyBtn = card.querySelector('.copy-icon-btn');
@@ -302,6 +416,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             frag.appendChild(card);
+        }
+
+        // Remove old fuzzy notice if any
+        const oldNotice = ui.grid.previousElementSibling;
+        if (oldNotice && oldNotice.classList.contains('fuzzy-notice')) oldNotice.remove();
+
+        // Show fuzzy notice if results came from fuzzy (no exact match existed)
+        if (state.search) {
+            const query = state.search.toLowerCase().trim();
+            const hasExact = data.some(i => i._searchText.includes(query));
+            if (!hasExact && data.length > 0) {
+                const notice = document.createElement('div');
+                notice.className = 'fuzzy-notice';
+                notice.textContent = `نتائج تقريبية لـ "${state.search}"`;
+                ui.grid.insertAdjacentElement('beforebegin', notice);
+            }
         }
 
         ui.grid.innerHTML = '';
@@ -433,7 +563,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Check if it's a child category
         const isChild = NAV_TREE.some(n => n.isGroup && n.children && n.children.some(c => c.label === cat));
 
-        if (isGroup || isChild || cat === 'الكل') {
+        if (isGroup || isChild || cat === 'الكل' || cat === 'المفضلة') {
             state.category    = cat;
             state.subCategory = 'الكل';
             state.search      = '';

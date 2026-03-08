@@ -530,3 +530,126 @@ button:active, .nav-item:active, .nav-group-header:active, .icon-btn-mobile:acti
 .pwa-btn-install:hover {
     background: var(--accent-hover);
 }
+
+/* ═══════════════════════════════════════════════════════
+   Favorites Button
+═══════════════════════════════════════════════════════ */
+.fav-btn {
+    position: absolute; top: 8px; right: 8px;
+    width: 28px; height: 28px; border: none; background: transparent;
+    cursor: pointer; color: var(--border-medium); font-size: 1rem;
+    opacity: 0.4; transition: all 0.2s ease;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 5; border-radius: 50%; padding: 0; line-height: 1;
+}
+.card:hover .fav-btn { opacity: 1; }
+.fav-btn:hover { color: #E10600; background: rgba(225,6,0,0.06); transform: scale(1.15); opacity: 1; }
+.fav-btn.fav-active { color: #E10600; opacity: 1; }
+.fav-btn.fav-active:hover { color: #C40000; }
+
+/* Favorites nav item heart icon */
+.fav-heart-nav { color: var(--accent); font-size: 0.8rem; }
+.nav-fav-item.active .fav-heart-nav { color: var(--accent); }
+
+/* Favorites empty state hint */
+.fav-empty-hint {
+    font-size: 0.8rem; color: var(--text-muted);
+    margin-top: 8px; display: block;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Symbol Meta Row (Unicode + HTML Entity)
+═══════════════════════════════════════════════════════ */
+.symbol-meta-row {
+    display: flex; gap: 8px; margin-top: 8px;
+    padding-top: 8px; border-top: 1px solid var(--border-light);
+    flex-wrap: wrap;
+}
+.sym-meta-item {
+    display: flex; align-items: center; gap: 4px;
+}
+.sym-meta-label {
+    font-size: 0.65rem; color: var(--text-muted);
+    font-weight: 600; letter-spacing: 0.3px;
+}
+.sym-meta-val {
+    font-size: 0.68rem; direction: ltr;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Print Button
+═══════════════════════════════════════════════════════ */
+.print-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: none; border: 1px solid var(--border-medium);
+    color: var(--text-secondary); padding: 6px 14px;
+    border-radius: 100px; font-family: var(--font-ui);
+    font-size: 0.8rem; cursor: pointer;
+    transition: all 0.2s ease; font-weight: 500;
+}
+.print-btn:hover { border-color: var(--text-primary); color: var(--text-primary); }
+.print-btn svg { flex-shrink: 0; }
+
+/* ═══════════════════════════════════════════════════════
+   Fuzzy Search Notice
+═══════════════════════════════════════════════════════ */
+.fuzzy-notice {
+    font-size: 0.75rem; color: var(--text-muted);
+    margin-bottom: 12px; padding: 6px 12px;
+    background: var(--bg-hover); border-radius: var(--radius-sm);
+    border: 1px solid var(--border-light); display: inline-block;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Print Styles (@media print)
+═══════════════════════════════════════════════════════ */
+@media print {
+    .app-header,
+    .sidebar,
+    .backdrop,
+    .back-to-top,
+    .pwa-banner,
+    .theme-overlay,
+    .fav-btn,
+    .copy-icon-btn,
+    .print-btn,
+    .sub-filter,
+    .mobile-controls { display: none !important; }
+
+    body { background: #fff; color: #000; }
+
+    .layout-container {
+        display: block;
+        padding: 0;
+        max-width: 100%;
+    }
+
+    .content-header { margin-bottom: 12px; }
+    .content-header h1 { font-size: 1rem; }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 8px;
+        break-inside: avoid;
+        animation: none;
+        box-shadow: none;
+    }
+
+    .card-symbol { font-size: 1.6rem; height: 36px; margin-bottom: 4px; }
+    .text-shortcut { font-size: 0.75rem; padding: 6px; margin-bottom: 4px; }
+    .card-name-ar { font-size: 0.75rem; }
+    .card-name-en, .card-desc { font-size: 0.65rem; }
+    .symbol-keyboard, .symbol-meta-row { padding-top: 4px; margin-top: 4px; }
+    .kbd-val, .sym-meta-val { font-size: 0.6rem; }
+    .card-footer { margin-top: 4px; }
+    .card-cat, .tag-sub { font-size: 0.55rem; padding: 2px 5px; }
+
+    @page { margin: 1cm; }
+}
